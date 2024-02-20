@@ -1,0 +1,71 @@
+Project Tree
+.
+├── 00-preface.Rmd
+├── 01_explore_processed_data.Rmd
+├── 99-appendix.Rmd
+├── 999-references.Rmd
+├── 9999-footer.Rmd
+├── LICENSE
+├── _bookdown.yml
+├── _common.R
+├── _global.R
+├── _output.yml
+├── bs4_template.html
+├── config
+│   └── config.yml
+├── dags
+│   ├── rulegraph.png
+│   └── rulegraph.svg
+├── data-prep.rds
+├── docs
+│   ├── 00-preface.md
+│   ├── 404.html
+│   ├── 99-appendix.md
+│   ├── 999-references.md
+│   ├── 9999-footer.md
+│   ├── dags
+│   ├── data-exploration-rulegraph.html
+│   ├── data-preparation-rulegraph.html
+│   ├── images
+│   ├── imap-github-repos.html
+│   ├── index.html
+│   ├── index.md
+│   ├── libs
+│   ├── preface.html
+│   ├── reference-keys.txt
+│   ├── references.html
+│   ├── search.json
+│   ├── session-information.html
+│   └── style.css
+├── images
+│   ├── coders.png
+│   └── explore.png
+├── imap-data-exploration.Rproj
+├── index.Rmd
+├── library
+│   ├── apa.csl
+│   ├── imap.bib
+│   ├── packages.bib
+│   └── references.bib
+├── output
+├── renv
+│   ├── activate.R
+│   ├── library
+│   ├── settings.json
+│   └── staging
+├── renv.lock
+├── reports
+│   ├── project_tree.txt
+│   └── snakemake_report.html
+├── resources
+│   └── session_info.txt
+├── style.css
+└── workflow
+    ├── Snakefile
+    ├── envs
+    ├── report
+    ├── rules
+    ├── schemas
+    └── scripts
+
+21 directories, 47 files
