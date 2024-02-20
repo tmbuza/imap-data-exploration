@@ -4,7 +4,7 @@ source("workflow/scripts/qiime2R.R")
 library(tidyverse)
 library(tools)
 library(yaml)
-library(rhdf5)
+# library(rhdf5)
 library(Matrix)
 
 metadata<-read_q2metadata("resources/sample_metadata.tsv")

@@ -11,17 +11,17 @@ rule import_processed_data:
         "../scripts/importdata.R"
 
 
-rule import_demo_qiime2_data:
-    output:
-        "resources/feature_table.qza",
-        "resources/sample_metadata.tsv",
-        "resources/taxonomy.qza",
-        "resources/rooted_tree.qza",
-        "resources/shannon_vector.qza",
-    conda:
-        "../envs/environment.yml"
-    script:
-        "../scripts/importdata.R"
+# rule import_demo_qiime2_data:
+#     output:
+#         "resources/feature_table.qza",
+#         "resources/sample_metadata.tsv",
+#         "resources/taxonomy.qza",
+#         "resources/rooted_tree.qza",
+#         "resources/shannon_vector.qza",
+#     conda:
+#         "../envs/environment.yml"
+#     script:
+#         "../scripts/importdata.R"
 
 
 

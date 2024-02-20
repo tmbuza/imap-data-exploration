@@ -439,7 +439,7 @@ bray %>%
 ```
 
 ## Getting `Jaccard` distances
-```{r braydist}
+```{r jaccarddist}
 jaccard <- avgdist(otutable, dmethod="jaccard", sample=1776) %>%
   as.matrix() %>%
   as_tibble(rownames = "A") %>%

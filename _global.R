@@ -131,8 +131,8 @@ library(phyloseq)
 if(!require("microbiome")){BiocManager::install("microbiome")}
 library(microbiome)
 
-if(!require("rhdf5")) {BiocManager::install("rhdf5")}
-library(rhdf5)
+# if(!require("rhdf5")) {BiocManager::install("rhdf5")}
+# library(rhdf5)
 
 if(!require("ggtree")) {BiocManager::install("ggtree")}
 library(ggtree)

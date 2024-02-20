@@ -28,6 +28,7 @@ description: |
 
 ```{r lockfile, include=FALSE}
 source("_common.R")
+source("_global.R")
 ```
 
 
@@ -53,7 +54,4 @@ source("_common.R")
 
 ## Welcome to chapter 8 {-}
 
-
-
-
-
+Welcome to the "Data Exploration" chapter, where we transition from the meticulous preparation of microbiome data to the fascinating realm of exploration. In this phase, we embark on a journey to uncover patterns, relationships, and insights within the datasets. Whether you are just beginning your journey in microbiome research or have years of experience as an analyst, the methodologies outlined in this chapter are crafted to empower you, providing the means to uncover insights and extract valuable knowledge

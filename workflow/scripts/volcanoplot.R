@@ -5,7 +5,7 @@ library(tidyverse)
 library(qiime2R)
 library(ggrepel)
 library(ggtree)
-library(ape)
+# library(ape)
 
 metadata<-read_q2metadata("resources/sample_metadata.tsv")
 ASVs<-read_qza("resources/feature_table.qza")$data

@@ -1,12 +1,16 @@
 Project Tree
 .
 ├── 00-preface.Rmd
-├── 01_explore_processed_data.Rmd
+├── 01_data_exploration_steps.Rmd
+├── 02_explore_processed_data.Rmd
 ├── 99-appendix.Rmd
 ├── 999-references.Rmd
 ├── 9999-footer.Rmd
 ├── LICENSE
+├── Rplots.pdf
 ├── _bookdown.yml
+├── _bookdown_files
+│   └── 02_explore_processed_data_files
 ├── _common.R
 ├── _global.R
 ├── _output.yml
@@ -16,27 +20,46 @@ Project Tree
 ├── dags
 │   ├── rulegraph.png
 │   └── rulegraph.svg
+├── data
+│   ├── mothur_composite.csv
+│   └── qiime2_composite.csv
+├── data-prep.html
+├── data-prep.md
 ├── data-prep.rds
 ├── docs
 │   ├── 00-preface.md
+│   ├── 01_data_exploration_steps.md
+│   ├── 02_explore_processed_data.md
+│   ├── 02_explore_processed_data_files
 │   ├── 404.html
 │   ├── 99-appendix.md
 │   ├── 999-references.md
 │   ├── 9999-footer.md
+│   ├── advanced-snakemake-features.html
+│   ├── case-studies-and-examples.html
+│   ├── conclusion.html
+│   ├── create-barplot.html
 │   ├── dags
 │   ├── data-exploration-rulegraph.html
+│   ├── data-exploration-techniques.html
 │   ├── data-preparation-rulegraph.html
+│   ├── exploration-of-processded-data.html
+│   ├── getting-started-with-data-exploration.html
 │   ├── images
 │   ├── imap-github-repos.html
 │   ├── index.html
 │   ├── index.md
 │   ├── libs
+│   ├── load-taxa-abundance-data.html
 │   ├── preface.html
 │   ├── reference-keys.txt
 │   ├── references.html
+│   ├── save-the-plot.html
+│   ├── scriptscreate_barplots.html
 │   ├── search.json
 │   ├── session-information.html
-│   └── style.css
+│   ├── style.css
+│   └── visualizations-with-r-and-python.html
 ├── images
 │   ├── coders.png
 │   └── explore.png
@@ -48,6 +71,7 @@ Project Tree
 │   ├── packages.bib
 │   └── references.bib
 ├── output
+├── render7e8559ae85ee.rds
 ├── renv
 │   ├── activate.R
 │   ├── library
@@ -58,7 +82,12 @@ Project Tree
 │   ├── project_tree.txt
 │   └── snakemake_report.html
 ├── resources
-│   └── session_info.txt
+│   ├── feature_table.qza
+│   ├── rooted_tree.qza
+│   ├── sample_metadata.tsv
+│   ├── session_info.txt
+│   ├── shannon_vector.qza
+│   └── taxonomy.qza
 ├── style.css
 └── workflow
     ├── Snakefile
@@ -68,4 +97,4 @@ Project Tree
     ├── schemas
     └── scripts
 
-21 directories, 47 files
+25 directories, 72 files

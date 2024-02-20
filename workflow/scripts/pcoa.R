@@ -4,7 +4,7 @@ source("workflow/scripts/qiime2R.R")
 library(tidyverse)
 library(tools)
 library(yaml)
-library(rhdf5)
+# library(rhdf5)
 library(Matrix)
 
 download.file("https://docs.qiime2.org/2020.2/data/tutorials/moving-pictures/core-metrics-results/unweighted_unifrac_pcoa_results.qza", "resources/unweighted_unifrac_pcoa.qza")

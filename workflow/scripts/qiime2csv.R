@@ -5,9 +5,9 @@ source("workflow/scripts/qiime2R.R")
 library(utils)
 library(tidyverse)
 library(yaml)
-library(rhdf5)
+# library(rhdf5)
 library(Matrix)
-library(ape)
+# library(ape)
 
 if (!dir.exists("data")){dir.create("data")}
 

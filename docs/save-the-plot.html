@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>8 Save the plot | IMAP: Integrated Microbiome Analysis Pipelines</title>
+
+    <meta name="author" content="Teresia Mrema-Buza" />
+  
+   <meta name="description" content="This part will be added before release." />
+   <meta name="generator" content="placeholder" />
+  <meta property="og:title" content="8 Save the plot | IMAP: Integrated Microbiome Analysis Pipelines" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://tmbuza.github.io/imap-data-preparation/" />
+  <meta property="og:image" content="https://tmbuza.github.io/imap-data-preparation/images/planning.png" />
+  <meta property="og:description" content="This part will be added before release." />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Save the plot | IMAP: Integrated Microbiome Analysis Pipelines" />
+  
+  <meta name="twitter:description" content="This part will be added before release." />
+  <meta name="twitter:image" content="https://tmbuza.github.io/imap-data-preparation/images/planning.png" />
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script>
+    <script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet" />
+    <script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script>
+    <link href="libs/Sen-0.4.8/font.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=DM%20Mono&amp;display=swap" rel="stylesheet"/>
+    <link href="libs/Bitter-0.4.8/font.css" rel="stylesheet" />
+    <script src="libs/bs3compat-0.6.1/transition.js"></script>
+    <script src="libs/bs3compat-0.6.1/tabs.js"></script>
+    <script src="libs/bs3compat-0.6.1/bs3compat.js"></script>
+    <link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet" />
+    <script src="libs/bs4_book-1.0.0/bs4_book.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script>
+
+  <!-- CSS -->
+  <style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+    <style type="text/css">
+    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
+    div.csl-bib-body { }
+    div.csl-entry {
+      clear: both;
+        }
+    .hanging div.csl-entry {
+      margin-left:2em;
+      text-indent:-2em;
+    }
+    div.csl-left-margin {
+      min-width:2em;
+      float:left;
+    }
+    div.csl-right-inline {
+      margin-left:2em;
+      padding-left:1em;
+    }
+    div.csl-indent {
+      margin-left: 2em;
+    }
+  </style>
+      <link rel="stylesheet" href="style.css" />
+  
+</head>
+
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book">
+    <a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="End-to-End Practical User Guides Using Integrated Approaches"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a>:
+        <small class="text-muted">End-to-End Practical User Guides Using Integrated Approaches</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+      </form>
+
+      <nav aria-label="Table of contents">
+        <h2>Table of contents</h2>
+        <div id="book-toc"></div>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="#">View book source <i class="fab fa-github"></i></a></li></p>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="col-sm-12 col-md-9 col-lg-7" id="content">
+<div id="save-the-plot" class="section level1" number="8">
+<h1><span class="header-section-number">8</span> Save the plot</h1>
+<p>ggsave(“results/barplot.pdf”, p)</p>
+<pre><code>
+# Advanced Snakemake Features
+Explore advanced Snakemake features that enhance workflow efficiency. Discuss dynamic rules, wildcard constraints, and conditional execution. Showcase how these features can be applied to optimize the data exploration workflow.
+
+# Case Studies and Examples
+Present real-world case studies demonstrating the application of Snakemake in the context of taxa abundance data. Include examples that showcase the synergy of R, Python, and Bash scripts for comprehensive data exploration.
+
+## Best Practices and Optimization
+Provide best practices for optimizing Snakemake workflows, emphasizing efficiency and reproducibility. Address common challenges and suggest strategies for effective workflow design in the context of data exploration.
+
+# Conclusion
+Summarize key takeaways, highlighting the benefits of an integrated Snakemake workflow for data exploration. Encourage readers to apply the demonstrated techniques to their own research projects.
+
+&lt;!--chapter:end:01_data_exploration_steps.Rmd--&gt;
+
+# Exploration of processded data
+
+
+```r
+library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.1
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="save-the-plot.html#cb3-1" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb3-2"><a href="save-the-plot.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(microbiome)</span></code></pre></div>
+<pre><code>## 
+## microbiome R package (microbiome.github.com)
+##     
+## 
+## 
+##  Copyright (C) 2011-2022 Leo Lahti, 
+##     Sudarshan Shetty et al. &lt;microbiome.github.io&gt;
+## 
+## 
+## Attaching package: &#39;microbiome&#39;
+## 
+## The following object is masked from &#39;package:ggplot2&#39;:
+## 
+##     alpha
+## 
+## The following object is masked from &#39;package:base&#39;:
+## 
+##     transform</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="save-the-plot.html#cb5-1" tabindex="-1"></a><span class="fu">library</span>(microbiomeMarker)</span></code></pre></div>
+<pre><code>## Registered S3 method overwritten by &#39;gplots&#39;:
+##   method         from     
+##   reorder.factor DescTools
+## 
+## Attaching package: &#39;microbiomeMarker&#39;
+## 
+## The following objects are masked from &#39;package:microbiome&#39;:
+## 
+##     abundances, aggregate_taxa
+## 
+## The following object is masked from &#39;package:phyloseq&#39;:
+## 
+##     plot_heatmap</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="save-the-plot.html#cb7-1" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;workflow/scripts/importdata.R&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Attaching package: &#39;Matrix&#39;
+## 
+## The following objects are masked from &#39;package:tidyr&#39;:
+## 
+##     expand, pack, unpack</code></pre>
+<div id="import-data" class="section level2" number="8.1">
+<h2><span class="header-section-number">8.1</span> Import data</h2>
+<pre><code>Loading objects:
+  df_GlobalPatterns
+  df_ibd_phylo
+  df_dietswap
+  df_caporaso
+  df_kostic_crc
+  ps_GlobalPatterns
+  ps_ibd_phylo
+  ps_dietswap
+  ps_caporaso
+  ps_kostic_crc</code></pre>
+</div>
+<div id="dataset-ps_globalpatterns" class="section level2" number="8.2">
+<h2><span class="header-section-number">8.2</span> Dataset: <code>ps_GlobalPatterns</code></h2>
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 19216 taxa and 26 samples ]
+sample_data() Sample Data:       [ 26 samples by 7 sample variables ]
+tax_table()   Taxonomy Table:    [ 19216 taxa by 7 taxonomic ranks ]
+phy_tree()    Phylogenetic Tree: [ 19216 tips and 19215 internal nodes ]</code></pre>
+<pre><code>
+Sample Variables</code></pre>
+<pre><code>[1] &quot;X.SampleID&quot;               &quot;Primer&quot;                  
+[3] &quot;Final_Barcode&quot;            &quot;Barcode_truncated_plus_T&quot;
+[5] &quot;Barcode_full_length&quot;      &quot;SampleType&quot;              
+[7] &quot;Description&quot;             </code></pre>
+<pre><code>
+Number of levels in selected group</code></pre>
+<pre><code>[1] 1 2 3 4 5 6 7 8 9</code></pre>
+</div>
+<div id="dataset-ps_ibd_phylo" class="section level2" number="8.3">
+<h2><span class="header-section-number">8.3</span> Dataset: <code>ps_ibd_phylo</code></h2>
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 36349 taxa and 91 samples ]
+sample_data() Sample Data:       [ 91 samples by 15 sample variables ]
+tax_table()   Taxonomy Table:    [ 36349 taxa by 7 taxonomic ranks ]</code></pre>
+<pre><code>
+Sample Variables</code></pre>
+<pre><code> [1] &quot;sample&quot;       &quot;gender&quot;       &quot;age&quot;          &quot;DiseaseState&quot; &quot;steroids&quot;    
+ [6] &quot;imsp&quot;         &quot;abx&quot;          &quot;mesalamine&quot;   &quot;ibd&quot;          &quot;activity&quot;    
+[11] &quot;active&quot;       &quot;race&quot;         &quot;fhx&quot;          &quot;imspLEVEL&quot;    &quot;SampleType&quot;  </code></pre>
+<pre><code>
+Number of levels in selected group</code></pre>
+<pre><code>[1] 1 2 3 4</code></pre>
+<p><img src="02_explore_processed_data_files/figure-html/unnamed-chunk-4-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dataset-ps_dietswap" class="section level2" number="8.4">
+<h2><span class="header-section-number">8.4</span> Dataset: <code>ps_dietswap</code></h2>
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 130 taxa and 222 samples ]
+sample_data() Sample Data:       [ 222 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 130 taxa by 3 taxonomic ranks ]</code></pre>
+<pre><code>
+Sample Variables</code></pre>
+<pre><code>[1] &quot;subject&quot;                &quot;sex&quot;                    &quot;nationality&quot;           
+[4] &quot;group&quot;                  &quot;sample&quot;                 &quot;timepoint&quot;             
+[7] &quot;timepoint.within.group&quot; &quot;bmi_group&quot;             </code></pre>
+<pre><code>
+Number of levels in nationality</code></pre>
+<pre><code>[1] 1 2</code></pre>
+<pre><code>
+Number of levels in group</code></pre>
+<pre><code>[1] 1 2 3</code></pre>
+<p><img src="02_explore_processed_data_files/figure-html/unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="02_explore_processed_data_files/figure-html/dietswap-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dataset-ps_caporaso" class="section level2" number="8.5">
+<h2><span class="header-section-number">8.5</span> Dataset: <code>ps_caporaso</code></h2>
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 3426 taxa and 34 samples ]
+sample_data() Sample Data:       [ 34 samples by 8 sample variables ]
+tax_table()   Taxonomy Table:    [ 3426 taxa by 7 taxonomic ranks ]
+phy_tree()    Phylogenetic Tree: [ 3426 tips and 3424 internal nodes ]</code></pre>
+<pre><code>
+Sample Variables</code></pre>
+<pre><code>[1] &quot;SampleType&quot;               &quot;Year&quot;                    
+[3] &quot;Month&quot;                    &quot;Day&quot;                     
+[5] &quot;Subject&quot;                  &quot;ReportedAntibioticUsage&quot; 
+[7] &quot;DaysSinceExperimentStart&quot; &quot;Description&quot;             </code></pre>
+<pre><code>
+Number of levels in selected group</code></pre>
+<pre><code>[1] 1 2 3 4</code></pre>
+<p><img src="02_explore_processed_data_files/figure-html/ps_caporaso_heatmap-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="02_explore_processed_data_files/figure-html/unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
+<img src="02_explore_processed_data_files/figure-html/ps_caporaso_cladogram-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="dataset-ps_kostic_crc" class="section level2" number="8.6">
+<h2><span class="header-section-number">8.6</span> Dataset: <code>ps_kostic_crc</code></h2>
+<pre><code>phyloseq-class experiment-level object
+otu_table()   OTU Table:         [ 2505 taxa and 177 samples ]
+sample_data() Sample Data:       [ 177 samples by 71 sample variables ]
+tax_table()   Taxonomy Table:    [ 2505 taxa by 7 taxonomic ranks ]</code></pre>
+<pre><code>
+Sample Variables</code></pre>
+<pre><code> [1] &quot;X.SampleID&quot;                    &quot;BarcodeSequence&quot;              
+ [3] &quot;LinkerPrimerSequence&quot;          &quot;NECROSIS_PERCENT&quot;             
+ [5] &quot;TARGET_SUBFRAGMENT&quot;            &quot;ASSIGNED_FROM_GEO&quot;            
+ [7] &quot;EXPERIMENT_CENTER&quot;             &quot;TITLE&quot;                        
+ [9] &quot;RUN_PREFIX&quot;                    &quot;AGE&quot;                          
+[11] &quot;NORMAL_EQUIVALENT_PERCENT&quot;     &quot;FIBROBLAST_AND_VESSEL_PERCENT&quot;
+[13] &quot;DEPTH&quot;                         &quot;TREATMENT&quot;                    
+[15] &quot;AGE_AT_DIAGNOSIS&quot;              &quot;COMMON_NAME&quot;                  
+[17] &quot;HOST_COMMON_NAME&quot;              &quot;BODY_SITE&quot;                    
+[19] &quot;ELEVATION&quot;                     &quot;REPORTS_RECEIVED&quot;             
+[21] &quot;CEA&quot;                           &quot;PCR_PRIMERS&quot;                  
+[23] &quot;COLLECTION_DATE&quot;               &quot;ALTITUDE&quot;                     
+[25] &quot;ENV_BIOME&quot;                     &quot;SEX&quot;                          
+[27] &quot;PLATFORM&quot;                      &quot;RACE&quot;                         
+[29] &quot;BSP_DIAGNOSIS&quot;                 &quot;STUDY_CENTER&quot;                 
+[31] &quot;COUNTRY&quot;                       &quot;CHEMOTHERAPY&quot;                 
+[33] &quot;YEAR_OF_DEATH&quot;                 &quot;ETHNICITY&quot;                    
+[35] &quot;ANONYMIZED_NAME&quot;               &quot;TAXON_ID&quot;                     
+[37] &quot;SAMPLE_CENTER&quot;                 &quot;SAMP_SIZE&quot;                    
+[39] &quot;YEAR_OF_BIRTH&quot;                 &quot;ORIGINAL_DIAGNOSIS&quot;           
+[41] &quot;AGE_UNIT&quot;                      &quot;STUDY_ID&quot;                     
+[43] &quot;EXPERIMENT_DESIGN_DESCRIPTION&quot; &quot;Description_duplicate&quot;        
+[45] &quot;DIAGNOSIS&quot;                     &quot;BODY_HABITAT&quot;                 
+[47] &quot;SEQUENCING_METH&quot;               &quot;RUN_DATE&quot;                     
+[49] &quot;HISTOLOGIC_GRADE&quot;              &quot;LONGITUDE&quot;                    
+[51] &quot;ENV_MATTER&quot;                    &quot;TARGET_GENE&quot;                  
+[53] &quot;ENV_FEATURE&quot;                   &quot;KEY_SEQ&quot;                      
+[55] &quot;BODY_PRODUCT&quot;                  &quot;TUMOR_PERCENT&quot;                
+[57] &quot;LIBRARY_CONSTRUCTION_PROTOCOL&quot; &quot;REGION&quot;                       
+[59] &quot;RUN_CENTER&quot;                    &quot;TUMOR_TYPE&quot;                   
+[61] &quot;BSP_NOTES&quot;                     &quot;RADIATION_THERAPY&quot;            
+[63] &quot;INFLAMMATION_PERCENT&quot;          &quot;HOST_SUBJECT_ID&quot;              
+[65] &quot;PC3&quot;                           &quot;LATITUDE&quot;                     
+[67] &quot;OSH_DIAGNOSIS&quot;                 &quot;STAGE&quot;                        
+[69] &quot;PRIMARY_DISEASE&quot;               &quot;HOST_TAXID&quot;                   
+[71] &quot;Description&quot;                  </code></pre>
+<pre><code>
+Number of levels in DIAGNOSIS</code></pre>
+<pre><code>[1] 1 2</code></pre>
+<p><img src="02_explore_processed_data_files/figure-html/ps_kostic_crc_heatmap-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="02_explore_processed_data_files/figure-html/ps_kostic_crc_cladogram-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="02_explore_processed_data_files/figure-html/unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<p><img src="02_explore_processed_data_files/figure-html/unconstrained_aitchison_pca-1.png" width="70%" style="display: block; margin: auto;" /></p>
+<pre><code>           Df  SumOfSqs         R2        F Pr(&gt;F)
+bmi_group   2  104.0678 0.04177157 4.773379   0.01
+Residual  219 2387.2862 0.95822843       NA     NA
+Total     221 2491.3540 1.00000000       NA     NA</code></pre>
+<pre><code>psExtra info:
+tax_agg = &quot;Family&quot; tax_trans = &quot;identity&quot; dist_method = &quot;aitchison&quot; </code></pre>
+<p><img src="02_explore_processed_data_files/figure-html/unnamed-chunk-13-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="plot-ggtree-cladogram" class="section level2" number="8.7">
+<h2><span class="header-section-number">8.7</span> Plot ggtree cladogram</h2>
+<pre><code>Loading objects:
+  df_GlobalPatterns
+  df_ibd_phylo
+  df_dietswap
+  df_caporaso
+  df_kostic_crc
+  ps_GlobalPatterns
+  ps_ibd_phylo
+  ps_dietswap
+  ps_caporaso
+  ps_kostic_crc</code></pre>
+</div>
+<div id="getting-otutable-from-phyloseq" class="section level2" number="8.8">
+<h2><span class="header-section-number">8.8</span> Getting <code>otutable</code> from phyloseq</h2>
+</div>
+<div id="getting-bray-curtis-distances" class="section level2" number="8.9">
+<h2><span class="header-section-number">8.9</span> Getting Bray-<code>Curtis</code> distances</h2>
+<p><img src="02_explore_processed_data_files/figure-html/braydist-1.png" width="70%" style="display: block; margin: auto;" /></p>
+</div>
+<div id="getting-jaccard-distances" class="section level2" number="8.10">
+<h2><span class="header-section-number">8.10</span> Getting <code>Jaccard</code> distances</h2>
+<p><img src="02_explore_processed_data_files/figure-html/jaccarddist-1.png" width="70%" style="display: block; margin: auto;" /><img src="02_explore_processed_data_files/figure-html/jaccarddist-2.png" width="70%" style="display: block; margin: auto;" /></p>
+
+</div>
+</div>
+
+
+
+  </main>
+
+  <div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page">
+      <h2>On this page</h2>
+      <div id="book-on-this-page"></div>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          <li><a id="book-source" href="#">View source <i class="fab fa-github"></i></a></li>
+          <li><a id="book-edit" href="#">Edit this page <i class="fab fa-github"></i></a></li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mt-3">
+        <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p><br>
+        <p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-20</b>.</p><br>
+      </div>
+      <div class="col-12 col-md-6 mt-3">
+        <p>Note: This practical guide was created using the <a class="text-light" href="https://bookdown.org/yihui/bookdown/">bookdown</a> R package, styled with the modern bs4_book format.</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+</body>
+
+</html>
