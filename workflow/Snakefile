@@ -211,7 +211,7 @@ rule create_barplots:
 rule render_bs4_book:
     input:
         "index.Rmd",
-        "reports/snakemake_report.html",
+        # "reports/snakemake_report.html",
         "reports/project_tree.txt",
         "dags/rulegraph.png",
         "dags/rulegraph.svg",
