@@ -17,7 +17,7 @@ citation_package:
   - natbib
   - biblatex
   - amsplain
-url: https://tmbuza.github.io/imap-data-preparation/
+url: https://tmbuza.github.io/imap-project-overview/
 cover-image: images/planning.png
 email_address: "ndelly@gmail.com"
 github-repo: tmbuza/imap-project-overview
@@ -28,9 +28,7 @@ description: |
 
 ```{r lockfile, include=FALSE}
 source("_common.R")
-source("_global.R")
 ```
-
 
 <!-- # Google fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
