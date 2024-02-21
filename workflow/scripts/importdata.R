@@ -8,14 +8,14 @@ library(Matrix)
 source("workflow/scripts/common.R")
 source("workflow/scripts/qiime2R.R")
 
-# if (!dir.exists("data")){dir.create("data")}
+if (!dir.exists("data")){dir.create("data")}
 
-# file.copy("~/Dropbox/MICROBIOME/imap-data-processing/data/external/external_ps_objects.rda", "data/processed_data.rda", overwrite = TRUE)
+file.copy("~/Dropbox/MICROBIOME/imap-data-processing/data/external/external_ps_objects.rda", "data/processed_data.rda", overwrite = TRUE)
 
-# file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/sample-metadata.tsv", "data/metadata.tsv", overwrite = TRUE)
-# file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/feature-table.qza", "data/feature.qza", overwrite = TRUE)
-# file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/taxonomy.qza", "data/taxonomy.qza", overwrite = TRUE)
-# file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/alpha_diversity/shannon_vector.qza", "data/shannon.qza", overwrite = TRUE)
+file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/sample-metadata.tsv", "data/metadata.tsv", overwrite = TRUE)
+file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/feature-table.qza", "data/feature.qza", overwrite = TRUE)
+file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/taxonomy.qza", "data/taxonomy.qza", overwrite = TRUE)
+file.copy("~/Dropbox/MICROBIOME/imap-qiime2-bioinformatics/qiime2_process/alpha_diversity/shannon_vector.qza", "data/shannon.qza", overwrite = TRUE)
 
 
 # Imported for demo only

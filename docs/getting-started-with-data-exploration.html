@@ -91,7 +91,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-preparation.git">View book source <i class="fas fa-air-freshener"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-exploration.git">View book source <i class="fas fa-air-freshener"></i></a></p>
         </div>
       </nav>
 </div>
@@ -116,6 +116,37 @@
 <span class="header-section-number">2.3</span> Basics of Snakemake Rules<a class="anchor" aria-label="anchor" href="#basics-of-snakemake-rules"><i class="fas fa-link"></i></a>
 </h2>
 <p>Explain the fundamental concepts of Snakemake rules, including input, output, and shell commands. Use a simple example related to taxa abundance data to illustrate how to define a basic rule for generating barplots.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"../imap-data-preparation/data/external/external_ps_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Loading objects:
+##   df_GlobalPatterns
+##   df_ibd_phylo
+##   df_dietswap
+##   df_caporaso
+##   df_kostic_crc
+##   ps_GlobalPatterns
+##   ps_ibd_phylo
+##   ps_dietswap
+##   ps_caporaso
+##   ps_kostic_crc</code></pre>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"../imap-data-preparation/data/mothur/mothur_phyloseq_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Loading objects:
+##   mtps_metadata
+##   mtps_otutable
+##   mtps_taxonomy
+##   mtps_phylotree
+##   ps_tree
+##   ps_raw
+##   ps_rel</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"../imap-data-preparation/data/qiime2/qiime2_phyloseq_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<pre><code>## Loading objects:
+##   ps_tree
+##   ps_raw
+##   ps_rel
+##   ps_df_raw
+##   ps_df_rel</code></pre>
 <div class="infoicon">
 <p>
 rule create_barplots input: “data/mothur_composite.csv”,
@@ -147,8 +178,8 @@ rule create_barplots input: “data/mothur_composite.csv”,
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/tmbuza/imap-data-preparation.git/blob/gh-pages/01_data_exploration_steps.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-preparation.git/edit/gh-pages/01_data_exploration_steps.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
+<li><a id="book-source" href="https://github.com/tmbuza/imap-data-exploration.git/blob/gh-pages/01_data_exploration_steps.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-exploration.git/edit/gh-pages/01_data_exploration_steps.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -161,7 +192,7 @@ rule create_barplots input: “data/mothur_composite.csv”,
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-20</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-21</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

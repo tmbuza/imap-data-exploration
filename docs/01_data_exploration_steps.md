@@ -10,6 +10,54 @@ Guide readers through the process of setting up the environment for Snakemake wo
 ## Basics of Snakemake Rules
 Explain the fundamental concepts of Snakemake rules, including input, output, and shell commands. Use a simple example related to taxa abundance data to illustrate how to define a basic rule for generating barplots.
 
+
+```r
+load("../imap-data-preparation/data/external/external_ps_objects.rda", verbose = TRUE)
+```
+
+```
+## Loading objects:
+##   df_GlobalPatterns
+##   df_ibd_phylo
+##   df_dietswap
+##   df_caporaso
+##   df_kostic_crc
+##   ps_GlobalPatterns
+##   ps_ibd_phylo
+##   ps_dietswap
+##   ps_caporaso
+##   ps_kostic_crc
+```
+
+```r
+load("../imap-data-preparation/data/mothur/mothur_phyloseq_objects.rda", verbose = TRUE)
+```
+
+```
+## Loading objects:
+##   mtps_metadata
+##   mtps_otutable
+##   mtps_taxonomy
+##   mtps_phylotree
+##   ps_tree
+##   ps_raw
+##   ps_rel
+```
+
+```r
+load("../imap-data-preparation/data/qiime2/qiime2_phyloseq_objects.rda", verbose = TRUE)
+```
+
+```
+## Loading objects:
+##   ps_tree
+##   ps_raw
+##   ps_rel
+##   ps_df_raw
+##   ps_df_rel
+```
+
+
 <div class="infoicon">
 <p>rule create_barplots input: “data/mothur_composite.csv”,
 “data/qiime2_composite.csv” output: “figures/taxon_barplot.png”
@@ -72,7 +120,10 @@ rbind(mo, q2) %>%
   # filter(total != 0) %>%
   filter(total >= 10) %>%
   ungroup() %>%
-  select(-total) %>% 
+  select(-total)  %>% 
+  saveRDS("data/mothur_qiime2_merged.rds")
+
+readRDS("data/mothur_qiime2_merged.rds") %>% 
   ggplot(aes(x=Genus, y=rel_abund, fill=pipeline)) +
   facet_grid(~pipeline) +
   geom_col() +

@@ -157,3 +157,4 @@ dmypy.json
 .pyre/
 .Rproj.user
 _bookdown_files/01_data_exploration_steps_files/figure-html/load_data-1.png
+Rplots.pdf

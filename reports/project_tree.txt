@@ -7,9 +7,11 @@ Project Tree
 ├── 999-references.Rmd
 ├── 9999-footer.Rmd
 ├── LICENSE
+├── README.md
 ├── Rplots.pdf
 ├── _bookdown.yml
 ├── _bookdown_files
+│   ├── 01_data_exploration_steps_files
 │   └── 02_explore_processed_data_files
 ├── _common.R
 ├── _global.R
@@ -21,14 +23,19 @@ Project Tree
 │   ├── rulegraph.png
 │   └── rulegraph.svg
 ├── data
+│   ├── feature.qza
+│   ├── metadata.tsv
 │   ├── mothur_composite.csv
-│   └── qiime2_composite.csv
-├── data-prep.html
-├── data-prep.md
+│   ├── mothur_qiime2_merged.rds
+│   ├── processed_data.rda
+│   ├── qiime2_composite.csv
+│   ├── shannon.qza
+│   └── taxonomy.qza
 ├── data-prep.rds
 ├── docs
 │   ├── 00-preface.md
 │   ├── 01_data_exploration_steps.md
+│   ├── 01_data_exploration_steps_files
 │   ├── 02_explore_processed_data.md
 │   ├── 02_explore_processed_data_files
 │   ├── 404.html
@@ -54,17 +61,23 @@ Project Tree
 │   ├── preface.html
 │   ├── reference-keys.txt
 │   ├── references.html
+│   ├── resources
 │   ├── save-the-plot.html
 │   ├── scriptscreate_barplots.html
 │   ├── search.json
 │   ├── session-information.html
+│   ├── session_info.Rmd
 │   ├── style.css
 │   └── visualizations-with-r-and-python.html
+├── figures
+│   ├── taxon_barplot.png
+│   └── taxon_barplot.svg
 ├── images
 │   ├── coders.png
 │   └── explore.png
 ├── imap-data-exploration.Rproj
 ├── index.Rmd
+├── index.knit.md
 ├── library
 │   ├── apa.csl
 │   ├── imap.bib
@@ -79,8 +92,7 @@ Project Tree
 │   └── staging
 ├── renv.lock
 ├── reports
-│   ├── project_tree.txt
-│   └── snakemake_report.html
+│   └── project_tree.txt
 ├── resources
 │   ├── feature_table.qza
 │   ├── rooted_tree.qza
@@ -88,6 +100,8 @@ Project Tree
 │   ├── session_info.txt
 │   ├── shannon_vector.qza
 │   └── taxonomy.qza
+├── session_info.Rmd
+├── session_info.txt
 ├── style.css
 └── workflow
     ├── Snakefile
@@ -97,4 +111,4 @@ Project Tree
     ├── schemas
     └── scripts
 
-25 directories, 72 files
+29 directories, 82 files

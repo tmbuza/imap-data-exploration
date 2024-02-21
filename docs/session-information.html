@@ -91,7 +91,7 @@
 </ul>
 
         <div class="book-extra">
-          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-preparation.git">View book source <i class="fas fa-air-freshener"></i></a></p>
+          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-exploration.git">View book source <i class="fas fa-air-freshener"></i></a></p>
         </div>
       </nav>
 </div>
@@ -100,12 +100,12 @@
 <span class="header-section-number">C</span> Session Information<a class="anchor" aria-label="anchor" href="#session-information"><i class="fas fa-link"></i></a>
 </h1>
 <p>Reproducibility relies on the ability to precisely recreate the working environment, and session information serves as a vital reference to achieve this consistency. Here we record details about the R environment, package versions, and system settings of the computing environment at the time of analysis.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://yihui.org/knitr/">knitr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-lib/sessioninfo#readme">sessioninfo</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Get session info</span></span>
-<span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">info</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/capture.output.html">capture.output</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Create the 'resources' folder if it doesn't exist</span></span>
 <span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span><span class="op">(</span><span class="st">"resources"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
@@ -113,10 +113,7 @@
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="co"># Save the session information to a text file without line numbers</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">info</span>, file <span class="op">=</span> <span class="st">"resources/session_info.txt"</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
-<blockquote>
-<p>For a detailed overview of the tools and versions suitable for this guide, I encourage you to explore the session information saved in the accompanying text file named <code>resources/session_info.txt</code>,</p>
-</blockquote>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="va">info</span>, file <span class="op">=</span> <span class="st">"session_info.txt"</span>, sep <span class="op">=</span> <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 
 </div>
   <div class="chapter-nav">
@@ -128,8 +125,8 @@
 
       <div class="book-extra">
         <ul class="list-unstyled">
-<li><a id="book-source" href="https://github.com/tmbuza/imap-data-preparation.git/blob/gh-pages/99-appendix.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
-          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-preparation.git/edit/gh-pages/99-appendix.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
+<li><a id="book-source" href="https://github.com/tmbuza/imap-data-exploration.git/blob/gh-pages/99-appendix.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-exploration.git/edit/gh-pages/99-appendix.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
         </ul>
 </div>
     </nav>
@@ -142,7 +139,7 @@
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-20</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-21</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

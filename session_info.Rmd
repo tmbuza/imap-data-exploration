@@ -1,0 +1,29 @@
+---
+title: "Session Information"
+output:
+  bookdown::html_document2:
+    toc: false
+---
+
+```bash
+#!/bin/bash
+
+# Read values from YAML file
+USERNAME=$(yq eval '.bookdown::bs4_book.repo.username' _bookdown.yml)
+REPOSITORY=$(yq eval '.bookdown::bs4_book.repo.base' _bookdown.yml | awk -F'/' '{print $NF}' | sed 's/.git//')
+
+# Construct GitHub link
+LINK="https://github.com/$USERNAME/$REPOSITORY/blob/main/session_info.txt"
+
+echo "GitHub Link: $LINK"
+
+#!/bin/bash
+
+# Read values from YAML file
+USERNAME=$(yq eval '.bookdown::bs4_book.repo.username' _bookdown.yml)
+REPOSITORY=$(yq eval '.bookdown::bs4_book.repo.base' _bookdown.yml | awk -F'/' '{print $NF}' | sed 's/.git//')
+
+# Construct GitHub link
+LINK="https://github.com/$USERNAME/$REPOSITORY/blob/main/session_info.txt"
+
+echo "GitHub Link: $LINK"

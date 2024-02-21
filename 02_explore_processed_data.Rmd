@@ -1,29 +1,15 @@
 # Exploration of processded data
-
+## Import data
 ```{r}
 library(tidyverse)
 library(phyloseq)
 library(microbiome)
 library(microbiomeMarker)
 
-source("workflow/scripts/importdata.R")
+load("../imap-data-preparation/data/external/external_ps_objects.rda", verbose = TRUE)
+load("../imap-data-preparation/data/mothur/mothur_phyloseq_objects.rda", verbose = TRUE)
+load("../imap-data-preparation/data/qiime2/qiime2_phyloseq_objects.rda", verbose = TRUE)
 ```
-
-
-## Import data
-```{r data}
-# QIIME2
-# load("~/Dropbox/MICROBIOME/imap-data-processing/data/qiime2/qiime2_phyloseq_objects.rda", verbose = TRUE)
-# composite <- read_csv("~/Dropbox/MICROBIOME/imap-data-processing/data/qiime2/qiime2_composite.csv", show_col_types = FALSE)
-
-# Mothur
-# load("~/Dropbox/MICROBIOME/imap-data-processing/data/mothur/mothur_phyloseq_objects.rda", verbose = TRUE)
-# composite <- read_csv("~/Dropbox/MICROBIOME/imap-data-processing/data/mothur/mothur_composite.csv", show_col_types = FALSE)
-
-# External data
-load("~/Dropbox/MICROBIOME/imap-data-processing/data/external/external_ps_objects.rda", verbose = TRUE)
-```
-
 
 ## Dataset: `ps_GlobalPatterns`
 ```{r}
