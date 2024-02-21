@@ -17,15 +17,14 @@ citation_package:
   - natbib
   - biblatex
   - amsplain
-url: https://tmbuza.github.io/imap-data-preparation/
+url: https://tmbuza.github.io/imap-data-exploration/
 cover-image: images/planning.png
 email_address: "ndelly@gmail.com"
-github-repo: tmbuza/imap-project-overview
+github-repo: tmbuza/imap-data-exploration
 biblio-style: apalike
 description: |
   | This part will be added before release.
 ---
-
 
 
 
@@ -43,7 +42,7 @@ description: |
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 
 
-# <u>IMAP-Part 08</u>:  Microbiome Data Exploration Guide {-#data-exploration}
+# <u>IMAP-Part 08</u>: Microbiome Data Exploration Guide {-#data-exploration}
 
 <br>
 ![Book cover](images/coders.png)
