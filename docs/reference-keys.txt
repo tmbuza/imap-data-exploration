@@ -3,17 +3,6 @@ the-significance-of-data-exploration
 what-to-expect
 navigating-the-chapter
 embark-on-the-exploration
-getting-started-with-data-exploration
-understand-snakemake-workflows
-setting-up-exploration-environment
-basics-of-snakemake-rules
-integrating-r-python-and-bash
-data-exploration-techniques
-visualizations-with-r-and-python
-advanced-snakemake-features
-case-studies-and-examples
-best-practices-and-optimization
-conclusion
 exploration-of-processded-data
 import-data
 dataset-ps_globalpatterns

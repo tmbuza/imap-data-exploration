@@ -12,7 +12,7 @@ output_dir: docs
 rmd_files:
   - index.Rmd
   - 00-preface.Rmd
-  - 01_data_exploration_steps.Rmd
+  #- 01_data_exploration_steps.Rmd
   - 02_explore_processed_data.Rmd
   - 99-appendix.Rmd
   - 999-references.Rmd

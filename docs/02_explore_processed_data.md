@@ -681,11 +681,11 @@ aitchison_perm <- aitchison_dists %>%
 ```
 
 ```
-## 2024-02-21 23:27:19.337993 - Starting PERMANOVA with 99 perms with 1 processes
+## 2024-02-21 23:39:14.909061 - Starting PERMANOVA with 99 perms with 1 processes
 ```
 
 ```
-## 2024-02-21 23:27:19.392805 - Finished PERMANOVA
+## 2024-02-21 23:39:14.96335 - Finished PERMANOVA
 ```
 
 ```r
