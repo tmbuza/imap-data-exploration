@@ -464,3 +464,45 @@ inner_join(bray, jaccard, by=c("A", "B")) %>%
 
 ```
 
+# Explore Microbiome Data {#data-for-stats}
+
+## Import microbiome demo dataset
+Using `dietswap` from `microbiome` package
+
+```{r demo_data}
+library(microbiome)
+data("dietswap", package = "microbiome")
+ps <- dietswap
+```
+
+## Create tidy dataframe
+```{r prepare_df}
+library(phyloseq)
+library(tidyverse)
+
+df <-dietswap %>% 
+  phyloseq::psmelt() %>% 
+  select(-sample) %>% 
+  tibble::rownames_to_column("sample_id") %>% 
+  rename_all(tolower)
+
+```
+
+## Find missing values
+```{r status}
+library(tidyverse)
+library(funModeling)
+
+df_status(df, print_results = FALSE) %>% 
+  select(variable, type, unique, p_zeros) %>% tibble::tibble()
+```
+
+
+## Distributions for categoric variables
+```{r freq_catvars}
+
+freq(df, 
+     input = c("sex", "nationality", "group", "bmi_group"), 
+     plot = TRUE,
+     na.rm = FALSE)
+```

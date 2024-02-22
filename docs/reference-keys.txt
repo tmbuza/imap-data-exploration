@@ -14,6 +14,11 @@ plot-ggtree-cladogram
 getting-otutable-from-phyloseq
 getting-bray-curtis-distances
 getting-jaccard-distances
+data-for-stats
+import-microbiome-demo-dataset
+create-tidy-dataframe
+find-missing-values
+distributions-for-categoric-variables
 imap-github-repos
 data-exploration-rulegraph
 session-information

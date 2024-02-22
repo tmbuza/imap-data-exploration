@@ -681,11 +681,11 @@ aitchison_perm <- aitchison_dists %>%
 ```
 
 ```
-## 2024-02-21 23:39:14.909061 - Starting PERMANOVA with 99 perms with 1 processes
+## 2024-02-22 22:48:41.941937 - Starting PERMANOVA with 99 perms with 1 processes
 ```
 
 ```
-## 2024-02-21 23:39:14.96335 - Finished PERMANOVA
+## 2024-02-22 22:48:41.997354 - Finished PERMANOVA
 ```
 
 ```r
@@ -949,3 +949,155 @@ inner_join(bray, jaccard, by=c("A", "B")) %>%
 
 <img src="02_explore_processed_data_files/figure-html/jaccarddist-2.png" width="672" />
 
+# Explore Microbiome Data {#data-for-stats}
+
+## Import microbiome demo dataset
+Using `dietswap` from `microbiome` package
+
+
+```r
+library(microbiome)
+data("dietswap", package = "microbiome")
+ps <- dietswap
+```
+
+## Create tidy dataframe
+
+```r
+library(phyloseq)
+library(tidyverse)
+
+df <-dietswap %>% 
+  phyloseq::psmelt() %>% 
+  select(-sample) %>% 
+  tibble::rownames_to_column("sample_id") %>% 
+  rename_all(tolower)
+```
+
+## Find missing values
+
+```r
+library(tidyverse)
+library(funModeling)
+```
+
+```
+## Loading required package: Hmisc
+```
+
+```
+## 
+## Attaching package: 'Hmisc'
+```
+
+```
+## The following objects are masked from 'package:dplyr':
+## 
+##     src, summarize
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, units
+```
+
+```
+## funModeling v.1.9.4 :)
+## Examples and tutorials at livebook.datascienceheroes.com
+##  / Now in Spanish: librovivodecienciadedatos.ai
+```
+
+```
+## 
+## Attaching package: 'funModeling'
+```
+
+```
+## The following object is masked from 'package:phyloseq':
+## 
+##     get_sample
+```
+
+```r
+df_status(df, print_results = FALSE) %>% 
+  select(variable, type, unique, p_zeros) %>% tibble::tibble()
+```
+
+```
+## # A tibble: 14 × 4
+##    variable               type      unique p_zeros
+##    <chr>                  <chr>      <int>   <dbl>
+##  1 sample_id              character  28860     0  
+##  2 otu                    character    130     0  
+##  3 sample                 character    222     0  
+##  4 abundance              numeric     1268    20.6
+##  5 subject                factor        38     0  
+##  6 sex                    factor         2     0  
+##  7 nationality            factor         2     0  
+##  8 group                  factor         3     0  
+##  9 timepoint              integer        6     0  
+## 10 timepoint.within.group integer        2     0  
+## 11 bmi_group              factor         3     0  
+## 12 phylum                 character      8     0  
+## 13 family                 character     22     0  
+## 14 genus                  character    130     0
+```
+
+
+## Distributions for categoric variables
+
+```r
+freq(df, 
+     input = c("sex", "nationality", "group", "bmi_group"), 
+     plot = TRUE,
+     na.rm = FALSE)
+```
+
+```
+## Warning: The `<scale>` argument of `guides()` cannot be `FALSE`. Use "none" instead as
+## of ggplot2 3.3.4.
+## ℹ The deprecated feature was likely used in the funModeling package.
+##   Please report the issue at <https://github.com/pablo14/funModeling/issues>.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+```
+
+<img src="02_explore_processed_data_files/figure-html/freq_catvars-1.png" width="672" />
+
+```
+##      sex frequency percentage cumulative_perc
+## 1   male     15600      54.05           54.05
+## 2 female     13260      45.95          100.00
+```
+
+<img src="02_explore_processed_data_files/figure-html/freq_catvars-2.png" width="672" />
+
+```
+##   nationality frequency percentage cumulative_perc
+## 1         AAM     15990      55.41           55.41
+## 2         AFR     12870      44.59          100.00
+```
+
+<img src="02_explore_processed_data_files/figure-html/freq_catvars-3.png" width="672" />
+
+```
+##   group frequency percentage cumulative_perc
+## 1    ED      9750      33.78           33.78
+## 2    HE      9750      33.78           67.56
+## 3    DI      9360      32.43          100.00
+```
+
+<img src="02_explore_processed_data_files/figure-html/freq_catvars-4.png" width="672" />
+
+```
+##    bmi_group frequency percentage cumulative_perc
+## 1      obese     11700      40.54           40.54
+## 2 overweight      9880      34.23           74.77
+## 3       lean      7280      25.23          100.00
+```
+
+```
+## [1] "Variables processed: sex, nationality, group, bmi_group"
+```
