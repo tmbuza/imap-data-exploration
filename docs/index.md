@@ -45,7 +45,7 @@ description: |
 # <u>IMAP-Part 08</u>: Microbiome Data Exploration Guide {-#data-exploration}
 
 <br>
-![Book cover](images/coders.png)
+![](images/coders.png)
 <br>
 
 ## Welcome to chapter 8 {-}
