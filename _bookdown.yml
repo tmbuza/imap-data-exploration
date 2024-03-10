@@ -16,7 +16,7 @@ rmd_files:
   - 02_explore_processed_data.Rmd
   - 99-appendix.Rmd
   - 999-references.Rmd
-  - 9999-footer.Rmd
+  # - 9999-footer.Rmd
   
 
 

@@ -27,28 +27,6 @@
     
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
-<style type="text/css">
-    /* Used with Pandoc 2.11+ new --citeproc when CSL is used */
-    div.csl-bib-body { }
-    div.csl-entry {
-      clear: both;
-        }
-    .hanging div.csl-entry {
-      margin-left:2em;
-      text-indent:-2em;
-    }
-    div.csl-left-margin {
-      min-width:2em;
-      float:left;
-    }
-    div.csl-right-inline {
-      margin-left:2em;
-      padding-left:1em;
-    }
-    div.csl-indent {
-      margin-left: 2em;
-    }
-  </style>
 <link rel="stylesheet" href="style.css">
 </head>
 <body data-spy="scroll" data-target="#toc">
@@ -98,7 +76,7 @@
 <span class="header-section-number">3.1</span> Import microbiome demo dataset<a class="anchor" aria-label="anchor" href="#import-microbiome-demo-dataset"><i class="fas fa-link"></i></a>
 </h2>
 <p>Using <code>dietswap</code> from <code>microbiome</code> package</p>
-<div class="sourceCode" id="cb109"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://microbiome.github.io/microbiome">microbiome</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="st">"dietswap"</span>, package <span class="op">=</span> <span class="st">"microbiome"</span><span class="op">)</span></span>
 <span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="va">dietswap</span></span></code></pre></div>
@@ -107,21 +85,21 @@
 <h2>
 <span class="header-section-number">3.2</span> Create tidy dataframe<a class="anchor" aria-label="anchor" href="#create-tidy-dataframe"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">df</span> <span class="op">&lt;-</span><span class="va">dietswap</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">phyloseq</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/psmelt.html">psmelt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"sample_id"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select_all.html">rename_all</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">df</span> <span class="op">&lt;-</span><span class="va">dietswap</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">phyloseq</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/psmelt.html">psmelt</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"sample_id"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div id="find-missing-values" class="section level2" number="3.3">
 <h2>
 <span class="header-section-number">3.3</span> Find missing values<a class="anchor" aria-label="anchor" href="#find-missing-values"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb113"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://livebook.datascienceheroes.com">funModeling</a></span><span class="op">)</span></span></code></pre></div>
 <pre><code>## Loading required package: Hmisc</code></pre>
@@ -141,9 +119,9 @@
 <pre><code>## The following object is masked from 'package:phyloseq':
 ## 
 ##     get_sample</code></pre>
-<div class="sourceCode" id="cb119"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/funModeling/man/df_status.html">df_status</a></span><span class="op">(</span><span class="va">df</span>, print_results <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> </span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/dplyr/man/select.html">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">type</span>, <span class="va">unique</span>, <span class="va">p_zeros</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/magrittr/man/pipe.html">%&gt;%</a></span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/tibble/man/tibble.html">tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/funModeling/man/df_status.html">df_status</a></span><span class="op">(</span><span class="va">df</span>, print_results <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">variable</span>, <span class="va">type</span>, <span class="va">unique</span>, <span class="va">p_zeros</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## # A tibble: 14 × 4
 ##    variable               type      unique p_zeros
 ##    &lt;chr&gt;                  &lt;chr&gt;      &lt;int&gt;   &lt;dbl&gt;
@@ -166,7 +144,7 @@
 <h2>
 <span class="header-section-number">3.4</span> Distributions for categoric variables<a class="anchor" aria-label="anchor" href="#distributions-for-categoric-variables"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb121"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb123"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/funModeling/man/freq.html">freq</a></span><span class="op">(</span><span class="va">df</span>, </span>
 <span>     input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"nationality"</span>, <span class="st">"group"</span>, <span class="st">"bmi_group"</span><span class="op">)</span>, </span>
 <span>     plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -232,7 +210,7 @@
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-02-22</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-03-10</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

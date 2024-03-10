@@ -20,6 +20,14 @@ library(tidyverse)
 
 ```r
 library(phyloseq)
+```
+
+```
+## Warning in .recacheSubclasses(def@className, def, env): undefined subclass
+## "ndiMatrix" of class "replValueSp"; definition not updated
+```
+
+```r
 library(microbiome)
 ```
 
@@ -88,10 +96,6 @@ load("../imap-data-preparation/data/mothur/mothur_phyloseq_objects.rda", verbose
 
 ```
 ## Loading objects:
-##   mtps_metadata
-##   mtps_otutable
-##   mtps_taxonomy
-##   mtps_phylotree
 ##   ps_tree
 ##   ps_raw
 ##   ps_rel
@@ -681,11 +685,11 @@ aitchison_perm <- aitchison_dists %>%
 ```
 
 ```
-## 2024-02-22 22:48:41.941937 - Starting PERMANOVA with 99 perms with 1 processes
+## 2024-03-10 18:51:39.230751 - Starting PERMANOVA with 99 perms with 1 processes
 ```
 
 ```
-## 2024-02-22 22:48:41.997354 - Finished PERMANOVA
+## 2024-03-10 18:51:39.285304 - Finished PERMANOVA
 ```
 
 ```r
