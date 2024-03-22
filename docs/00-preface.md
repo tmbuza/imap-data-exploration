@@ -16,4 +16,4 @@ The chapter unfolds in a logical sequence, starting with basic exploratory techn
 ## Embark on the Exploration
 Data exploration is not just a technical endeavor; it is a journey of discovery. As you embark on this chapter, embrace the iterative nature of exploration, allowing your curiosity to guide the analyses. The insights gained during this phase will lay the foundation for more targeted investigations, ultimately contributing to a richer understanding of the microbial communities under study.
 
-Whether you are new to data exploration or a seasoned explorer of datasets, this chapter invites you to delve into the fascinating intricacies of microbiome data. Let the exploration begin!
+Whether you are new to data exploration or a seasoned explorer of datasets, this chapter invites you to delve into the fascinating complexities of microbiome data. Let the exploration begin!
