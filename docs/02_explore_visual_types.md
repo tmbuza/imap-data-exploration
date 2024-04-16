@@ -513,16 +513,7 @@ cor_heatmap(
 Hierarchical clustering is a method for grouping similar observations or variables together based on their similarity or dissimilarity. It creates a hierarchical tree-like structure (dendrogram) that illustrates the relationships between clusters, allowing for the identification of natural groupings or patterns within the data.
 
 
-
-
-## Hierarchical clustering
-
-Hierarchical clustering is a method for grouping similar observations or variables together based on their similarity or dissimilarity. It creates a hierarchical tree-like structure (dendrogram) that illustrates the relationships between clusters, allowing for the identification of natural groupings or patterns within the data.
-
-
-
-
-# (PART) PHYLOGENY {-}
+# (PART) PHYLOGENY ANALYSIS {-}
 
 # Phylogenetic Analysis 
 
