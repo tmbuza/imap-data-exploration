@@ -1,0 +1,77 @@
+# (PART) VISUALIZATION TYPES {-}
+
+# Type of Visualization of Microbiome Data {#visual-types}
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  echo  =TRUE,
+  message  =FALSE,
+  warning  =FALSE,
+  cache  =FALSE,
+  comment  =NA)
+  
+```
+
+
+## Import prepared data
+```{bash eval=FALSE, include=FALSE}
+mkdir -p figures
+mkdir -p data
+
+cp -r ../imap-data-preparation/data/* data/
+
+```
+
+```{r message=FALSE, warning=FALSE}
+# Load required packages
+library(phyloseq)
+library(tidyverse)
+
+cat("\nSaved RData objects\n\n")
+load("data/dataframe_objects.rda", verbose = T)
+load("data/phyloseq_objects.rda", verbose = T)
+load("data/phyloseq_extra_objects.rda", verbose = T)
+load("data/ps_transformed.rda", verbose = T)
+load("data/bray_distances.rda", verbose = T)
+load("data/psextra_distances.rda", verbose = T)
+load("data/reduced_dimension.rda", verbose = T)
+
+```
+
+## Overview of demo data
+
+Now that we have imported the microbiome data into R environment, let us get an overview of these microbiome demo data. We will examine the dimensions of the OTU table within the dataset to understand the available information.
+
+
+```{r}
+# Load required packages
+library(phyloseq)
+
+cat("\nDimensions of the OTU table in the GlobalPatterns dataset\n")
+dim(otu_table(ps_GlobalPatterns))
+
+cat("\nColumn names of ps_GlobalPatterns dataset\n")
+colnames(otu_table(ps_GlobalPatterns))
+
+cat("\nDimensions of the OTU table in the dietswap dataset\n") 
+dim(otu_table(ps_dietswap))
+
+cat("\nColumn names of ps_dietswap dataset\n")
+colnames(otu_table(ps_dietswap))
+
+cat("\nDimensions of the OTU table in the caporaso dataset\n") 
+dim(otu_table(ps_caporaso))
+
+cat("\nColumn names of ps_caporaso dataset\n") 
+colnames(otu_table(ps_caporaso))
+
+cat("\nDimensions of the OTU table in the kostic_crc dataset\n") 
+dim(otu_table(ps_kostic_crc))
+
+cat("\nColumn names of kostic_crc dataset\n") 
+colnames(otu_table(ps_kostic_crc))
+
+```
+
+
+

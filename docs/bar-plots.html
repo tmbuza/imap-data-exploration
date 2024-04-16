@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>4 Bar Plots | IMAP: Integrated Microbiome Analysis Pipelines</title>
+<meta name="author" content="Teresia Mrema-Buza">
+<meta name="description" content="Bar plots are commonly used to visualize the relative abundance of taxa or other features within different groups or conditions in microbiome data. In this section, we will demonstrate different...">
+<meta name="generator" content="bookdown 0.37 with bs4_book()">
+<meta property="og:title" content="4 Bar Plots | IMAP: Integrated Microbiome Analysis Pipelines">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://tmbuza.github.io/imap-data-exploration/bar-plots.html">
+<meta property="og:image" content="https://tmbuza.github.io/imap-data-exploration/images/planning.png">
+<meta property="og:description" content="Bar plots are commonly used to visualize the relative abundance of taxa or other features within different groups or conditions in microbiome data. In this section, we will demonstrate different...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="4 Bar Plots | IMAP: Integrated Microbiome Analysis Pipelines">
+<meta name="twitter:description" content="Bar plots are commonly used to visualize the relative abundance of taxa or other features within different groups or conditions in microbiome data. In this section, we will demonstrate different...">
+<meta name="twitter:image" content="https://tmbuza.github.io/imap-data-exploration/images/planning.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Sen-0.4.8/font.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM%20Mono&amp;display=swap" rel="stylesheet">
+<link href="libs/Bitter-0.4.8/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.6.1/transition.js"></script><script src="libs/bs3compat-0.6.1/tabs.js"></script><script src="libs/bs3compat-0.6.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="End-to-End Practical User Guides Using Integrated Approaches"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a>:
+        <small class="text-muted">End-to-End Practical User Guides Using Integrated Approaches</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">IMAP-Part 08: Microbiome Data Exploration Guide</a></li>
+<li class="book-part">DATA EXPLORATION</li>
+<li><a class="" href="preface.html"><span class="header-section-number">1</span> Exploratory Data Analysis (EDA) of Microbiome Communities</a></li>
+<li class="book-part">VISUALIZATION TYPES</li>
+<li><a class="" href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></li>
+<li class="book-part">START EXPLORING</li>
+<li><a class="" href="exploration-of-visualization-types.html"><span class="header-section-number">3</span> Exploration of Visualization Types</a></li>
+<li class="book-part">BAR CHARTS</li>
+<li><a class="active" href="bar-plots.html"><span class="header-section-number">4</span> Bar Plots</a></li>
+<li class="book-part">DIFFERENTIAL ABUNDANCE</li>
+<li><a class="" href="differential-analysis-of-microbiome-data.html"><span class="header-section-number">5</span> Differential Analysis of Microbiome Data</a></li>
+<li class="book-part">ORDINATION</li>
+<li><a class="" href="ordination-plots.html"><span class="header-section-number">6</span> Ordination Plots</a></li>
+<li class="book-part">RELATIONSHIP ANALYSIS</li>
+<li><a class="" href="patterns-and-associations-analysis.html"><span class="header-section-number">7</span> Patterns and Associations Analysis</a></li>
+<li class="book-part">PHYLOGENY ANALYSIS</li>
+<li><a class="" href="phylogenetic-analysis.html"><span class="header-section-number">8</span> Phylogenetic Analysis</a></li>
+<li class="book-part">STATISTICAL ANALYSIS</li>
+<li><a class="" href="statistical-significance-analysis.html"><span class="header-section-number">10</span> Statistical Significance Analysis</a></li>
+<li class="book-part">APPENDIX</li>
+<li><a class="" href="imap-github-repos.html"><span class="header-section-number">A</span> IMAP GitHub Repos</a></li>
+<li><a class="" href="data-exploration-rulegraph.html"><span class="header-section-number">B</span> Data Exploration Rulegraph</a></li>
+<li><a class="" href="session-information.html"><span class="header-section-number">C</span> Session Information</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-exploration.git">View book source <i class="fas fa-air-freshener"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="bar-plots" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Bar Plots<a class="anchor" aria-label="anchor" href="#bar-plots"><i class="fas fa-link"></i></a>
+</h1>
+<p>Bar plots are commonly used to visualize the relative abundance of taxa or other features within different groups or conditions in microbiome data. In this section, we will demonstrate different methods for plotting bar plots.</p>
+<div id="using-freq-to-explore-sample-metadata" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Using freq() to explore sample metadata<a class="anchor" aria-label="anchor" href="#using-freq-to-explore-sample-metadata"><i class="fas fa-link"></i></a>
+</h2>
+<p>The freq() function is in the funModeling package provides a concise summary of the frequency distribution of a categorical variable in a dataset. It displays the count and percentage of each category, allowing users to quickly understand the distribution and prevalence of different categories within the variable. This function is useful for exploratory data analysis and understanding the composition of categorical variables in the dataset.</p>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://microbiome.github.io/microbiome">microbiome</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://livebook.datascienceheroes.com">funModeling</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">df</span> <span class="op">&lt;-</span><span class="va">df_dietswap</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">sample</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select_all.html">rename_all</a></span><span class="op">(</span><span class="va">tolower</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/funModeling/man/freq.html">freq</a></span><span class="op">(</span><span class="va">df</span>, </span>
+<span>     input <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"sex"</span>, <span class="st">"nationality"</span>, <span class="st">"group"</span>, <span class="st">"bmi_group"</span><span class="op">)</span>, </span>
+<span>     plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>     na.rm <span class="op">=</span> <span class="cn">FALSE</span>, </span>
+<span>     <span class="co"># path_out="figures"</span></span>
+<span>     <span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/prepare_df-1.png" width="672"></div>
+<pre><code>     sex frequency percentage cumulative_perc
+1   male     15600      54.05           54.05
+2 female     13260      45.95          100.00</code></pre>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/prepare_df-2.png" width="672"></div>
+<pre><code>  nationality frequency percentage cumulative_perc
+1         AAM     15990      55.41           55.41
+2         AFR     12870      44.59          100.00</code></pre>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/prepare_df-3.png" width="672"></div>
+<pre><code>  group frequency percentage cumulative_perc
+1    ED      9750      33.78           33.78
+2    HE      9750      33.78           67.56
+3    DI      9360      32.43          100.00</code></pre>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/prepare_df-4.png" width="672"></div>
+<pre><code>   bmi_group frequency percentage cumulative_perc
+1      obese     11700      40.54           40.54
+2 overweight      9880      34.23           74.77
+3       lean      7280      25.23          100.00</code></pre>
+<pre><code>[1] "Variables processed: sex, nationality, group, bmi_group"</code></pre>
+</div>
+<div id="relative-abundance-of-taxa" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Relative abundance of taxa<a class="anchor" aria-label="anchor" href="#relative-abundance-of-taxa"><i class="fas fa-link"></i></a>
+</h2>
+<ul>
+<li>Using <code>comp_barplot</code> function in microViz package</li>
+</ul>
+<p>The <code>comp_barplot</code> function in the <code>microViz</code> R package is designed to create comparative bar plots for visualizing microbiome data. This function allows users to compare the relative abundance of taxa or other features across different groups or conditions. It supports customization options such as color palette selection and plot title specification to enhance the appearance of the bar plot.</p>
+<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://david-barnett.github.io/microViz">microViz</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ps_dietswap</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://david-barnett.github.io/microViz/reference/comp_barplot.html">comp_barplot</a></span><span class="op">(</span></span>
+<span>    tax_level <span class="op">=</span> <span class="st">"Genus"</span>, n_taxa <span class="op">=</span> <span class="fl">15</span>, other_name <span class="op">=</span> <span class="st">"Other"</span>,</span>
+<span>    taxon_renamer <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">stringr</span><span class="fu">::</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">x</span>, <span class="st">" [ae]t rel."</span><span class="op">)</span>,</span>
+<span>    palette <span class="op">=</span> <span class="fu"><a href="https://david-barnett.github.io/microViz/reference/distinct_palette.html">distinct_palette</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">15</span>, add <span class="op">=</span> <span class="st">"grey90"</span><span class="op">)</span>,</span>
+<span>    merge_other <span class="op">=</span> <span class="cn">FALSE</span>, bar_outline_colour <span class="op">=</span> <span class="st">"darkgrey"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="st">"nationality"</span>, nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/barplotmicroViz-1.png" width="960"></div>
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="exploration-of-visualization-types.html"><span class="header-section-number">3</span> Exploration of Visualization Types</a></div>
+<div class="next"><a href="differential-analysis-of-microbiome-data.html"><span class="header-section-number">5</span> Differential Analysis of Microbiome Data</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#bar-plots"><span class="header-section-number">4</span> Bar Plots</a></li>
+<li><a class="nav-link" href="#using-freq-to-explore-sample-metadata"><span class="header-section-number">4.1</span> Using freq() to explore sample metadata</a></li>
+<li><a class="nav-link" href="#relative-abundance-of-taxa"><span class="header-section-number">4.2</span> Relative abundance of taxa</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tmbuza/imap-data-exploration.git/blob/gh-pages/02_explore_visual_types.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-exploration.git/edit/gh-pages/02_explore_visual_types.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mt-3">
+        <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-16</b>.</p>
+<br>
+</div>
+      <div class="col-12 col-md-6 mt-3">
+        <p>Note: This practical guide was created using the <a class="text-light" href="https://bookdown.org/yihui/bookdown/">bookdown</a> R package, styled with the modern bs4_book format.</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+</html>

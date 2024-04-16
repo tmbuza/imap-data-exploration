@@ -73,7 +73,7 @@ library(microbiomeMarker)
 ```
 
 ```r
-load("../imap-data-preparation/data/external/external_ps_objects.rda", verbose = TRUE)
+load("../imap-data-preparation/data/external/phyloseq_objects.rda", verbose = TRUE)
 ```
 
 ```
@@ -685,11 +685,11 @@ aitchison_perm <- aitchison_dists %>%
 ```
 
 ```
-## 2024-03-10 18:51:39.230751 - Starting PERMANOVA with 99 perms with 1 processes
+## 2024-04-12 11:42:17.996247 - Starting PERMANOVA with 99 perms with 1 processes
 ```
 
 ```
-## 2024-03-10 18:51:39.285304 - Finished PERMANOVA
+## 2024-04-12 11:42:18.049993 - Finished PERMANOVA
 ```
 
 ```r
@@ -816,7 +816,7 @@ cor_heatmap(
 
 ```r
 # External data
-load("~/Dropbox/MICROBIOME/imap-data-processing/data/external/external_ps_objects.rda", verbose = TRUE)
+load("~/Dropbox/MICROBIOME/imap-data-processing/data/external/phyloseq_objects.rda", verbose = TRUE)
 ```
 
 ```

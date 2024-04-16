@@ -1,0 +1,54 @@
+# (PART) STATISTICAL ANALYSIS
+
+# Statistical Significance Analysis
+
+This section delves into statistical analysis methods tailored specifically for microbiome data. Statistical analysis plays a crucial role in understanding the complex relationships and patterns within microbiome datasets, helping researchers uncover significant findings and insights into microbial community dynamics, composition, and responses to various environmental factors or treatments.
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  echo  =TRUE,
+  message  =FALSE,
+  warning  =FALSE,
+  cache  =FALSE,
+  comment  =NA)
+  
+```
+
+
+```{r message=FALSE, warning=FALSE}
+# Load required packages
+library(phyloseq)
+library(tidyverse)
+
+cat("\nSaved RData objects\n\n")
+load("data/dataframe_objects.rda", verbose = T)
+load("data/phyloseq_objects.rda", verbose = T)
+load("data/phyloseq_extra_objects.rda", verbose = T)
+load("data/ps_transformed.rda", verbose = T)
+load("data/bray_distances.rda", verbose = T)
+load("data/psextra_distances.rda", verbose = T)
+load("data/reduced_dimension.rda", verbose = T)
+
+```
+
+## PERMANOVA
+PERMANOVA (Permutational Multivariate Analysis of Variance) is a statistical test used to assess the significance of differences between groups of microbial communities. Particularly suited for analyzing multivariate data like microbiome composition, PERMANOVA offers valuable insights into how different experimental conditions or treatments impact microbial community structure.
+
+```{r}
+library(microViz) 
+
+bray_perm <- psextra_log10p_asin_bray_dist %>%
+  dist_permanova(
+    seed = 1234, # for set.seed to ensure reproducibility of random process
+    n_processes = 1, n_perms = 99, # you should use at least 999!
+    variables = "bmi_group"
+  )
+
+perm_get(bray_perm) %>% as.data.frame()
+
+
+info_get(bray_perm)
+
+```
+
+

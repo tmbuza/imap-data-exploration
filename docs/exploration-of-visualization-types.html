@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>3 Exploration of Visualization Types | IMAP: Integrated Microbiome Analysis Pipelines</title>
+<meta name="author" content="Teresia Mrema-Buza">
+<meta name="description" content='3.1 Import data # Load required packages library(phyloseq) library(tidyverse) cat("\nSaved RData objects\n\n") Saved RData objects load("data/external_ps_objects.rda", verbose = T) Loading...'>
+<meta name="generator" content="bookdown 0.37 with bs4_book()">
+<meta property="og:title" content="3 Exploration of Visualization Types | IMAP: Integrated Microbiome Analysis Pipelines">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://tmbuza.github.io/imap-data-exploration/exploration-of-visualization-types.html">
+<meta property="og:image" content="https://tmbuza.github.io/imap-data-exploration/images/planning.png">
+<meta property="og:description" content='3.1 Import data # Load required packages library(phyloseq) library(tidyverse) cat("\nSaved RData objects\n\n") Saved RData objects load("data/external_ps_objects.rda", verbose = T) Loading...'>
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="3 Exploration of Visualization Types | IMAP: Integrated Microbiome Analysis Pipelines">
+<meta name="twitter:description" content='3.1 Import data # Load required packages library(phyloseq) library(tidyverse) cat("\nSaved RData objects\n\n") Saved RData objects load("data/external_ps_objects.rda", verbose = T) Loading...'>
+<meta name="twitter:image" content="https://tmbuza.github.io/imap-data-exploration/images/planning.png">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><link href="libs/Sen-0.4.8/font.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM%20Mono&amp;display=swap" rel="stylesheet">
+<link href="libs/Bitter-0.4.8/font.css" rel="stylesheet">
+<script src="libs/bs3compat-0.6.1/transition.js"></script><script src="libs/bs3compat-0.6.1/tabs.js"></script><script src="libs/bs3compat-0.6.1/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-spy="scroll" data-target="#toc">
+
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
+
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="End-to-End Practical User Guides Using Integrated Approaches"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a>:
+        <small class="text-muted">End-to-End Practical User Guides Using Integrated Approaches</small>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
+    </div>
+
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html">IMAP-Part 08: Microbiome Data Exploration Guide</a></li>
+<li class="book-part">DATA EXPLORATION</li>
+<li><a class="" href="preface.html"><span class="header-section-number">1</span> Exploratory Data Analysis (EDA) of Microbiome Communities</a></li>
+<li class="book-part">VISUALIZATION TYPES</li>
+<li><a class="" href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></li>
+<li class="book-part">START EXPLORING</li>
+<li><a class="active" href="exploration-of-visualization-types.html"><span class="header-section-number">3</span> Exploration of Visualization Types</a></li>
+<li class="book-part">BAR CHARTS</li>
+<li><a class="" href="bar-plots.html"><span class="header-section-number">4</span> Bar Plots</a></li>
+<li class="book-part">DIFFERENTIAL ABUNDANCE</li>
+<li><a class="" href="differential-analysis-of-microbiome-data.html"><span class="header-section-number">5</span> Differential Analysis of Microbiome Data</a></li>
+<li class="book-part">ORDINATION</li>
+<li><a class="" href="ordination-plots.html"><span class="header-section-number">6</span> Ordination Plots</a></li>
+<li class="book-part">RELATIONSHIP ANALYSIS</li>
+<li><a class="" href="patterns-and-associations-analysis.html"><span class="header-section-number">7</span> Patterns and Associations Analysis</a></li>
+<li class="book-part">PHYLOGENY ANALYSIS</li>
+<li><a class="" href="phylogenetic-analysis.html"><span class="header-section-number">8</span> Phylogenetic Analysis</a></li>
+<li class="book-part">STATISTICAL ANALYSIS</li>
+<li><a class="" href="statistical-significance-analysis.html"><span class="header-section-number">10</span> Statistical Significance Analysis</a></li>
+<li class="book-part">APPENDIX</li>
+<li><a class="" href="imap-github-repos.html"><span class="header-section-number">A</span> IMAP GitHub Repos</a></li>
+<li><a class="" href="data-exploration-rulegraph.html"><span class="header-section-number">B</span> Data Exploration Rulegraph</a></li>
+<li><a class="" href="session-information.html"><span class="header-section-number">C</span> Session Information</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          <p><a id="book-repo" href="https://github.com/tmbuza/imap-data-exploration.git">View book source <i class="fas fa-air-freshener"></i></a></p>
+        </div>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="exploration-of-visualization-types" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Exploration of Visualization Types<a class="anchor" aria-label="anchor" href="#exploration-of-visualization-types"><i class="fas fa-link"></i></a>
+</h1>
+<div id="import-data" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Import data<a class="anchor" aria-label="anchor" href="#import-data"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Load required packages</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nSaved RData objects\n\n"</span><span class="op">)</span></span></code></pre></div>
+<pre><code>
+Saved RData objects</code></pre>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/external_ps_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  df_GlobalPatterns
+  df_dietswap
+  df_caporaso
+  df_kostic_crc
+  ps_GlobalPatterns
+  ps_dietswap
+  ps_caporaso
+  ps_kostic_crc</code></pre>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/ps_transformed.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  ps_asin
+  ps_identity
+  ps_compositional
+  ps_z_otu
+  ps_z_sample
+  ps_log10
+  ps_log10p
+  ps_clr
+  ps_shift
+  ps_scale</code></pre>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/bray_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  ps_asin_bray_dist
+  ps_compositional_bray_dist
+  ps_z_otu_bray_dist
+  ps_z_sample_bray_dist
+  ps_log10_bray_dist
+  ps_log10p_bray_dist
+  ps_clr_bray_dist
+  ps_shift_bray_dist
+  ps_scale_bray_dist</code></pre>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/psextra_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  psextra_clr_asin_bray_dist
+  psextra_id_asin_bray_dist
+  psextra_log10p_asin_bray_dist</code></pre>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/reduced_dimension.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  pca_asin_bray_metrics
+  mds_asin_bray_metrics
+  pcoa_asin_bray_metrics
+  tsne_asin_bray_metrics</code></pre>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_extra_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  psextra_clr_dietswap
+  psextra_id_dietswap
+  psextra_log10p_dietswap</code></pre>
+</div>
+<div id="major-visualization-r-colors" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Major visualization R colors<a class="anchor" aria-label="anchor" href="#major-visualization-r-colors"><i class="fas fa-link"></i></a>
+</h2>
+<p>In R, there are several built-in palettes that we can use for color schemes in plots. Some commonly used palettes include:</p>
+<pre><code>[1] "#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3" "#A6D854" "#FFD92F" "#E5C494"
+[8] "#B3B3B3"</code></pre>
+<pre><code>[1] "#B3B3B3" "#E5C494" "#FFD92F" "#A6D854" "#E78AC3" "#8DA0CB" "#FC8D62"
+[8] "#66C2A5"</code></pre>
+<pre><code>[1] "#440154FF" "#46337EFF" "#365C8DFF" "#277F8EFF" "#1FA187FF" "#4AC16DFF"
+[7] "#9FDA3AFF" "#FDE725FF"</code></pre>
+<pre><code>[1] "#FDE725FF" "#9FDA3AFF" "#4AC16DFF" "#1FA187FF" "#277F8EFF" "#365C8DFF"
+[7] "#46337EFF" "#440154FF"</code></pre>
+<pre><code>[1] "#FF0000" "#FFBF00" "#80FF00" "#00FF40" "#00FFFF" "#0040FF" "#8000FF"
+[8] "#FF00BF"</code></pre>
+<pre><code>[1] "#FF00BF" "#8000FF" "#0040FF" "#00FFFF" "#00FF40" "#80FF00" "#FFBF00"
+[8] "#FF0000"</code></pre>
+<blockquote>
+<ul>
+<li><p><strong>viridis</strong>: A perceptually uniform and colorblind-friendly palette.</p></li>
+<li><p><strong>magma</strong>: A palette with a dark-to-light color scheme.</p></li>
+<li><p><strong>inferno</strong>: A palette with a light-to-dark color scheme.</p></li>
+<li><p><strong>plasma</strong>: A palette with a dark-to-light color scheme.</p></li>
+<li><p><strong>cool</strong>: A palette with cool colors.</p></li>
+<li><p><strong>hot</strong>: A palette with hot colors.</p></li>
+<li><p><strong>terrain.colors</strong>: A palette with colors resembling a terrain map.</p></li>
+<li><p><strong>rainbow</strong>: A palette with colors of the rainbow.</p></li>
+<li><p><strong>heat.colors</strong>: A palette with colors ranging from dark red to yellow.</p></li>
+<li><p>In ggpubr: “npg”, “aaas”, “lancet”, “jco”, “ucscgb”, “uchicago”, “simpsons” and “rickandmorty”.</p></li>
+</ul>
+</blockquote>
+</div>
+<div id="visual-types" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Major visualization techniques<a class="anchor" aria-label="anchor" href="#visual-types"><i class="fas fa-link"></i></a>
+</h2>
+<p>Below are some of the key visualization techniques used in microbiome research, along with their descriptions and the corresponding tools in R.</p>
+<div class="inline-table"><table class="table table-sm">
+<colgroup>
+<col width="35%">
+<col width="65%">
+</colgroup>
+<thead><tr class="header">
+<th>Visual Type</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Barplots</td>
+<td>Display the relative abundances of different taxa across groups.</td>
+</tr>
+<tr class="even">
+<td>Heatmaps</td>
+<td>Represent the abundance or presence/absence of taxa across samples.</td>
+</tr>
+<tr class="odd">
+<td>Scatter plots</td>
+<td>Useful for visualizing relationships between numerical variables</td>
+</tr>
+<tr class="even">
+<td>Box plots</td>
+<td>Summarize the distribution of a variable</td>
+</tr>
+<tr class="odd">
+<td>PCA plots</td>
+<td>Dimensionality reduction technique for visualizing similarities or dissimilarities between samples based on their microbial composition</td>
+</tr>
+<tr class="even">
+<td>Alpha diversity plots</td>
+<td>Measure the diversity within a sample, e.g. rarefaction plot</td>
+</tr>
+<tr class="odd">
+<td>Beta diversity plots</td>
+<td>Measure the dissimilarity between samples, e.g. PCoA ordination</td>
+</tr>
+<tr class="even">
+<td>Line plot</td>
+<td>Visualize changes in the abundance of specific taxa over time or across different conditions.</td>
+</tr>
+<tr class="odd">
+<td>Network plots</td>
+<td>Depict interactions or associations between taxa</td>
+</tr>
+<tr class="even">
+<td>Volcano plots</td>
+<td>Identify statistically significant differences in abundance between groups</td>
+</tr>
+<tr class="odd">
+<td>Correlation plots</td>
+<td>Visualize correlations between taxa or between taxa and metadata variables</td>
+</tr>
+<tr class="even">
+<td>UpSet plots</td>
+<td>Display intersections of sets and their size in a matrix layout</td>
+</tr>
+<tr class="odd">
+<td>Venn diagrams</td>
+<td>Show overlap between taxa or groups</td>
+</tr>
+<tr class="even">
+<td>Differential abundance plots</td>
+<td>Visualize differences in abundance between groups while controlling for confounding factors</td>
+</tr>
+<tr class="odd">
+<td>Indicator species analysis plots</td>
+<td>Identify taxa associated with specific groups or conditions</td>
+</tr>
+</tbody>
+</table></div>
+</div>
+</div>
+
+
+
+  <div class="chapter-nav">
+<div class="prev"><a href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></div>
+<div class="next"><a href="bar-plots.html"><span class="header-section-number">4</span> Bar Plots</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#exploration-of-visualization-types"><span class="header-section-number">3</span> Exploration of Visualization Types</a></li>
+<li><a class="nav-link" href="#import-data"><span class="header-section-number">3.1</span> Import data</a></li>
+<li><a class="nav-link" href="#major-visualization-r-colors"><span class="header-section-number">3.2</span> Major visualization R colors</a></li>
+<li><a class="nav-link" href="#visual-types"><span class="header-section-number">3.3</span> Major visualization techniques</a></li>
+</ul>
+
+      <div class="book-extra">
+        <ul class="list-unstyled">
+<li><a id="book-source" href="https://github.com/tmbuza/imap-data-exploration.git/blob/gh-pages/02_explore_visual_types.Rmd">View source <i class="fas fa-air-freshener"></i></a></li>
+          <li><a id="book-edit" href="https://github.com/tmbuza/imap-data-exploration.git/edit/gh-pages/02_explore_visual_types.Rmd">Edit this page <i class="fas fa-air-freshener"></i></a></li>
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container">
+    <div class="row">
+      <div class="col-12 col-md-6 mt-3">
+        <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-16</b>.</p>
+<br>
+</div>
+      <div class="col-12 col-md-6 mt-3">
+        <p>Note: This practical guide was created using the <a class="text-light" href="https://bookdown.org/yihui/bookdown/">bookdown</a> R package, styled with the modern bs4_book format.</p>
+      </div>
+
+    </div>
+  </div>
+</footer>
+</body>
+</html>

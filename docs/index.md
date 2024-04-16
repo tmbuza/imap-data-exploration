@@ -2,7 +2,7 @@
 title: "<big>IMAP:</big> Integrated Microbiome Analysis Pipelines"
 subtitle: "End-to-End Practical User Guides Using Integrated Approaches"
 date:
-- <b>2024-03-10</b>
+- <b>2024-04-16</b>
 author: Teresia Mrema-Buza
 site: bookdown::bookdown_site
 documentclass: book
@@ -45,9 +45,17 @@ description: |
 # <u>IMAP-Part 08</u>: Microbiome Data Exploration Guide {-#data-exploration}
 
 <br>
-![](images/coders.png)
+
+![](images/explore.png)
 <br>
 
 ## Welcome to chapter 8 {-}
 
-Welcome to the "Data Exploration" chapter, where we transition from the meticulous preparation of microbiome data to the fascinating realm of exploration. In this phase, we embark on a journey to uncover patterns, relationships, and insights within the datasets. Whether you are just beginning your journey in microbiome research or have years of experience as an analyst, the methodologies outlined in this chapter are crafted to empower you, providing the means to uncover insights and extract valuable knowledge
+Welcome to the Microbiome Data Exploration section! In this phase of our analysis, we embark on a journey to explore the intricacies of microbiome data using preprocessed data stored in phyloseq objects. These objects encapsulate rich information about microbial communities, including taxonomic abundance, sample metadata, and ecological features.
+
+Through data exploration, we aim to unravel the hidden patterns, structures, and relationships within microbial communities, shedding light on their composition, diversity, and ecological dynamics. By delving into the depths of microbiome data, we strive to uncover novel insights and understand the complex interplay between microorganisms and their environments.
+
+Throughout this exploration, we'll employ various analytical techniques, visualization methods, and statistical approaches to gain a comprehensive understanding of microbial communities' structure and function. 
+
+Let's embark on this exciting exploration together!
+

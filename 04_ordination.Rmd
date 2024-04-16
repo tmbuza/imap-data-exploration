@@ -1,0 +1,756 @@
+# (PART) ORDINATION EXPLORATION{-}
+
+# Ordination of Abundance Data
+
+```{r include=FALSE}
+library(vegan)
+library(ape)
+library(dplyr)
+library(microViz)
+
+```
+
+## Import count data
+```{r}
+load("../imap-data-preparation/data/external/phyloseq_objects.rda", verbose = TRUE)
+ps <- dietswap %>% tax_fix() %>% phyloseq_validate()
+ps
+
+cat("\n\n")
+
+otu_table(ps)[1:10,1:8]
+```
+
+## Interactive ordination
+- Package: microViz
+- Function: ord_explore(phyloseq object)
+- Reference: https://github.com/david-barnett/microViz
+
+
+## Static ordination
+For simplicity, we will demonstrate static ordinations generated using different techniques.
+
+```{r}
+library(microViz)
+
+ps <- ps_dietswap %>% 
+  tax_fix() %>% 
+  phyloseq_validate()
+
+
+```
+
+
+## Constrained partial ordination
+You could visualise the effect of the (numeric/logical) variables in your permanova directly using the ord_plot function with constraints (and conditions).
+
+```{r}
+perm2 <- aitchison_dists %>%
+  dist_permanova(variables = c("weight", "african", "sex"), seed = 321)
+```
+
+
+```{r}
+ps %>%
+ tax_transform(rank = "Genus", trans = "clr") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(
+  method = "PCoA"
+ ) %>% 
+ ord_plot(
+  axes = c(1, 2),
+  plot_taxa = 1:3,
+  colour = "azure4", fill = "azure4",
+  shape = "circle", alpha = 0.5,
+  size = 2
+ )
+```
+
+
+## Static Ordination
+```{r}
+
+```
+
+
+### PCA: Principal component analysis
+```{r PCA_ord}
+## Phylum-level
+
+p_pca_ord <- ps %>%
+ tax_transform(rank = "Phylum", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+p_pca_ord +
+    theme_bw()
+
+## Class-level
+c_pca_ord <- ps %>%
+ tax_transform(rank = "Class", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+c_pca_ord +
+    theme_bw()
+
+## Order-level
+o_pca_ord <- ps %>%
+ tax_transform(rank = "Order", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+o_pca_ord +
+    theme_bw()
+
+## Family-level
+f_pca_ord <- ps %>%
+ tax_transform(rank = "Family", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+f_pca_ord +
+    theme_bw()
+  
+## Genus-level
+g_pca_ord <- ps %>%
+ tax_transform(rank = "Genus", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Genus-level NMDS")
+g_pca_ord +
+    theme_bw()
+  
+## Species-level
+s_pca_ord <- ps %>%
+ tax_transform(rank = "Species", trans = "identity") %>%
+ ord_calc(method = "PCA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Species-level PCA")
+s_pca_ord +
+    theme_bw()
+
+```
+
+### PCoA: Principal Coordinate Analysis
+```{r PCoA_ord}
+## Phylum-level
+p_pcoa_ord <- ps %>%
+ tax_transform(rank = "Phylum", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+p_pcoa_ord +
+    theme_bw()
+
+## Class-level
+c_pcoa_ord <- ps %>%
+ tax_transform(rank = "Class", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+c_pcoa_ord +
+    theme_bw()
+
+## Order-level
+o_pcoa_ord <- ps %>%
+ tax_transform(rank = "Order", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+o_pcoa_ord +
+    theme_bw()
+
+## Family-level
+f_pcoa_ord <- ps %>%
+ tax_transform(rank = "Family", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+f_pcoa_ord +
+    theme_bw()
+  
+## Genus-level
+g_pcoa_ord <- ps %>%
+ tax_transform(rank = "Genus", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Genus-levell PCoA")
+g_pcoa_ord +
+    theme_bw()
+  
+## Species-level
+s_pcoa_ord <- ps %>%
+ tax_transform(rank = "Species", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "PCoA") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Species-level PCoA")
+s_pcoa_ord +
+    theme_bw()
+
+```
+
+### NMDS: Non-Metric Multidimensional Scaling
+```{r NMDS_ord}
+## Phylum-level
+p_nmds_ord <- ps %>%
+ tax_transform(rank = "Phylum", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+p_nmds_ord +
+    theme_bw()
+
+## Class-level
+c_nmds_ord <- ps %>%
+ tax_transform(rank = "Class", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+c_nmds_ord +
+    theme_bw()
+
+## Order-level
+o_nmds_ord <- ps %>%
+ tax_transform(rank = "Order", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+o_nmds_ord +
+    theme_bw()
+
+## Family-level
+f_nmds_ord <- ps %>%
+ tax_transform(rank = "Family", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL)
+f_nmds_ord +
+    theme_bw()
+  
+## Genus-level
+g_nmds_ord <- ps %>%
+ tax_transform(rank = "Genus", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Genus-level NMDS")
+g_nmds_ord +
+    theme_bw()
+  
+## Species-level
+s_nmds_ord <- ps %>%
+ tax_transform(rank = "Species", trans = "identity") %>%
+ dist_calc(dist = "bray") %>%
+ ord_calc(method = "NMDS") %>% 
+ ord_plot(
+  axes = c(1, 2),
+  colour = "Platform", fill = "Platform",
+  shape = "Platform", alpha = 0.9,
+  size = 3) + 
+ scale_shape_girafe_filled() #+
+  labs(caption = NULL, title = "Species-level NMDS")
+s_nmds_ord  +
+    theme_bw()
+    
+```
+
+```{r ordination_gif, echo=FALSE, animation.hook='gifski', interval=3, fig.path="./GIFS/"}
+g_pca_ord
+s_pca_ord
+g_pcoa_ord
+s_pcoa_ord
+g_nmds_ord
+s_nmds_ord
+
+```
+
+# Ordination Methods Explained
+
+```{block, type="infoicon", echo=TRUE}
+**Summary of ordination methods**
+
+1. PCA (Principal Component Analysis): PCA can be used to identify the major patterns of variation in taxa abundance data, revealing the primary axes of variability.
+2. PCoA (Principal Coordinates Analysis): PCoA is employed to visualize the similarity or dissimilarity in taxa abundance patterns, representing them in a lower-dimensional space.
+3. MDS (Multidimensional Scaling): MDS helps visualize the dissimilarity or similarity in taxa abundance data, providing insights into the relationships between samples or communities.
+4. NMDS (Non-Metric Multidimensional Scaling): NMDS is a variation of MDS that focuses on preserving the rank order of dissimilarities in taxa abundance, aiding in the visualization of complex community data.
+5. DPCoA (Double Principal Coordinate Analysis): DPCoA allows for the visualization of relationships between multiple dissimilarity matrices in taxa abundance data.
+6. DCA (Detrended Correspondence Analysis): DCA captures the major gradients of variation in taxa abundance data, facilitating the exploration and interpretation of community composition.
+7. CCA (Canonical Correspondence Analysis): CCA examines the associations between taxa abundance and environmental variables, identifying the environmental gradients influencing the community structure.
+8. RDA (Redundancy Analysis): RDA extends CCA by quantifying the proportion of variation in taxa abundance explained by environmental variables and shared effects.
+9. CAP (Canonical Analysis of Principal coordinates): CAP combines ordination and classification techniques to assess the separation of predefined groups based on taxa abundance data.
+10. CA (Correspondence Analysis): CA visualizes the associations between taxa and different categories, aiding in the exploration of patterns in ecological community data.
+```
+
+## Load data for Beta diversity analysis
+```{r ordi_methods}
+load("data/ps_transformed.rda", verbose = TRUE)
+load("data/bray_distances.rda", verbose = TRUE)
+```
+
+## PCA: Principal Component Analysis
+- RDA (redundancy analysis) method in vegan package performs principal components analysis (PCA).
+
+```{r pca-ordi}
+library(tidyverse)
+library(phyloseq)
+set.seed(23)
+
+
+metadata <- data.frame(sample_data(ps_raw)) %>%
+  tibble::rownames_to_column("sample_id") %>% 
+  rename(bmi=bmi_group)
+
+ps_pca = phyloseq::ordinate(ps_raw, "RDA", "euclidean")
+# Create scree plot with plot_scree()
+phyloseq::plot_scree(ps_pca) + 
+  geom_col(fill = "steelblue") + 
+  theme_bw() +
+  labs(x = "Number of Components", y = "Proportion of Variance Explained", subtitle = "PCA scree plot for all axes") +
+  theme(axis.text.x = element_blank()) +
+  scale_y_continuous(labels = percent)
+
+eigenvalues <- ps_pca$CA$eig[1:10]
+
+# Create a dataframe with eigenvalues and axis numbers
+pca_axes <- data.frame(PC = 1:length(eigenvalues), Eigenvalue = eigenvalues)
+
+# Create the bar plot and scree plot with ggplot2 - axis 1 to 10
+pca_axes %>% 
+  mutate(Eigenvalue = Eigenvalue/sum(Eigenvalue)) %>% 
+ggplot(aes(x = round(PC,4), y = Eigenvalue)) +
+  geom_col(fill = "steelblue") +
+  geom_line(color = "black", size = 1) +   
+  geom_point(color = "#222222", size = 3) +
+  labs(x = "Number of Components", y = "Eigen Value", subtitle = "PCA scree plot of top 10 significant PC") +
+  theme_test() +
+  scale_y_continuous(labels = percent)
+
+
+# - Extract PCoA vectors.
+# - Join metadata and the PCoA data.
+# - Plot the first two axes.
+
+pca_samples <- as.data.frame(ps_pca$CA$u) %>% 
+  tibble::rownames_to_column("sample_id")
+
+metadata_pcoa <- inner_join(metadata, pca_samples, by='sample_id')
+
+metadata_pcoa %>% 
+  ggplot(aes(x=round(PC1, 4), y=round(PC2,4), color=nationality)) +
+	geom_point(shape=19, size=2) +
+	# coord_fixed() +
+	labs(subtitle="RDA-PCA ordination using Bray-Curtis distance dissimilarities \nOrdination method: phyloseq::geom_point()",
+		x="PC 1",
+		y="PC 2",
+		color = "Nationality") +
+	theme_test() +
+  scale_y_continuous(labels = percent)
+
+```
+
+
+
+## PCoA: Principal Coordinate Analysis {#pcoa_analysis}
+```{block, type="infoicon", echo=TRUE}
+- PCoA is Classical Metric Multidimensional Scaling (MDS).
+- All variables are scaled to unit variance before the analysis.
+- PCoA enables us to plot two axes against each other.
+- The PCoA scree plot plots the proportion of variance explained by each principal coordinate on the y-axis against the corresponding coordinate number on the x-axis. 
+    - Axis 1 explains the most variation in the data
+    - Axis 2 explains the second most variation, and so forth.
+    - It helps visualize the diminishing returns of adding more coordinates
+    - Identifies the significant axes that capture most of the variation.
+```
+
+
+```{r pcoa_ordi, message=FALSE, warning=FALSE}
+library(tidyverse)
+
+metadata <- data.frame(sample_data(ps_raw)) %>%
+  tibble::rownames_to_column("sample_id") %>% 
+  rename(bmi=bmi_group)
+
+# Perform PCoA on the bray dissimilarity data
+ps_pcoa = phyloseq::ordinate(ps_log10p, "PCoA", "bray", weighted=TRUE)
+
+# Create scree plot with plot_scree()
+phyloseq::plot_scree(ps_pcoa) + 
+  geom_col(fill = "steelblue") + 
+  theme_bw() +
+  labs(x = "Number of Coordinates", y = "Percent of Variance Explained", subtitle = "PCoA scree plot of all axes") +
+  theme(axis.text.x = element_blank()) +
+  scale_y_continuous(labels = percent)
+
+eigenvalues <- ps_pcoa$values$Eigenvalues[1:10]
+
+# Create a dataframe with eigenvalues and axis numbers
+df <- data.frame(Axis = 1:length(eigenvalues), Eigenvalue = eigenvalues)
+
+# Create the bar plot and scree plot with ggplot2 - axis 1 to 10
+ggplot(df, aes(x = Axis, y = Eigenvalue)) +
+  geom_col(fill = "steelblue") +
+  geom_line(color = "black", size = 1) +   
+  geom_point(color = "#222222", size = 3) +
+  labs(x = "Number of Coordinates", y = "Percent of Variance Explained", subtitle = "PCoA scree plot of top 10 significant axes") +
+  theme_test() +
+  scale_y_continuous(labels = percent)
+
+
+# - Extract PCoA vectors.
+# - Join metadata and the PCoA data.
+# - Plot the first two axes.
+
+pcoa_vectors <- as.data.frame(ps_pcoa$vectors) %>% 
+  rename_all(~ str_replace(., "\\.", "")) %>% 
+  tibble::rownames_to_column("sample_id")
+
+metadata_pcoa <- inner_join(metadata, pcoa_vectors, by='sample_id')
+
+metadata_pcoa %>% 
+  ggplot(aes(x=Axis1, y=Axis2, color=nationality)) +
+	geom_point(shape=19, size=2) +
+	# coord_fixed() +
+	labs(subtitle="Ex 1: PCoA ordination using Bray-Curtis distance dissimilarities \nOrdination method: phyloseq::ordinate()",
+		x="PCoA Axis 1",
+		y="PCoA Axis 2",
+		color = "Nationality") +
+	theme_test()
+
+
+
+## Using PCoA data from cmdscale() function
+
+set.seed(2022)
+
+dist <- ps_log10p_bray_dist
+
+pcoa_cmd <- cmdscale(dist, k = (nrow(metadata) - 1), eig = TRUE)
+pcoa_variance <- data.frame(PCO = paste("PCO",  seq(1:nrow(as.matrix(ps_log10p_bray_dist))), sep = ""), 
+                           ExplainedVar = round(pcoa_cmd$eig^2/sum(pcoa_cmd$eig^2), 4))
+### PCoA with formatted y-axis
+pcoa_1_2 <- data.frame(PCO1 = pcoa_cmd$points[,1], PCO2 = pcoa_cmd$points[,2]) %>% 
+  tibble::rownames_to_column("sample_id") %>% 
+  inner_join(metadata, pcoa_1_2, by = "sample_id")
+
+perc_expned <- format(round((100 * pcoa_cmd$eig / sum(pcoa_cmd$eig)), digits =1), nsmall=1, trim=TRUE)
+
+library(glue)
+labels <- c(glue("PCoA Axis 1 ({perc_expned[1]}%)"),
+            glue("PCoA Axis 2 ({perc_expned[2]}%)"))
+
+pcoa_1_2 %>% 
+ggplot(aes(x = PCO1, y = PCO2, color = nationality)) +
+	geom_point(shape=19, size=2) +
+	# coord_fixed() +
+	labs(subtitle="Ex 2: PCoA ordination using Bray-Curtis distance dissimilarities \nOrdination method: cmdscale()",
+		x="PCoA Axis 1",
+		y="PCoA Axis 2",
+		color = "Nationality") +
+	theme_test()
+
+
+# With more aesthetic parameters.
+pcoa_vectors %>%
+  select(sample_id, Axis1, Axis2) %>%
+  left_join(metadata) %>%
+  left_join(readRDS("data/df_alpha_wide.rds")) %>%
+  ggplot(aes(x=Axis1, y=Axis2, color=nationality, shape=sex, size=shannon)) +
+  geom_point(alpha=0.5) + 
+  theme_q2r() +
+  scale_shape_manual(values=c(16,1), name="Sex") + 
+  scale_size_continuous(name="Shannon Diversity") +
+  scale_color_discrete(name="Nationality") +	
+  labs(subtitle="PCoA ordination with additional aesthetic parameters.",
+		x="PCoA1",
+		y="PCoA2",
+		color = "Nationality") +
+	theme_test()
+
+
+
+library(microbial)
+plotbeta(ps_raw, group="nationality")
+```
+
+
+## NMDS: Nonmetric Multidimensional Scaling {#nmds-ordi}
+```{block, type="infoicon", echo=TRUE}
+NMDS plots show the samples as points in the reduced space.
+
+- The proximity of points on the NMDS plot reflects their similarity or dissimilarity, with closer points representing more similar samples or objects. 
+- The NMDS plot can be further annotated with metadata to aid in the interpretation of the patterns.
+```
+
+
+```{r nmds_ordi}
+### Ordination
+set.seed(25)
+
+ps <- ps_log10p
+ps_nmds = phyloseq::ordinate(ps, "NMDS", "bray", weighted=TRUE)
+nmds_points <- as.data.frame(ps_nmds$points) %>% 
+  tibble::rownames_to_column("sample_id")
+
+metadata_nmds <- inner_join(metadata, nmds_points, by='sample_id')
+
+metadata_nmds %>% 
+  ggplot(aes(x=MDS1, y=MDS2, color=nationality)) +
+  geom_point(size=2, alpha=0.75, shape=19, ) + 
+  scale_colour_brewer(type="qual", palette="Set1") + 
+	# coord_fixed() +
+	labs(subtitle="NMDS ordination using Bray-Curtis distance dissimilarities \nOrdination method: phyloseq::ordinate()",
+		x="NMDS 1",
+		y="NMDS 2",
+		color = "Nationality") +
+    geom_point(size=2) +
+	theme_test()
+
+
+nmds_points %>%
+  select(sample_id, NMDS1=MDS1, NMDS2=MDS2) %>%
+  left_join(metadata) %>%
+  left_join(readRDS("data/df_alpha_wide.rds")) %>%
+  ggplot(aes(x=NMDS1, y=NMDS2, color=nationality, shape=sex, size=shannon)) +
+  geom_point(alpha=0.5) + 
+  theme_q2r() +
+  scale_shape_manual(values=c(16,1), name="Sex") + 
+  scale_size_continuous(name="Shannon Diversity") +
+  scale_color_discrete(name="Nationality") +	
+  labs(subtitle="NMDS ordination with additional aesthetic parameters.",
+		x="NMDS1",
+		y="NMDS2",
+		color = "Nationality") +
+	theme_test()
+
+
+### NMDS Stress Plot
+
+stressplot(ps_nmds)
+
+```
+
+
+
+## DPCoA: Double Principal Coordinate Analysis {#dpcoa}
+```{block, type="infoicon", echo=TRUE}
+DPCoA requires `asymmetric dissimilarity matrices`, where the dissimilarity value between Sample A and Sample B can be different from the dissimilarity value between Sample B and Sample A. 
+
+- DPCoA is not applicable to `symmetric dissimilarity` measures like Bray-Curtis.
+- Weighted UniFrac dissimilarities are asymmetric
+- DPCoA can be applied to visualize and analyze the relationships between samples based on these dissimilarities. 
+- DPCoA can help reveal patterns, clusters, or gradients in the weighted UniFrac dissimilarity structure
+```
+
+```{r}
+phy_tree <- rtree(ntaxa(ps_dietswap))
+dietswap <- merge_phyloseq(dietswap, phy_tree)
+```
+
+
+```{r DPCoA_ordi}
+ps <- ps_log10p
+ps_dpcoa = phyloseq::ordinate(ps, "DPCoA", "wunifrac")
+
+# Create scree plot with plot_scree()
+phyloseq::plot_scree(ps_dpcoa) + 
+  geom_col(fill = "steelblue") + 
+  theme_bw() +
+  labs(x = "Number of Coordinates", y = "Percent of Variance Explained", subtitle = "PCoA scree plot of all axes") +
+  theme(axis.text.x = element_blank()) +
+  scale_y_continuous(labels = percent)
+
+eigenvalues <- ps_dpcoa$eig[1:10]
+
+# Create a dataframe with eigenvalues and axis numbers
+df <- data.frame(Axis = 1:length(eigenvalues), Eigenvalue = eigenvalues)
+
+# Create the bar plot and scree plot with ggplot2 - axis 1 to 10
+ggplot(df, aes(x = Axis, y = Eigenvalue)) +
+  geom_col(fill = "steelblue") +
+  geom_line(color = "black", size = 1) +   
+  geom_point(color = "#222222", size = 3) +
+  labs(x = "Number of Double Coordinates", y = "Percent of Variance Explained", subtitle = "PCoA scree plot of top 10 significant axes") +
+  theme_test() +
+  scale_y_continuous(labels = percent)
+
+
+# Ordination 
+
+dpcoa_tab <- as.data.frame(ps_dpcoa$tab) %>% 
+  tibble::rownames_to_column("sample")
+ps <- ps_log10p
+
+metadata <- data.frame(sample_data(ps)) %>% 
+  select(-sample) %>% 
+  tibble::rownames_to_column("sample")
+
+metadata_nmds <- inner_join(metadata, dpcoa_tab, by='sample')
+
+metadata_nmds %>% 
+  ggplot(aes(x=A1, y=A2, color=nationality)) +
+	geom_point(shape=19, size=2) +
+	# coord_fixed() +
+	labs(subtitle="DPCoA ordination using Weighted UniFrac distances\nOrdination method: cmdscale()",
+		x="DPCoA Axis 1",
+		y="DPCoA Axis 2",
+		color = "Nationality") +
+	theme_test()
+
+```
+
+
+
+
+## Grouped ordination plots
+```{r grouped_ordi, fig.height=10, fig.width=10}
+
+library(phyloseq)
+library(plyr)
+library(ggpubr)
+
+dist = "bray"
+ord_meths = c( "RDA", "PCoA", "MDS", "NMDS", "DCA", "CCA")
+
+plist <- llply(ord_meths, function(i, physeq, dist) {
+  ordi_plot <- phyloseq::ordinate(physeq, method = i, distance = dist)
+  plot_ordination(
+    physeq, ordi_plot, "samples",
+    color = "nationality") +
+    theme(text = element_text(size = 8)) +
+    labs(color = "Nationality", subtitle = i) +
+    geom_point(size = 2) +
+    theme_test()+
+    theme(plot.subtitle = element_text(face = "bold"))
+
+}, physeq = ps_log10p, dist = dist)
+ 
+
+library(ggpubr)
+
+ggpubr::ggarrange(plist[[1]], 
+          plist[[2]], 
+          plist[[3]], 
+          plist[[4]], 
+          plist[[5]], 
+          plist[[6]], 
+          ncol = 2, nrow = 3, common.legend = TRUE, legend = "right", labels = NULL )
+
+
+
+# Add polygons
+
+
+dist = "bray"
+ord_meths = c( "CCA", "DCA", "MDS", "NMDS", "PCoA", "RDA")
+names(plist) <- ord_meths
+pdataframe = ldply(plist, function(x){
+    df = x$data[, 1:2]
+    colnames(df) = c("Axis_1", "Axis_2")
+    return(cbind(df, x$data))
+})
+names(pdataframe)[1] = "method"
+pdataframe %>% 
+  ggplot(aes(Axis_1, Axis_2, color=nationality, fill=nationality)) +
+  geom_point(size=2) + 
+  geom_polygon() +
+  facet_wrap(method ~., scales="free", ncol = 2) +
+  scale_fill_brewer(type="qual", palette="Set2") +
+  scale_colour_brewer(type="qual", palette="Set2") + 
+  theme_test()
+```

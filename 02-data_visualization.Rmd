@@ -1,0 +1,1818 @@
+
+# (PART) DATA VISUALIZATION {-}
+
+# Microbiome Data Visualization {#data-visualization}
+
+## Import libraries and processed data 
+
+```{r warning=FALSE}
+## Import libraries and processed data {#libraries-n-data}
+
+source("_common.R")
+
+library(tidyverse)
+library(ggtext)
+library(phyloseq)
+# library(metagMisc)
+library(microbiome)
+library(microViz)
+library(RColorBrewer)
+library(glue)
+library(ggtext)
+library(broom)
+library(scales)
+
+load("data/phyloseq_objects.rda", verbose = TRUE)
+load("data/ps_transformed.rda", verbose = TRUE)
+load("data/bray_distances.rda", verbose = TRUE)
+load("data/reduced_dimension.rda", verbose = TRUE)
+
+```
+
+
+## Major microbiome data visualization techniques {#visual-types}
+
+| Output Image | Description | Rscript | Python |
+|--------------|-------------|----------|---------------|
+| ![Barplots]() | Display the relative abundances of different taxa across groups.  | `R` | `Python 1` |
+| ![Heatmaps]() | Represent the abundance or presence/absence of taxa across samples. | `R` | `Python 1` |
+| ![Scatter plots]() | Useful for visualizing relationships between numerical variables | `R` | `Python 1` |
+| ![Box plots]() | Summarize the distribution of a variable | `R` | `Python 1` |
+| ![PCA plots]() | Dimensionality reduction technique for visualizing similarities or dissimilarities between samples based on their microbial composition | `R` | `Python 1` |
+| ![Alpha diversity plots]() | Measure the diversity within a sample, e.g. rarefaction plot | `R` | `Python 1` |
+| ![Bets diversity plots]() | Measure the dissimilarity between samples,  e.g. PCoA ordination | `R` | `Python 1` |
+| ![Line plot]() | Visualize changes in the abundance of specific taxa over time or across different conditions.  | `R` | `Python 1` |
+| ![Network plots]() | Depict interactions or associations between taxa| `R` | `Python 1` |
+
+
+<br><hr width=100%><br>
+
+# Bar plots
+
+```{block, type="infoicon", echo=TRUE}
+Bar plots in microbiome studies illustrate the relative abundance of various taxonomic groups within a dataset.
+
+- Bar plots are an effective way to visualize categorical variables, such as taxonomic groups.
+- The height of each bar in the plot corresponds to the abundance or frequency of the taxon it represents.
+
+```
+
+
+## Process input data
+```{r import_data}
+# Input
+load("../../BOOKS/bs4_book/data/phyloseq_objects.rda", verbose = TRUE) 
+saveRDS(ps_raw, "data/ps_raw.rds")
+saveRDS(ps_rel, "data/ps_rel.rds")
+saveRDS(ps_df, "data/ps_df.rds")
+```
+
+
+```{r barplot}
+source("_common.R")
+library(tidyverse)
+library(gifski)
+library(magrittr)
+
+seqcount_per_sample <- read_csv("data/ps_df.csv", show_col_types = FALSE) %>%
+  summarise(nseqs = sum(count), .groups = "drop") %>% 
+  arrange(-nseqs)
+
+seqcount_per_sample <- ps_df %>% 
+  aggregate(abundance ~ sample_id, data = ., FUN = sum) %>%
+  filter(abundance != 0) %>%
+  arrange(desc(abundance))
+
+
+head_tail <- rbind(head(seqcount_per_sample, 5), tail(seqcount_per_sample, 5))
+
+max_y <- max(head_tail$nseqs)
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(stat = "identity", position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith no data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  ybreaks10
+
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(stat = "identity", position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  ybreaks10 +
+  coord_cartesian(ylim = c(0, max_y)) +
+  geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
+
+
+## Taxa relative abundane bar plots
+library(tidyverse)
+library(readxl)
+library(ggtext)
+library(RColorBrewer)
+
+
+
+load("data/phyloseq_objects.rda")
+
+#####################
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+
+resave(otu_rel_abund, file = "data/otu_rel_abund.rda")
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    labels = c("Bacteroidetes", "Firmicutes", "Proteobacteria", "Verrucomicrobia", "Other"),
+                    values = c(brewer.pal(4, "Dark2"), "gray")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Phyla stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+
+#####################
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Taxa stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+#####################
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Phyla grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+
+#####################
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+## Plotting
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Taxa grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+
+
+library(phyloseq)
+library(MicEco)
+library(ggtext)
+library(RColorBrewer)
+library(viridis)
+
+
+load("data/phyloseq_objects.rda")
+
+#-------------------------
+library(ggplot2)
+library(dplyr)
+#-------------------------
+phylum <- ps_df %>% 
+  filter(level == "phylum") 
+
+phylum_pool <- phylum %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.02,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(phylum, phylum_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance by MicEco package", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    labels=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    values = c(brewer.pal(5, "Paired"), "gray"))
+
+  
+family <- ps_df %>% 
+  filter(level == "family") 
+
+family_pool <- family %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.1,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(family, family_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance by MicEco package", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
+
+  
+genus <- ps_df %>% 
+  filter(level == "genus") 
+
+genus_pool <- genus %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.15,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(genus, genus_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance by MicEco package", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
+
+#-------------------------
+library(microbial)
+#-------------------------
+
+plotbar(ps_rel, level="Phylum", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Phyla Relative Abundance by microbial package", 
+       fill = NULL)
+  
+plotbar(ps_rel, level="Genus", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Taxa Relative Abundance by microbial package", 
+       fill = NULL)
+
+#-------------------------
+library(ggpubr)
+#-------------------------
+# Load data
+data("mtcars")
+dfm <- mtcars
+# Convert the cyl variable to a factor
+dfm$cyl <- as.factor(dfm$cyl)
+# Add the name colums
+dfm$name <- rownames(dfm)
+# Inspect the data
+head(dfm[, c("name", "wt", "mpg", "cyl")])
+
+# Ordered bar plots
+ggbarplot(dfm, x = "name", y = "mpg",
+          fill = "cyl",               # change fill color by cyl
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "desc",          # Sort the value in dscending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90           # Rotate vertically x axis texts
+          )
+
+# sorted by group
+ggbarplot(dfm, x = "name", y = "mpg",
+          fill = "cyl",               # change fill color by cyl
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "asc",           # Sort the value in dscending order
+          sort.by.groups = TRUE,      # Sort inside each group
+          x.text.angle = 90           # Rotate vertically x axis texts
+          )
+
+# Deviation graphs
+# Calculate the z-score of the mpg data
+dfm$mpg_z <- (dfm$mpg -mean(dfm$mpg))/sd(dfm$mpg)
+dfm$mpg_grp <- factor(ifelse(dfm$mpg_z < 0, "low", "high"), 
+                     levels = c("low", "high"))
+# Inspect the data
+head(dfm[, c("name", "wt", "mpg", "mpg_z", "mpg_grp", "cyl")])
+
+ggbarplot(dfm, x = "name", y = "mpg_z",
+          fill = "mpg_grp",           # change fill color by mpg_level
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "asc",           # Sort the value in ascending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "MPG z-score",
+          xlab = FALSE,
+          legend.title = "MPG Group"
+          )
+
+# Rotate
+ggbarplot(dfm, x = "name", y = "mpg_z",
+          fill = "mpg_grp",           # change fill color by mpg_level
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "desc",          # Sort the value in descending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "MPG z-score",
+          legend.title = "MPG Group",
+          rotate = TRUE,
+          ggtheme = theme_minimal()
+          )
+```
+
+
+# Dot charts
+```{r ggpubr_dot}
+#-------------------------
+library(ggpubr)
+#-------------------------
+
+#Lollipop chart
+# Load data
+data("mtcars")
+dfm <- mtcars
+# Convert the cyl variable to a factor
+dfm$cyl <- as.factor(dfm$cyl)
+# Add the name colums
+dfm$name <- rownames(dfm)
+# Inspect the data
+head(dfm[, c("name", "wt", "mpg", "cyl")])
+
+ggdotchart(dfm, x = "name", y = "mpg",
+           color = "cyl",                                # Color by groups
+           palette = c("#00AFBB", "#E7B800", "#FC4E07"), # Custom color palette
+           sorting = "ascending",                        # Sort value in descending order
+           add = "segments",                             # Add segments from y = 0 to dots
+           ggtheme = theme_pubr()                        # ggplot2 theme
+           )
+
+# With labels
+
+ggdotchart(dfm, x = "name", y = "mpg",
+           color = "cyl",                                # Color by groups
+           palette = c("#00AFBB", "#E7B800", "#FC4E07"), # Custom color palette
+           sorting = "descending",                       # Sort value in descending order
+           add = "segments",                             # Add segments from y = 0 to dots
+           rotate = TRUE,                                # Rotate vertically
+           group = "cyl",                                # Order by groups
+           dot.size = 6,                                 # Large dot size
+           label = round(dfm$mpg),                        # Add mpg values as dot labels
+           font.label = list(color = "white", size = 9, 
+                             vjust = 0.5),               # Adjust label parameters
+           ggtheme = theme_pubr()                        # ggplot2 theme
+           )
+
+
+# Cleveland’s dot plot
+ggdotchart(dfm, x = "name", y = "mpg",
+           color = "cyl",                                # Color by groups
+           palette = c("#00AFBB", "#E7B800", "#FC4E07"), # Custom color palette
+           sorting = "descending",                       # Sort value in descending order
+           rotate = TRUE,                                # Rotate vertically
+           dot.size = 2,                                 # Large dot size
+           y.text.col = TRUE,                            # Color y text by groups
+           ggtheme = theme_pubr()                        # ggplot2 theme
+           )+
+  theme_cleveland()                                      # Add dashed grids
+
+```
+
+
+
+# Box Plots
+
+```{block, type="infoicon", echo=TRUE}
+A box plot displays the distribution and statistical properties of taxa abundance data. It summarizes the abundance values of different taxa within a dataset in the following way:
+
+- The box represents the interquartile range (IQR), which encompasses the middle 50% of the data. 
+- The bottom edge of the box represents the 25th percentile (Q1)
+- The top edge represents the 75th percentile (Q3).
+- The line inside the box represents the median, which is the midpoint of the data.
+- Whiskers extend from the box to indicate the range of the data, excluding any outliers. 
+- The whiskers usually represent 1.5 times the IQR from the edges of the box.
+- Individual data points outside the whiskers are considered outliers and are plotted separately as individual points or asterisks.
+
+Use box plot to quickly grasp the central tendency, spread, and presence of outliers in the taxa abundance data. Also, helps to identify variations, compare distributions between different taxa, or observe changes in abundance across samples or conditions.
+```
+
+
+```{r boxplot}
+source("workflow/scripts/_common.R")
+library(tidyverse)
+library(gifski)
+library(magrittr)
+library(phyloseq)
+library(MicEco)
+library(ggtext)
+library(RColorBrewer)
+library(viridis)
+library(ggpubr)
+library(microbial)
+
+ps_raw <- readRDS("data/ps_raw.rds") 
+ps_rel <- readRDS("data/ps_rel.rds") 
+ps_df <- readRDS("data/ps_df.rds")
+
+
+seqcount_per_sample <- readRDS("data/ps_df.rds") %>%
+  group_by(sample_id) %>% 
+  summarise(nseqs = sum(count), .groups = "drop") %>% 
+  arrange(-nseqs)
+
+head_tail <- rbind(head(seqcount_per_sample, 5), tail(seqcount_per_sample, 5))
+
+max_y <- max(head_tail$nseqs)
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith no data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  ybreaks10
+
+ggsave("figures/basic_barplot.png", width=5, height=4)
+
+#---------------------------------------
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  ybreaks10 +
+  coord_cartesian(ylim = c(0, max_y)) +
+  geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
+
+ggsave("figures/barplot_w_labels.png", width=5, height=4)
+
+#---------------------------------------
+
+## Taxa relative abundane bar plots
+library(tidyverse)
+library(readxl)
+library(ggtext)
+library(RColorBrewer)
+
+
+
+otu_rel_abund <- ps_df %>%
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+
+save(otu_rel_abund, file = "data/otu_rel_abund.rda")
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    labels = c("Bacteroidetes", "Firmicutes", "Proteobacteria", "Verrucomicrobia", "Other"),
+                    values = c(brewer.pal(4, "Dark2"), "gray")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Phyla stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+ggsave("figures/stacked_phyla.png", width=5, height=4)
+
+#---------------------------------------
+
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Taxa stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+
+ggsave("figures/stacked_taxa.png", width=5, height=4)
+
+#---------------------------------------
+
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Phyla grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        # panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) #+
+  # scale_x_continuous(expand = c(0, 0))
+
+
+ggsave("figures/grouped_phyla.png", width=5, height=4)
+
+#---------------------------------------
+
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+## Plotting
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Taxa grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        # panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+
+ggsave("figures/grouped_taxa.png", width=5, height=4)
+
+#---------------------------------------
+
+phylum <- ps_df %>%
+  filter(level == "phylum") 
+
+phylum_pool <- phylum %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.02,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(phylum, phylum_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance faceted by group", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    labels=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    values = c(brewer.pal(5, "Paired"), "gray"))
+
+ 
+ggsave("figures/faceted_phyla_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+genus <-  ps_df %>%
+  filter(level == "genus") 
+
+genus_pool <- genus %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.15,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(genus, genus_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance faceted by group", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
+
+
+ggsave("figures/faceted_taxa_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+ps_rel %>% 
+microbial::plotbar( level="Phylum", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Phyla Relative Abundance by plotbar()\nin microbial package", 
+       fill = NULL)
+
+ggsave("figures/plotbar_phyla_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+ps_rel %>% 
+microbial::plotbar(level="Genus", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Taxa Relative Abundance by plotbar()\nin microbial package", 
+       fill = NULL)
+
+ggsave("figures/plotbar_taxa_bar.png", width=5, height=4)
+
+
+# Using ggpubr package
+#---------------------------------------
+# Load data
+data("mtcars")
+dfm <- mtcars
+# Convert the cyl variable to a factor
+dfm$cyl <- as.factor(dfm$cyl)
+# Add the name colums
+dfm$name <- rownames(dfm)
+# Inspect the data
+head(dfm[, c("name", "wt", "mpg", "cyl")])
+
+# Ordered bar plots
+ggbarplot(dfm, x = "name", y = "mpg",
+          fill = "cyl",               # change fill color by cyl
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "desc",          # Sort the value in dscending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90           # Rotate vertically x axis texts
+          ) +
+  theme(axis.text = element_text(size = 8),
+        legend.text = element_text(size = 8))
+
+ggsave("figures/ggpubr_ordered_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+
+# sorted by group
+ggbarplot(dfm, x = "name", y = "mpg",
+          fill = "cyl",               # change fill color by cyl
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "asc",           # Sort the value in dscending order
+          sort.by.groups = TRUE,      # Sort inside each group
+          x.text.angle = 90           # Rotate vertically x axis texts
+          ) +
+  theme(axis.text = element_text(size = 8),
+        legend.text = element_text(size = 8))
+
+ggsave("figures/ggpubr_sorted_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+
+# Deviation graphs
+# Calculate the z-score of the mpg data
+dfm$mpg_z <- (dfm$mpg -mean(dfm$mpg))/sd(dfm$mpg)
+dfm$mpg_grp <- factor(ifelse(dfm$mpg_z < 0, "low", "high"), 
+                     levels = c("low", "high"))
+# Inspect the data
+head(dfm[, c("name", "wt", "mpg", "mpg_z", "mpg_grp", "cyl")])
+
+ggbarplot(dfm, x = "name", y = "mpg_z",
+          fill = "mpg_grp",           # change fill color by mpg_level
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "asc",           # Sort the value in ascending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "MPG z-score",
+          xlab = FALSE,
+          legend.title = "MPG Group"
+          ) +
+  theme(axis.text = element_text(size = 8),
+        legend.text = element_text(size = 8))
+
+ggsave("figures/ggpubr_deviated_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+
+# Rotate
+ggbarplot(dfm, x = "name", y = "mpg_z",
+          fill = "mpg_grp",           # change fill color by mpg_level
+          color = "white",            # Set bar border colors to white
+          palette = "jco",            # jco journal color palett. see ?ggpar
+          sort.val = "desc",          # Sort the value in descending order
+          sort.by.groups = FALSE,     # Don't sort inside each group
+          x.text.angle = 90,          # Rotate vertically x axis texts
+          ylab = "MPG z-score",
+          legend.title = "MPG Group",
+          rotate = TRUE,
+          ggtheme = theme_test()
+          ) +
+  theme(axis.text = element_text(size = 8),
+        legend.text = element_text(size = 8))
+  
+
+
+ggsave("figures/ggpubr_rotated_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+
+```
+
+
+# Jitter strip chart
+
+```{block, type="infoicon", echo=TRUE}
+Jitter Plot is useful if the data points have overlapping values. 
+
+- Jitter plot help to prevent overlapping points.
+- Provides a clearer representation of the density and distribution of taxa abundances.
+
+```
+
+```{r jitter}
+load("data/phyloseq_objects.rda")
+
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(nationality, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggboxplot(
+    x = "nationality",
+    y = "rel_abund",
+    color = "nationality", palette =c("#00AFBB", "#FC4E07"),
+    add = "jitter") +
+  theme_classic() +
+  labs(x = NULL, 
+       y = "Relative abundance", 
+       subtitle = "Relative abundance boxplot",
+       color = NULL) +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.y =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1) +
+  scale_x_continuous(expand = c(0, 0)))
+
+
+#####################
+
+my_comparisons <- list( c("0.5", "1"), c("1", "2"), c("0.5", "2") )
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggboxplot(
+    x = "nationality",
+    y = "rel_abund",
+    color = "nationality", palette =c("#00AFBB", "#FC4E07"),
+    add = "jitter") +
+  theme_classic() +
+  labs(x = NULL, 
+       y = "Relative abundance", 
+       subtitle = "Relative abundance boxplot",
+       color = NULL) +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.y =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1) +
+  scale_x_continuous(expand = c(0, 0))) + 
+  stat_compare_means(comparisons = my_comparisons, paired = TRUE) +
+  stat_compare_means(label.y = 95) 
+
+
+#####################
+
+my_comparisons <- list( c("0.5", "1"), c("1", "2"), c("0.5", "2") )
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, nationality, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(bmi, nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+my_comparisons <- list( c("0.5", "1"), c("1", "2"), c("0.5", "2") )
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, bmi, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggboxplot(
+    x = "bmi",
+    y = "rel_abund",
+    color = "bmi", palette =c("green", "blue", "red"),
+    add = "jitter") +
+  theme_classic() +
+  labs(x = NULL, 
+       y = "Relative abundance", 
+       subtitle = "Relative abundance boxplot",
+       color = NULL) +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.y =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1) +
+  scale_x_continuous(expand = c(0, 0))) +
+  facet_grid(~ nationality) +
+  theme(strip.background = element_rect(colour = "lightblue", fill = "lightblue")) + 
+  stat_compare_means(comparisons = my_comparisons, paired = TRUE) +
+  stat_compare_means(label.y = 95) 
+
+#####################
+```
+
+
+
+# Point range 
+
+```{block, type="infoicon", echo=TRUE}
+Point range plot represents the spread or dispersion of the data points along a particular axis. It provides insights into data variability and complements summary statistics. For example:
+
+- In a box plot, it is represented by the whiskers, showing the minimum and maximum values. 
+- In a jitter strip chart, it is visualized by the dispersion of jittered points, indicating the range of values. 
+
+Here we analyze and visualize the relative abundance of taxa based on selected variables. The code is created to performs data manipulation, filtering, grouping, summarizing, and visualization operations. 
+```
+
+
+```{r point_range}
+load("data/phyloseq_objects.rda")
+
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(nationality, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggplot(aes(y=taxon, x=rel_abund, color=nationality)) +
+  stat_summary(fun.data=median_hilow, geom = "pointrange",
+               fun.args=list(conf.int=0.5),
+               position = position_dodge(width=0.6)) +
+  labs(y=NULL, x="Relative Abundance", color = NULL, title = "Point range plot ny nationality") +
+  theme_classic() +
+  theme(axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.position = c(0.8, 0.6),
+        legend.background = element_rect(color="black", fill = NA),
+        legend.margin = margin(t=-5, r=3, b=3)
+        )
+otu_rel_abund <- ps_df %>% 
+  mutate(bmi = factor(bmi, 
+                      levels=c("AAM", "AFR"),
+                      labels = c("African American", "African")))
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+# Sex
+otu_rel_abund <- ps_df %>% 
+  mutate(sex = factor(sex, 
+                      levels=c("female", "male"),
+                      labels = c("Female", "Male")))
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(sex, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(sex, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, sex, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggplot(aes(y=taxon, x=rel_abund, color=sex)) +
+  stat_summary(fun.data=median_hilow, geom = "pointrange",
+               fun.args=list(conf.int=0.5),
+               position = position_dodge(width=0.6)) +
+  labs(y=NULL, x="Relative Abundance", color = NULL, title = "Point range plot by sex") +
+  theme_classic() +
+  theme(axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.position = c(0.8, 0.6),
+        legend.background = element_rect(color="black", fill = NA),
+        legend.margin = margin(t=-5, r=3, b=3)
+        )
+
+
+# BMI group
+otu_rel_abund <- ps_df %>% 
+  mutate(bmi = factor(bmi, 
+                      levels=c("obese", "lean", "overweight"),
+                      labels = c("Obese", "Lean", "Overweight")))
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(bmi, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, bmi, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggplot(aes(y=taxon, x=rel_abund, color=bmi)) +
+  stat_summary(fun.data=median_hilow, geom = "pointrange",
+               fun.args=list(conf.int=0.5),
+               position = position_dodge(width=0.6)) +
+  labs(y=NULL, x="Relative Abundance", color = NULL, title = "Point range plot by BMI category") +
+  theme_classic() +
+  theme(axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.position = c(0.8, 0.6),
+        legend.background = element_rect(color="black", fill = NA),
+        legend.margin = margin(t=-5, r=3, b=3)
+        )
+
+```
+
+
+# Density plot
+
+```{block, type="infoicon", echo=TRUE}
+Density plots, also known as kernel density plots, offer a way to visualize the distribution of data by estimating the underlying probability density function. 
+
+- Provide a smooth, continuous representation of the data's density along a numerical axis. 
+- Allow for observing the shape, central tendency, and variability of the data distribution.
+- Useful identifying peaks, modes, and potential outliers. 
+
+Density plots are useful for gaining insights into the overall distribution and patterns present in the dataset.
+```
+
+
+```{r dens_plot}
+set.seed(2023)
+library(ggpubr)
+
+load("data/phyloseq_objects.rda")
+
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(nationality, sex, bmi, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggdensity(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "nationality", fill = "nationality",
+    palette = c("#00AFBB", "#E7B800")) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by nationality") +
+  xbreaks10
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(sex, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, sex, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggdensity(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "sex", fill = "sex",
+    palette = c("#00AFBB", "#E7B800")) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex") +
+  xbreaks10
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(bmi, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, bmi, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggdensity(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "bmi", fill = "bmi",
+    palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+    alpha = 0.5) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex") +
+  xbreaks10
+
+```
+
+
+# Histogram plot
+```{block, type="infoicon", echo=TRUE}
+Histograms provide a visual summary of the distribution of a dataset. 
+
+- Display the frequencies or counts of data points falling within specified intervals or bins along a numerical axis. 
+- Help identify the shape, central tendency, spread, and potential outliers in the data.
+- Histograms enable gaining insights into the overall distribution and patterns in a dataset.
+```
+
+
+```{r hist_plot}
+set.seed(2023)
+library(ggpubr)
+
+load("data/phyloseq_objects.rda")
+
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(nationality, sex, bmi, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  gghistogram(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "nationality", fill = "nationality",
+    palette = c("#00AFBB", "#E7B800")) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by nationality") +
+  xbreaks10
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(sex, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, sex, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  gghistogram(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "sex", fill = "sex",
+    palette = c("#00AFBB", "#E7B800")) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex") +
+  xbreaks10
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(bmi, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, bmi, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  gghistogram(
+    x = "rel_abund",
+    add = "mean", rug = TRUE,
+    color = "bmi", fill = "bmi",
+    palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+    alpha = 0.5) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex") +
+  xbreaks10
+
+```
+
+
+# Violin
+```{r violin_plot}
+set.seed(2023)
+library(ggpubr)
+
+load("data/phyloseq_objects.rda")
+
+otu_rel_abund <- ps_df %>% 
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi, 
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(nationality, sex, bmi, sample_id, taxon) %>%
+  summarise(rel_abund = 100*sum(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(nationality, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, nationality, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggviolin(
+    x = "nationality",
+    y = "rel_abund",
+    color = "nationality", palette =c("green", "blue", "red"),
+    add = "jitter") +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by nationality")
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(sex, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, sex, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggviolin(
+    x = "sex",
+    y = "rel_abund",
+    color = "sex", palette =c("green", "blue", "red"),
+    add = "jitter") +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex")
+
+
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(bmi, taxon) %>%
+  summarise(median=median(rel_abund), .groups="drop") %>%
+  group_by(taxon) %>%
+  summarise(pool = max(median) < 3,
+            median = median(median),
+            .groups="drop")
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(sample_id, bmi, taxon) %>%
+  summarise(rel_abund = sum(rel_abund),
+            median = min(median),
+            .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, median, .desc=FALSE)) %>%
+  ggviolin(
+    x = "bmi",
+    y = "rel_abund",
+    color = "bmi", palette =c("green", "blue", "red"),
+    add = "jitter",
+    alpha = 0.5) +
+  theme_bw() +
+  labs(subtitle = "Relative abundance by sex")
+
+```
+
+
+
+# Line plot
+
+```{block, type="infoicon", echo=TRUE}
+A line plot or line chart displays data points connected by straight lines. 
+
+- It is commonly used to show the trend or change in a variable over a continuous axis, such as a numerical scale. 
+- Line plots allow for observing patterns, trends, and fluctuations in the data.
+- Very useful for visualizing relationships, comparing multiple variables, or tracking changes over time.
+```
+
+
+```{r lineplot}
+set.seed(2022)
+
+```
+
+
+# Network Visualization
+
+```{block, type="infoicon", echo=TRUE}
+Use network visualization techniques to represent the relationships between samples based on shared metadata attributes.
+Each sample is represented as a node, and the connections between nodes indicate shared metadata characteristics or associations.
+This visualization can be useful for exploring complex relationships or interactions between samples based on their metadata.
+```
+
+
+
+```{r network}
+## Sample network using `ggraph` function
+
+# Load required packages
+library(phyloseq)
+library(igraph)
+library(ggraph)
+library(tidygraph)
+set.seed(123)
+source("_common.R")
+
+load("data/bray_distances.rda")
+
+dist <- ps_log10p_bray_dist
+
+# Convert the distance matrix to a similarity matrix
+similarity_matrix <- as.matrix(1 - dist)
+
+# Randomly select a subset of samples
+selected_samples <- sample(colnames(similarity_matrix), 10)
+
+# Subset the similarity matrix based on the selected samples
+subset_matrix <- similarity_matrix[selected_samples, selected_samples]
+
+# Randomly sample a subset of nodes to plot
+nodes_to_plot <- sample(1:nrow(similarity_matrix), size = 10)
+
+# Filter the similarity matrix and keep only the desired nodes
+filtered_similarity_matrix <- similarity_matrix[nodes_to_plot, nodes_to_plot]
+
+# Create an 'igraph' graph object
+graph_undir <- graph.adjacency(filtered_similarity_matrix, mode = "undirected", weighted = TRUE)
+g <- graph.adjacency(filtered_similarity_matrix, mode = "undirected", weighted = TRUE)
+
+
+layout <- layout_with_fr(g)  # Use a layout algorithm (e.g., Fruchterman-Reingold layout)
+node_colors <- "steelblue"  # Customize node colors
+node_sizes <- 25  # Customize node sizes
+
+plot(g, main = "Network of 10 randomly picked nodes (package = `igraph`")
+
+
+library(ggraph)
+library(RColorBrewer)
+# Convert 'igraph' graph to 'ggraph' graph
+g <- as_tbl_graph(g)
+
+# Customize the network visualization with 'ggraph'
+ggraph(g, layout = "auto") +
+  geom_edge_diagonal(color = "steelblue") +
+  geom_edge_link(width = 0.2, alpha = 0.2) +
+  geom_node_point(size = 4, color = "red") +
+  geom_node_text(aes(label = name), repel = TRUE, segment.size = 0.2) +
+  labs(title = "\nNetwork of 10 randomly picked nodes (package = ggraph)\n") +
+  theme(panel.background = element_rect(fill = "white")) +
+  theme(
+    legend.position="none"
+  )
+```
+
+
+# Interactive Visualizations
+
+```{block, type="infoicon", echo=TRUE}
+Consider using interactive visualization tools or libraries that allow users to explore variables dynamically.
+Interactive plots enable users to filter, sort, or interact with the data to gain deeper insights and explore different aspects of the metadata.
+
+```
+
+```{r interactive, fig.height=5, fig.width=10}
+library(ggplot2)
+library(dplyr)
+library(plotly)
+library(phyloseq)
+library(ggtext)
+
+load("data/otu_rel_abund.rda", verbose = TRUE)
+
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+## Plotting
+p <- inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Taxa grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+ggplotly(p)
+
+```
