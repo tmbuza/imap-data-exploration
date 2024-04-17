@@ -53,8 +53,8 @@
 <li><a class="" href="index.html">IMAP-Part 08: Microbiome Data Exploration Guide</a></li>
 <li class="book-part">DATA EXPLORATION</li>
 <li><a class="" href="preface.html"><span class="header-section-number">1</span> Exploratory Data Analysis (EDA) of Microbiome Communities</a></li>
-<li class="book-part">VISUALIZATION TYPES</li>
-<li><a class="" href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></li>
+<li class="book-part">DEMO DATASET</li>
+<li><a class="" href="demo-datasets.html"><span class="header-section-number">2</span> Microbiome Demo Datasets</a></li>
 <li class="book-part">START EXPLORING</li>
 <li><a class="" href="exploration-of-visualization-types.html"><span class="header-section-number">3</span> Exploration of Visualization Types</a></li>
 <li class="book-part">BAR CHARTS</li>
@@ -96,7 +96,7 @@
 <span class="header-section-number">7.1.1</span> Pearson Correlation Heatmap with microViz Package<a class="anchor" aria-label="anchor" href="#pearson-correlation-heatmap-with-microviz-package"><i class="fas fa-link"></i></a>
 </h3>
 <p>In this section, we utilize the cor_heatmap function available in the microViz package to generate a heatmap visualizing Pearson correlation coefficients between variables. This technique allows for the exploration of relationships and patterns within the data, providing insights into the strength and direction of linear associations between variables.</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ps_extra</span> <span class="op">&lt;-</span> <span class="va">ps_dietswap</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span><span class="fu"><a href="https://david-barnett.github.io/microViz/reference/tax_transform.html">tax_transform</a></span><span class="op">(</span></span>
 <span>  trans <span class="op">=</span> <span class="st">"clr"</span>,</span>
@@ -106,7 +106,7 @@
 <span>  add <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  transformation <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load required packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://david-barnett.github.io/microViz">microViz</a></span><span class="op">)</span></span>
@@ -139,7 +139,7 @@
 <span>    Log2 <span class="op">=</span> <span class="fu"><a href="https://david-barnett.github.io/microViz/reference/anno_tax_box.html">anno_tax_box</a></span><span class="op">(</span>undetected <span class="op">=</span> <span class="fl">50</span>, trans <span class="op">=</span> <span class="st">"log2"</span>, zero_replace <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-17-1.png" width="672"></div>
 <blockquote>
 <p>Note: The parameter min_prevalence = 0.1 is set, equivalent to approximately 23 out of 222 samples. This value may vary depending on the dataset. Adjust as necessary.</p>
 </blockquote>
@@ -184,7 +184,7 @@
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-16</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-18</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

@@ -53,8 +53,8 @@
 <li><a class="" href="index.html">IMAP-Part 08: Microbiome Data Exploration Guide</a></li>
 <li class="book-part">DATA EXPLORATION</li>
 <li><a class="" href="preface.html"><span class="header-section-number">1</span> Exploratory Data Analysis (EDA) of Microbiome Communities</a></li>
-<li class="book-part">VISUALIZATION TYPES</li>
-<li><a class="" href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></li>
+<li class="book-part">DEMO DATASET</li>
+<li><a class="" href="demo-datasets.html"><span class="header-section-number">2</span> Microbiome Demo Datasets</a></li>
 <li class="book-part">START EXPLORING</li>
 <li><a class="active" href="exploration-of-visualization-types.html"><span class="header-section-number">3</span> Exploration of Visualization Types</a></li>
 <li class="book-part">BAR CHARTS</li>
@@ -89,7 +89,7 @@
 <h2>
 <span class="header-section-number">3.1</span> Import data<a class="anchor" aria-label="anchor" href="#import-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load required packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
@@ -97,7 +97,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nSaved RData objects\n\n"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>
 Saved RData objects</code></pre>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/external_ps_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   df_GlobalPatterns
@@ -108,7 +108,7 @@ Saved RData objects</code></pre>
   ps_dietswap
   ps_caporaso
   ps_kostic_crc</code></pre>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/ps_transformed.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   ps_asin
@@ -121,7 +121,7 @@ Saved RData objects</code></pre>
   ps_clr
   ps_shift
   ps_scale</code></pre>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/bray_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   ps_asin_bray_dist
@@ -133,25 +133,33 @@ Saved RData objects</code></pre>
   ps_clr_bray_dist
   ps_shift_bray_dist
   ps_scale_bray_dist</code></pre>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/psextra_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   psextra_clr_asin_bray_dist
   psextra_id_asin_bray_dist
   psextra_log10p_asin_bray_dist</code></pre>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/reduced_dimension.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   pca_asin_bray_metrics
   mds_asin_bray_metrics
   pcoa_asin_bray_metrics
   tsne_asin_bray_metrics</code></pre>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_extra_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
 <pre><code>Loading objects:
   psextra_clr_dietswap
   psextra_id_dietswap
   psextra_log10p_dietswap</code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_raw_rel_psextra_df_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
+<pre><code>Loading objects:
+  ps_raw
+  ps_rel
+  psextra_raw
+  psextra_rel
+  ps_df</code></pre>
 </div>
 <div id="major-visualization-r-colors" class="section level2" number="3.2">
 <h2>
@@ -268,7 +276,7 @@ Saved RData objects</code></pre>
 
 
   <div class="chapter-nav">
-<div class="prev"><a href="visual-types.html"><span class="header-section-number">2</span> Type of Visualization of Microbiome Data</a></div>
+<div class="prev"><a href="demo-datasets.html"><span class="header-section-number">2</span> Microbiome Demo Datasets</a></div>
 <div class="next"><a href="bar-plots.html"><span class="header-section-number">4</span> Bar Plots</a></div>
 </div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
     <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
@@ -295,7 +303,7 @@ Saved RData objects</code></pre>
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-16</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-18</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

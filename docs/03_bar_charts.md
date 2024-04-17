@@ -3,21 +3,70 @@
 # Bar plots using integrated packages
 
 ## Load libraries and data
-```{r bartools}
-# Load required packages
-library(phyloseq)
-library(tidyverse)
 
-cat("\nSaved RData objects\n\n")
-load("data/phyloseq_objects.rda", verbose = T)
 
-source("colors.R")
 
-```
+# (PART) DATA VISUALIZATION {-}
+
+# Microbiome Data Visualization 
 
 ## Compute sequence count per sample
 
-```{r}
+
+```r
+library(tidyverse)
+# ibrary(gifski)
+library(magrittr)  # For piping (%>%)
+
+seqcount_per_sample <- ps_df %>%
+  group_by(sample_id) %>% 
+  summarise(nseqs = sum(count), .groups = "drop") %>% 
+  arrange(-nseqs)
+
+head_tail <- rbind(head(seqcount_per_sample, 5), tail(seqcount_per_sample, 5))
+
+max_y <- max(head_tail$nseqs)
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(stat = "identity", position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith no data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+```r
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(stat = "identity", position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  coord_cartesian(ylim = c(0, max_y)) +
+  geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
+```
+
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-2-2.png" width="672" />
+
+
+
+
+# View head and tail of abundance table
+
+```r
+seqcount_per_sample <- ps_df %>%
+  group_by(sample_id) %>% 
+  summarise(nseqs = sum(count), .groups = "drop") %>% 
+  arrange(-nseqs)
+
 head_tail <- rbind(head(seqcount_per_sample, 5), tail(seqcount_per_sample, 5))
 
 max_y <- max(head_tail$nseqs)
@@ -30,9 +79,12 @@ head_tail %>%
   geom_col(position = position_stack(), fill = "steelblue") +
   labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith no data labels") +
   theme_classic() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
-  ybreaks10
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-3-1.png" width="672" />
+
+```r
 ggsave("figures/basic_barplot.png", width=5, height=4)
 
 
@@ -48,21 +100,22 @@ head_tail %>%
   labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith data labels") +
   theme_classic() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
-  ybreaks10 +
   coord_cartesian(ylim = c(0, max_y)) +
   geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-3-2.png" width="672" />
+
+```r
 ggsave("figures/barplot_w_labels.png", width=5, height=4)
-
 ```
 
 
-
-```{r}
-#---------------------------------------
+## Taxa relative abundane
 
 
-## Taxa relative abundane bar plots
+```r
+set.seed(1234)
 library(tidyverse)
 library(readxl)
 library(ggtext)
@@ -74,7 +127,7 @@ otu_rel_abund <- ps_df %>%
   mutate(nationality = factor(nationality, 
                       levels = c("AAM", "AFR"),
                       labels = c("African American", "African")),
-         bmi = factor(bmi, 
+         bmi = factor(bmi,
                       levels = c("lean", "overweight", "obese"),
                       labels = c("Lean", "Overweight", "Obese")),
          sex = factor(sex,
@@ -114,18 +167,25 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
   scale_fill_discrete(name=NULL) +
   scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
   scale_fill_manual(name=NULL,
-                    breaks=c("*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
-                    labels = c("Bacteroidetes", "Firmicutes", "Proteobacteria", "Verrucomicrobia", "Other"),
-                    values = c(brewer.pal(4, "Dark2"), "gray")) +
+                    breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Cyanobacteria*", "*Firmicutes*","*Proteobacteria*", "Other"),
+                    labels = c("Actinobacteria","Bacteroidetes", "Cyanobacteria", "Firmicutes", "Proteobacteria", "Other"),
+                    values = c(brewer.pal(5, "Dark2"), "gray")) +
   labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Phyla stacked bars filled by taxon") +
   theme_classic() +
   theme(axis.text.x = element_markdown(),
         legend.text = element_markdown(),
         legend.key.size = unit(10, "pt"))
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+
+```r
 ggsave("figures/stacked_phyla.png", width=5, height=4)
+```
 
 
+
+```r
 #---------------------------------------
 
 taxon_rel_abund <- otu_rel_abund %>%
@@ -166,8 +226,13 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
   theme(axis.text.x = element_markdown(),
         legend.text = element_markdown(),
         legend.key.size = unit(10, "pt"))
+```
+
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 
+
+```r
 ggsave("figures/stacked_taxa.png", width=5, height=4)
 
 #---------------------------------------
@@ -211,11 +276,17 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
         panel.border = element_blank()) +
   guides(fill = guide_legend(ncol=1)) +
   scale_x_continuous(expand = c(0, 0))
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-6-1.png" width="672" />
 
+```r
 ggsave("figures/grouped_phyla.png", width=5, height=4)
+```
 
 
+
+```r
 #---------------------------------------
 
 taxon_rel_abund <- otu_rel_abund %>%
@@ -258,11 +329,17 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
         panel.border = element_blank()) +
   guides(fill = guide_legend(ncol=1)) +
   scale_x_continuous(expand = c(0, 0))
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
+```r
 ggsave("figures/grouped_taxa.png", width=5, height=4)
+```
 
 
+
+```r
 #---------------------------------------
 
 phylum <- ps_df %>%
@@ -287,11 +364,17 @@ inner_join(phylum, phylum_pool, by="taxon") %>%
                     breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
                     labels=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
                     values = c(brewer.pal(5, "Paired"), "gray"))
+```
 
- 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+
+```r
 ggsave("figures/faceted_phyla_bar.png", width=5, height=4)
+```
 
 
+
+```r
 #---------------------------------------
 
 genus <-  ps_df %>%
@@ -312,10 +395,17 @@ inner_join(genus, genus_pool, by="taxon") %>%
   theme(axis.text.x = element_blank(),
         legend.text = element_markdown(),
         strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
+```r
 ggsave("figures/faceted_taxa_bar.png", width=5, height=4)
+```
 
+
+
+```r
 #---------------------------------------
 
 ps_rel %>% 
@@ -325,7 +415,11 @@ microbial::plotbar( level="Phylum", group = "nationality", top = 10) +
        y="Relative Abundance", 
        subtitle = "Phyla Relative Abundance by plotbar()\nin microbial package", 
        fill = NULL)
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+
+```r
 ggsave("figures/plotbar_phyla_bar.png", width=5, height=4)
 
 #---------------------------------------
@@ -337,10 +431,17 @@ microbial::plotbar(level="Genus", group = "nationality", top = 10) +
        y="Relative Abundance", 
        subtitle = "Taxa Relative Abundance by plotbar()\nin microbial package", 
        fill = NULL)
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-10-2.png" width="672" />
+
+```r
 ggsave("figures/plotbar_taxa_bar.png", width=5, height=4)
+```
 
 
+
+```r
 #---------------------------------------
 # Using ggpubr package
 #---------------------------------------
@@ -372,9 +473,17 @@ psmelt(ps_rel) %>%
        subtitle = "Phyla Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality", 
        fill = NULL) +
   guides(color = "none")
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+
+```r
 ggsave("figures/ggpubr_phyla_bar.png", width=5, height=4)
+```
 
+
+
+```r
 #------------------------------
 # Plot top n
 #------------------------------
@@ -419,107 +528,113 @@ top_n_unique(df, n, Genus, Abundance) %>%
        subtitle = "Genera Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality", 
        fill = NULL) +
   guides(color = "none")
+```
 
+<img src="03_bar_charts_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+
+```r
 ggsave("figures/ggpubr_top_n_bar.png", width=5, height=4)
+```
 
 
-#------------------------------
-# mtcars data
-#------------------------------
 
-data("mtcars")
-dfm <- mtcars
-# Convert the cyl variable to a factor
-dfm$cyl <- as.factor(dfm$cyl)
-# Add the name colums
-dfm$name <- rownames(dfm)
-# Inspect the data
-head(dfm[, c("name", "wt", "mpg", "cyl")])
+```r
+# #------------------------------
+# # mtcars data
+# #------------------------------
+# 
+# data("mtcars")
+# dfm <- mtcars
+# # Convert the cyl variable to a factor
+# dfm$cyl <- as.factor(dfm$cyl)
+# # Add the name colums
+# dfm$name <- rownames(dfm)
+# # Inspect the data
+# head(dfm[, c("name", "wt", "mpg", "cyl")])
+# 
+# 
+# # Ordered bar plots
+# ggbarplot(dfm, x = "name", y = "mpg",
+#           fill = "cyl",               
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "desc",          
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90           
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# 
+# ggsave("figures/ggpubr_ordered_bar.png", width=5, height=4)
 
-
-# Ordered bar plots
-ggbarplot(dfm, x = "name", y = "mpg",
-          fill = "cyl",               
-          color = "white",            
-          palette = "jco",            
-          sort.val = "desc",          
-          sort.by.groups = FALSE,     
-          x.text.angle = 90           
-          ) +
-  theme(axis.text = element_text(size = 8),
-        legend.text = element_text(size = 8))
-
-
-ggsave("figures/ggpubr_ordered_bar.png", width=5, height=4)
-
-#------------------------------
-# sorted by group
-#------------------------------
-ggbarplot(dfm, x = "name", y = "mpg",
-          fill = "cyl",              
-          color = "white",            
-          palette = "jco",            
-          sort.val = "asc",          
-          sort.by.groups = TRUE,      
-          x.text.angle = 90           
-          ) +
-  theme(axis.text = element_text(size = 8),
-        legend.text = element_text(size = 8))
-
-ggsave("figures/ggpubr_sorted_bar.png", width=5, height=4)
-
-#---------------------------------------
-
-
-# Deviation graphs
-# Calculate the z-score of the mpg data
-dfm$mpg_z <- (dfm$mpg -mean(dfm$mpg))/sd(dfm$mpg)
-dfm$mpg_grp <- factor(ifelse(dfm$mpg_z < 0, "low", "high"), 
-                     levels = c("low", "high"))
-# Inspect the data
-head(dfm[, c("name", "wt", "mpg", "mpg_z", "mpg_grp", "cyl")])
-
-ggbarplot(dfm, 
-          x = "name", 
-          y = "mpg_z",
-          fill = "mpg_grp",           
-          color = "white",            
-          palette = "jco",            
-          sort.val = "asc",           
-          sort.by.groups = FALSE,     
-          x.text.angle = 90,          
-          ylab = "MPG z-score",
-          xlab = FALSE,
-          legend.title = "MPG Group"
-          ) +
-  theme(axis.text = element_text(size = 8),
-        legend.text = element_text(size = 8))
-
-ggsave("figures/ggpubr_deviated_bar.png", width=5, height=4)
-
-#---------------------------------------
-
-
-# Rotate
-ggbarplot(dfm, x = "name", y = "mpg_z",
-          fill = "mpg_grp",           
-          color = "white",            
-          palette = "jco",            
-          sort.val = "desc",          
-          sort.by.groups = FALSE,     
-          x.text.angle = 90,          
-          ylab = "MPG z-score",
-          legend.title = "MPG Group",
-          rotate = TRUE,
-          ggtheme = theme_test()
-          ) +
-  theme(axis.text = element_text(size = 8),
-        legend.text = element_text(size = 8))
-  
-ggsave("figures/ggpubr_rotated_bar.png", width=5, height=4)
-
-#---------------------------------------
-
+# #------------------------------
+# # sorted by group
+# #------------------------------
+# ggbarplot(dfm, x = "name", y = "mpg",
+#           fill = "cyl",              
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "asc",          
+#           sort.by.groups = TRUE,      
+#           x.text.angle = 90           
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# ggsave("figures/ggpubr_sorted_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
+# 
+# 
+# # Deviation graphs
+# # Calculate the z-score of the mpg data
+# dfm$mpg_z <- (dfm$mpg -mean(dfm$mpg))/sd(dfm$mpg)
+# dfm$mpg_grp <- factor(ifelse(dfm$mpg_z < 0, "low", "high"), 
+#                      levels = c("low", "high"))
+# # Inspect the data
+# head(dfm[, c("name", "wt", "mpg", "mpg_z", "mpg_grp", "cyl")])
+# 
+# ggbarplot(dfm, 
+#           x = "name", 
+#           y = "mpg_z",
+#           fill = "mpg_grp",           
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "asc",           
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90,          
+#           ylab = "MPG z-score",
+#           xlab = FALSE,
+#           legend.title = "MPG Group"
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# ggsave("figures/ggpubr_deviated_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
+# 
+# 
+# # Rotate
+# ggbarplot(dfm, x = "name", y = "mpg_z",
+#           fill = "mpg_grp",           
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "desc",          
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90,          
+#           ylab = "MPG z-score",
+#           legend.title = "MPG Group",
+#           rotate = TRUE,
+#           ggtheme = theme_test()
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+#   
+# ggsave("figures/ggpubr_rotated_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
 ```
 
 

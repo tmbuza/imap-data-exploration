@@ -1,0 +1,57 @@
+# Exploring data using heatmaps
+
+## Load libraries and data
+# Heatmapas 
+
+...Placeholder for cover image...
+
+```{r}
+library(tidyverse)
+# library(tools)
+# library(yaml)
+# library(rhdf5)
+# library(Matrix)
+
+if (!dir.exists("data")){dir.create("data")}
+
+download.file("https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/table.qza", "data/feature_table.qza")
+download.file("https://data.qiime2.org/2018.4/tutorials/moving-pictures/sample_metadata.tsv", "data/sample_metadata.tsv")
+download.file("https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/taxonomy.qza", "data/taxonomy.qza")
+download.file("https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/rooted-tree.qza", "data/rooted_tree.qza")
+download.file("https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza", "data/shannon_vector.qza")
+```
+
+## Heatmap by `qiime2R` package
+```{r}
+library(qiime2R)
+metadata<-read_q2metadata("data/sample_metadata.tsv")
+ASVs<-read_qza("data/feature_table.qza")$data
+taxonomy<-read_qza("data/taxonomy.qza")$data %>% parse_taxonomy()
+
+taxasums<-summarize_taxa(ASVs, taxonomy)$Genus
+
+taxa_heatmap(taxasums, metadata, "BodySite")
+
+# ggsave("figures/heatmap.pdf", height=4, width=8, device="pdf")
+# ggsave("figures/q2r_heatmap.png", height=4, width=8, device="png")
+ggsave("figures/q2r_heatmap.svg", height=4, width=8, device="svg")
+
+```
+
+
+## Heatmap by `microbiomeMarker` package
+
+```{r}
+metadata<-read_q2metadata("data/sample_metadata.tsv")
+ASVs<-read_qza("data/feature_table.qza")$data
+taxonomy<-read_qza("data/taxonomy.qza")$data %>% parse_taxonomy()
+
+taxasums<-summarize_taxa(ASVs, taxonomy)$Genus
+
+taxa_barplot(taxasums, metadata, "BodySite")
+
+# ggsave("figures/barplot.pdf", height=4, width=8, device="pdf")
+ggsave("figures/q2r_barplot.png", height=4, width=8, device="png")
+ggsave("figures/q2r_barplot.svg", height=4, width=8, device="svg")
+
+```

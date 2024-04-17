@@ -1,6 +1,8 @@
-# (PART) VISUALIZATION TYPES {-}
+# (PART) DEMO DATASET {-}
 
-# Type of Visualization of Microbiome Data {#visual-types}
+# Microbiome Demo Datasets {#demo-datasets}
+
+In this section, we provide demo datasets for microbiome analysis. These datasets have been preprocessed and transformed in previous sessions, and now we are preparing to analyze them. We begin by importing the R and Phyloseq objects.
 
 ```{r, include=FALSE}
 knitr::opts_chunk$set(
@@ -13,7 +15,6 @@ knitr::opts_chunk$set(
 ```
 
 
-## Import prepared data
 ```{bash eval=FALSE, include=FALSE}
 mkdir -p figures
 mkdir -p data
@@ -22,56 +23,48 @@ cp -r ../imap-data-preparation/data/* data/
 
 ```
 
+## Import preprepared data
 ```{r message=FALSE, warning=FALSE}
 # Load required packages
 library(phyloseq)
 library(tidyverse)
 
 cat("\nSaved RData objects\n\n")
-load("data/dataframe_objects.rda", verbose = T)
-load("data/phyloseq_objects.rda", verbose = T)
-load("data/phyloseq_extra_objects.rda", verbose = T)
+
 load("data/ps_transformed.rda", verbose = T)
 load("data/bray_distances.rda", verbose = T)
-load("data/psextra_distances.rda", verbose = T)
 load("data/reduced_dimension.rda", verbose = T)
-
-```
-
-## Overview of demo data
-
-Now that we have imported the microbiome data into R environment, let us get an overview of these microbiome demo data. We will examine the dimensions of the OTU table within the dataset to understand the available information.
-
-
-```{r}
-# Load required packages
-library(phyloseq)
-
-cat("\nDimensions of the OTU table in the GlobalPatterns dataset\n")
-dim(otu_table(ps_GlobalPatterns))
-
-cat("\nColumn names of ps_GlobalPatterns dataset\n")
-colnames(otu_table(ps_GlobalPatterns))
-
-cat("\nDimensions of the OTU table in the dietswap dataset\n") 
-dim(otu_table(ps_dietswap))
-
-cat("\nColumn names of ps_dietswap dataset\n")
-colnames(otu_table(ps_dietswap))
-
-cat("\nDimensions of the OTU table in the caporaso dataset\n") 
-dim(otu_table(ps_caporaso))
-
-cat("\nColumn names of ps_caporaso dataset\n") 
-colnames(otu_table(ps_caporaso))
-
-cat("\nDimensions of the OTU table in the kostic_crc dataset\n") 
-dim(otu_table(ps_kostic_crc))
-
-cat("\nColumn names of kostic_crc dataset\n") 
-colnames(otu_table(ps_kostic_crc))
+load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
 
 ```
 
 
+```{block, type="infoicon", echo=TRUE}
+## Demo data for QIIME2 analysis
+
+The demo data for QIIME2 analysis is downloaded and stored in the `data/qiime2` directory. You can use these files to practice QIIME2 workflows and analysis techniques.
+
+The data was sourced from the QIIME2 tutorials available at [https://docs.qiime2.org/2024.4/data/tutorials/moving-pictures/](https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/).
+
+It contains the following files:
+
+- Sample metadata
+- Feature table
+- Taxonomy
+- Shannon vector
+- Rooted tree
+
+This data is essential for leveraging downstream analysis aimed at understanding data analyzed using the QIIME2 pipeline.
+
+```R
+if (!dir.exists("data")){dir.create("data")}
+if (!dir.exists("data/qiime2")){dir.create("data/qiime2")}
+
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza", "data/qiime2/feature_table.qza")
+download.file("https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv", "data/qiime2/sample_metadata.tsv")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza", "data/qiime2/taxonomy.qza")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza", "data/qiime2/rooted_tree.qza")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza", "data/qiime2/shannon_vector.qza")
+
+```
 

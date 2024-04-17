@@ -14,6 +14,7 @@ rmd_files:
   - 00-preface.Rmd
   - 01_demo_data_overview.Rmd
   - 02_explore_visual_types.Rmd
+  # - 03_bar_charts.Rmd
   - 07_statistical_analysis.Rmd
   - 99-appendix.Rmd
   - 999-references.Rmd

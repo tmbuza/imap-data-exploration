@@ -1,0 +1,572 @@
+# (PART) BAR CHARTS {-}
+
+# Bar plots using integrated packages
+
+## Load libraries and data
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  echo  =TRUE,
+  message  =FALSE,
+  warning  =FALSE,
+  cache  =FALSE,
+  comment  =NA)
+  
+# Load required packages
+library(phyloseq)
+library(tidyverse)
+
+load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
+```
+
+
+# (PART) DATA VISUALIZATION {-}
+
+# Microbiome Data Visualization 
+
+## Compute sequence count per sample
+Here we only show the head and tail count data
+
+```{r}
+seqcount_per_sample <- ps_df %>%
+  group_by(sample_id) %>% 
+  summarise(nseqs = sum(count), .groups = "drop") %>% 
+  arrange(-nseqs)
+
+head_tail <- rbind(head(seqcount_per_sample, 5), tail(seqcount_per_sample, 5))
+
+max_y <- max(head_tail$nseqs)
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith no data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+
+ggsave("figures/basic_barplot.png", width=5, height=4)
+
+
+#---------------------------------------
+
+
+head_tail %>% 
+  mutate(sample_id = factor(sample_id),
+         sample_id = fct_reorder(sample_id, nseqs, .desc = F),
+         sample_id = fct_shift(sample_id, n = 0)) %>%
+  ggplot(aes(x = reorder(sample_id, nseqs), y = nseqs)) +
+  geom_col(position = position_stack(), fill = "steelblue") +
+  labs(x = "sample ID", y = "Number of sequences", subtitle = "Phylum: Top and bottom sequence count \nwith data labels") +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8)) +
+  coord_cartesian(ylim = c(0, max_y)) +
+  geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
+
+ggsave("figures/barplot_w_labels.png", width=5, height=4)
+
+```
+
+
+## Taxa relative abundane
+
+```{r}
+set.seed(1234)
+library(tidyverse)
+library(readxl)
+library(ggtext)
+library(RColorBrewer)
+
+
+
+otu_rel_abund <- ps_df %>%
+  mutate(nationality = factor(nationality, 
+                      levels = c("AAM", "AFR"),
+                      labels = c("African American", "African")),
+         bmi = factor(bmi,
+                      levels = c("lean", "overweight", "obese"),
+                      labels = c("Lean", "Overweight", "Obese")),
+         sex = factor(sex,
+                      levels =c("female", "male"),
+                      labels = c("Female", "Male")))
+
+save(otu_rel_abund, file = "data/otu_rel_abund.rda")
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Cyanobacteria*", "*Firmicutes*","*Proteobacteria*", "Other"),
+                    labels = c("Actinobacteria","Bacteroidetes", "Cyanobacteria", "Firmicutes", "Proteobacteria", "Other"),
+                    values = c(brewer.pal(5, "Dark2"), "gray")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Phyla stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+ggsave("figures/stacked_phyla.png", width=5, height=4)
+
+
+```
+
+
+```{r}
+#---------------------------------------
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+#---------------------------------------
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(x=bmi, y=mean_rel_abund, fill=taxon)) +
+  geom_col(position = position_stack()) +
+  scale_fill_discrete(name=NULL) +
+  scale_x_discrete(breaks = c("lean", "overweight", "obese"), labels = c("Lean", "Overweight", "Obese")) +
+  labs(x = NULL, y = "Mean Relative Abundance", subtitle = "Taxa stacked bars filled by taxon") +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(10, "pt"))
+
+
+```
+
+
+```{r}
+ggsave("figures/stacked_taxa.png", width=5, height=4)
+
+#---------------------------------------
+
+phylum_rel_abund <- otu_rel_abund %>%
+  filter(level=="phylum",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+taxon_pool <- phylum_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 1,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+
+inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Phyla grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        # panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+
+ggsave("figures/grouped_phyla.png", width=5, height=4)
+
+```
+
+
+```{r}
+
+#---------------------------------------
+
+taxon_rel_abund <- otu_rel_abund %>%
+  filter(level=="genus",
+         !grepl(".*unassigned.*|.*nclassified.*|.*ncultured.*",taxon)) %>%
+  group_by(bmi, sample_id, taxon) %>%
+  summarise(rel_abund = sum(rel_abund), .groups="drop") %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = 100*mean(rel_abund), .groups="drop") %>%
+  mutate(taxon = str_replace(taxon, "(.*)_unclassified", "Unclassified<br>*\\1*"),
+         taxon = str_replace(taxon, "^$", "*\\1*"),
+         taxon = str_replace(taxon, "_", " "))
+
+## Pool low abundance to "Others"
+
+taxon_pool <- taxon_rel_abund %>%
+  group_by(taxon) %>%
+  summarise(pool = max(mean_rel_abund) < 2,
+            mean = mean(mean_rel_abund), .groups="drop")
+
+## Plotting
+inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  group_by(bmi, taxon) %>%
+  summarise(mean_rel_abund = sum(mean_rel_abund),
+            mean = min(mean), .groups="drop") %>%
+  mutate(taxon = factor(taxon),
+         taxon = fct_reorder(taxon, mean, .desc=TRUE),
+         taxon = fct_shift(taxon, n=1)) %>%
+  ggplot(aes(y=taxon, x = mean_rel_abund, fill= bmi)) +
+  geom_col(width=0.8, position = position_dodge()) +
+  labs(y = NULL, x = "Mean Relative Abundance", subtitle = "Taxa grouped by BMI category", fill = NULL) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"),
+        panel.background = element_blank(),
+        # panel.grid.major.x =  element_line(colour = "lightgray", size = 0.1),
+        panel.border = element_blank()) +
+  guides(fill = guide_legend(ncol=1)) +
+  scale_x_continuous(expand = c(0, 0))
+
+
+ggsave("figures/grouped_taxa.png", width=5, height=4)
+
+
+```
+
+
+```{r}
+#---------------------------------------
+
+phylum <- ps_df %>%
+  filter(level == "phylum") 
+
+phylum_pool <- phylum %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.02,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(phylum, phylum_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance faceted by group", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue")) +
+  scale_fill_manual(name=NULL,
+                    breaks=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    labels=c("*Actinobacteria*","*Bacteroidetes*", "*Firmicutes*","*Proteobacteria*", "*Verrucomicrobia*", "Other"),
+                    values = c(brewer.pal(5, "Paired"), "gray"))
+
+ 
+ggsave("figures/faceted_phyla_bar.png", width=5, height=4)
+
+
+```
+
+
+```{r}
+#---------------------------------------
+
+genus <-  ps_df %>%
+  filter(level == "genus") 
+
+genus_pool <- genus %>%
+  group_by(taxon) %>%
+  summarise(pool = max(rel_abund) < 0.15,
+            mean = mean(rel_abund), .groups="drop")  
+  
+inner_join(genus, genus_pool, by="taxon") %>%
+  mutate(taxon = if_else(pool, "Other", taxon)) %>%
+  ggplot(aes(x = sample_id, y = 100*rel_abund, fill = taxon)) +
+  theme_bw() + 
+  geom_bar(stat = "identity", position = position_stack()) +
+  labs(x="Sample", y="Relative Abundance", subtitle = "Taxa Relative Abundance faceted by group", fill = NULL) +
+  facet_grid(~ nationality, space = "free", scales = "free") +
+  theme(axis.text.x = element_blank(),
+        legend.text = element_markdown(),
+        strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
+
+
+ggsave("figures/faceted_taxa_bar.png", width=5, height=4)
+
+```
+
+
+```{r}
+#---------------------------------------
+
+ps_rel %>% 
+microbial::plotbar( level="Phylum", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Phyla Relative Abundance by plotbar()\nin microbial package", 
+       fill = NULL)
+
+ggsave("figures/plotbar_phyla_bar.png", width=5, height=4)
+
+#---------------------------------------
+
+ps_rel %>% 
+microbial::plotbar(level="Genus", group = "nationality", top = 10) +
+  theme(axis.text.x = element_text(angle = 0)) + 
+  labs(x="Sample", 
+       y="Relative Abundance", 
+       subtitle = "Taxa Relative Abundance by plotbar()\nin microbial package", 
+       fill = NULL)
+
+ggsave("figures/plotbar_taxa_bar.png", width=5, height=4)
+
+
+```
+
+
+```{r message=FALSE, warning=FALSE}
+#---------------------------------------
+# Using ggpubr package
+#---------------------------------------
+
+library(ggpubr)
+library(RColorBrewer)
+library(viridis)
+
+psmelt(ps_rel) %>% 
+  select(Sample, nationality, Phylum, Abundance) %>% 
+  group_by(Sample, nationality, Phylum) %>% 
+  summarise(Abundance = sum(Abundance), .groups = "drop") %>% 
+  filter(Abundance > 0.01) %>% 
+  mutate(Phylum = fct_reorder(Phylum, -Abundance)) %>% 
+  ggbarplot(x = "Phylum", y = "Abundance", 
+            fill = "nationality",
+            color = "nationality",
+            palette = "jco",
+            sort.by.groups = FALSE,     
+            rotate = TRUE,
+            position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"))  +
+  labs(x=NULL, 
+       y="Relative Abundance (%)",
+       subtitle = "Phyla Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality", 
+       fill = NULL) +
+  guides(color = "none")
+
+ggsave("figures/ggpubr_phyla_bar.png", width=5, height=4)
+
+```
+
+
+```{r}
+#------------------------------
+# Plot top n
+#------------------------------
+library(phyloseq)
+library(tidyverse)
+library(ggpubr)
+
+df <- psmelt(ps_rel) %>% 
+  select(Sample, nationality, Genus, Abundance) %>% 
+  group_by(Sample, nationality, Genus) %>% 
+  summarise(Abundance = sum(Abundance), .groups = "drop")
+
+# Function
+top_n_unique <- function(df, n, group_var, value_var) {
+  df %>%
+    group_by({{ group_var }}) %>%
+    mutate(rank = dense_rank(desc({{ value_var }}))) %>%
+    filter(rank <= n) %>%
+    ungroup() %>%
+    select(-rank)
+}
+
+# Plot
+n <- 10  # Number of top unique taxa to select
+top_n_unique(df, n, Genus, Abundance) %>% 
+  filter(Abundance > 0.2) %>% 
+  mutate(Genus = fct_reorder(Genus, -Abundance)) %>% 
+  ggbarplot(x = "Genus", y = "Abundance", 
+            fill = "nationality",
+            color = "nationality",
+            palette = "jco",
+            sort.by.groups = FALSE,     
+            rotate = TRUE,
+            position = position_dodge()) +
+  theme_classic() +
+  theme(axis.text.x = element_markdown(angle = 0, hjust = 1, vjust = 1),
+        axis.text.y = element_markdown(),
+        legend.text = element_markdown(),
+        legend.key.size = unit(12, "pt"))  +
+  labs(x=NULL, 
+       y="Relative Abundance (%)",
+       subtitle = "Genera Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality", 
+       fill = NULL) +
+  guides(color = "none")
+
+ggsave("figures/ggpubr_top_n_bar.png", width=5, height=4)
+
+```
+
+
+```{r}
+
+# #------------------------------
+# # mtcars data
+# #------------------------------
+# 
+# data("mtcars")
+# dfm <- mtcars
+# # Convert the cyl variable to a factor
+# dfm$cyl <- as.factor(dfm$cyl)
+# # Add the name colums
+# dfm$name <- rownames(dfm)
+# # Inspect the data
+# head(dfm[, c("name", "wt", "mpg", "cyl")])
+# 
+# 
+# # Ordered bar plots
+# ggbarplot(dfm, x = "name", y = "mpg",
+#           fill = "cyl",               
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "desc",          
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90           
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# 
+# ggsave("figures/ggpubr_ordered_bar.png", width=5, height=4)
+
+# #------------------------------
+# # sorted by group
+# #------------------------------
+# ggbarplot(dfm, x = "name", y = "mpg",
+#           fill = "cyl",              
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "asc",          
+#           sort.by.groups = TRUE,      
+#           x.text.angle = 90           
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# ggsave("figures/ggpubr_sorted_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
+# 
+# 
+# # Deviation graphs
+# # Calculate the z-score of the mpg data
+# dfm$mpg_z <- (dfm$mpg -mean(dfm$mpg))/sd(dfm$mpg)
+# dfm$mpg_grp <- factor(ifelse(dfm$mpg_z < 0, "low", "high"), 
+#                      levels = c("low", "high"))
+# # Inspect the data
+# head(dfm[, c("name", "wt", "mpg", "mpg_z", "mpg_grp", "cyl")])
+# 
+# ggbarplot(dfm, 
+#           x = "name", 
+#           y = "mpg_z",
+#           fill = "mpg_grp",           
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "asc",           
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90,          
+#           ylab = "MPG z-score",
+#           xlab = FALSE,
+#           legend.title = "MPG Group"
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+# 
+# ggsave("figures/ggpubr_deviated_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
+# 
+# 
+# # Rotate
+# ggbarplot(dfm, x = "name", y = "mpg_z",
+#           fill = "mpg_grp",           
+#           color = "white",            
+#           palette = "jco",            
+#           sort.val = "desc",          
+#           sort.by.groups = FALSE,     
+#           x.text.angle = 90,          
+#           ylab = "MPG z-score",
+#           legend.title = "MPG Group",
+#           rotate = TRUE,
+#           ggtheme = theme_test()
+#           ) +
+#   theme(axis.text = element_text(size = 8),
+#         legend.text = element_text(size = 8))
+#   
+# ggsave("figures/ggpubr_rotated_bar.png", width=5, height=4)
+# 
+# #---------------------------------------
+
+```
+
+
+
