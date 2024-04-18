@@ -39,7 +39,6 @@ load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
 ```
 
 
-```{block, type="infoicon", echo=TRUE}
 ## Demo data for QIIME2 analysis
 
 The demo data for QIIME2 analysis is downloaded and stored in the `data/qiime2` directory. You can use these files to practice QIIME2 workflows and analysis techniques.
@@ -55,6 +54,7 @@ It contains the following files:
 - Rooted tree
 
 This data is essential for leveraging downstream analysis aimed at understanding data analyzed using the QIIME2 pipeline.
+
 
 ```R
 if (!dir.exists("data")){dir.create("data")}

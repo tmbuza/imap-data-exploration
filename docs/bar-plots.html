@@ -91,7 +91,7 @@
 <span class="header-section-number">4.1</span> Explore categorical variables<a class="anchor" aria-label="anchor" href="#explore-categorical-variables"><i class="fas fa-link"></i></a>
 </h2>
 <p>The freq() function is in the funModeling package provides a concise summary of the frequency distribution of a categorical variable in a dataset. It displays the count and percentage of each category, allowing users to quickly understand the distribution and prevalence of different categories within the variable. This function is useful for exploratory data analysis and understanding the composition of categorical variables in the dataset.</p>
-<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://microbiome.github.io/microbiome">microbiome</a></span><span class="op">)</span></span>
@@ -127,12 +127,48 @@
 3       lean     23300      25.41          100.00</code></pre>
 <pre><code>[1] "Variables processed: sex, nationality, grp, bmi"</code></pre>
 </div>
-<div id="compute-sequence-count-per-sample" class="section level2" number="4.2">
+<div id="comparative-results-from-mothur-and-qiime2" class="section level2" number="4.2">
 <h2>
-<span class="header-section-number">4.2</span> Compute sequence count per sample<a class="anchor" aria-label="anchor" href="#compute-sequence-count-per-sample"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.2</span> Comparative results from Mothur and QIIME2<a class="anchor" aria-label="anchor" href="#comparative-results-from-mothur-and-qiime2"><i class="fas fa-link"></i></a>
+</h2>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># scripts/create_barplots.R</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readr.tidyverse.org">readr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://svglite.r-lib.org">svglite</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"../imap-data-preparation/data/mothur/mothur_composite.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pipeline<span class="op">=</span><span class="st">"MOTHUR"</span>, .before<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">OTU</span>, <span class="op">-</span><span class="fl">3</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Genus</span>, y<span class="op">=</span><span class="va">rel_abund</span>, fill<span class="op">=</span><span class="va">pipeline</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">pipeline</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"Relative Abundance (%)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-1.png" width="576"></div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"../imap-data-preparation/data/qiime2/qiime2_composite.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pipeline<span class="op">=</span><span class="st">"QIIME2"</span>, .before<span class="op">=</span><span class="fl">2</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">feature</span>, <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span><span class="op">:</span><span class="fl">14</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Genus</span>, y<span class="op">=</span><span class="va">rel_abund</span>, fill<span class="op">=</span><span class="va">pipeline</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="op">~</span><span class="va">pipeline</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y<span class="op">=</span><span class="st">"Relative Abundance (%)"</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position<span class="op">=</span><span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-2.png" width="576"></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"figures/taxon_barplot.png"</span>, width<span class="op">=</span><span class="fl">10</span>, height<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span>file<span class="op">=</span><span class="st">"figures/taxon_barplot.svg"</span>, width<span class="op">=</span><span class="fl">10</span>, height<span class="op">=</span><span class="fl">10</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div id="compute-sequence-count-per-sample" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Compute sequence count per sample<a class="anchor" aria-label="anchor" href="#compute-sequence-count-per-sample"><i class="fas fa-link"></i></a>
 </h2>
 <p>Here we only show the head and tail count data</p>
-<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seqcount_per_sample</span> <span class="op">&lt;-</span> <span class="va">ps_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">sample_id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>nseqs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">count</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -151,8 +187,8 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"sample ID"</span>, y <span class="op">=</span> <span class="st">"Number of sequences"</span>, subtitle <span class="op">=</span> <span class="st">"Phylum: Top and bottom sequence count \nwith no data labels"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_classic</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-1.png" width="672"></div>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-1.png" width="672"></div>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/basic_barplot.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span></span>
@@ -170,16 +206,16 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_cartesian.html">coord_cartesian</a></span><span class="op">(</span>ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">max_y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">nseqs</span><span class="op">)</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.3</span>, color <span class="op">=</span> <span class="st">"#AAAAAA"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-2.png" width="672"></div>
-<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-2.png" width="672"></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/barplot_w_labels.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="relative-abundance-of-taxa" class="section level2" number="4.3">
+<div id="relative-abundance-of-taxa" class="section level2" number="4.4">
 <h2>
-<span class="header-section-number">4.3</span> Relative abundance of taxa<a class="anchor" aria-label="anchor" href="#relative-abundance-of-taxa"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.4</span> Relative abundance of taxa<a class="anchor" aria-label="anchor" href="#relative-abundance-of-taxa"><i class="fas fa-link"></i></a>
 </h2>
 <p>The <code>comp_barplot</code> function in the <code>microViz</code> R package is designed to create comparative bar plots for visualizing microbiome data. This function allows users to compare the relative abundance of taxa or other features across different groups or conditions. It supports customization options such as color palette selection and plot title specification to enhance the appearance of the bar plot.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://david-barnett.github.io/microViz">microViz</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">psextra_raw</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -195,11 +231,11 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/barplotmicroViz-1.png" width="960"></div>
 </div>
-<div id="bar-plot-on-ps_caporaso-dataset" class="section level2" number="4.4">
+<div id="bar-plot-on-ps_caporaso-dataset" class="section level2" number="4.5">
 <h2>
-<span class="header-section-number">4.4</span> Bar plot on ps_caporaso dataset<a class="anchor" aria-label="anchor" href="#bar-plot-on-ps_caporaso-dataset"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.5</span> Bar plot on ps_caporaso dataset<a class="anchor" aria-label="anchor" href="#bar-plot-on-ps_caporaso-dataset"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://david-barnett.github.io/microViz">microViz</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ps_caporaso</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -214,13 +250,13 @@
 <span>  <span class="co"># facet_wrap("SampleType", nrow = 1, scales = "free") +</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>, axis.ticks.y <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-1.png" width="960"></div>
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-6-1.png" width="960"></div>
 </div>
-<div id="bar-plots-for-taxa-relative-abundane" class="section level2" number="4.5">
+<div id="bar-plots-for-taxa-relative-abundane" class="section level2" number="4.6">
 <h2>
-<span class="header-section-number">4.5</span> Bar plots for Taxa relative abundane<a class="anchor" aria-label="anchor" href="#bar-plots-for-taxa-relative-abundane"><i class="fas fa-link"></i></a>
+<span class="header-section-number">4.6</span> Bar plots for Taxa relative abundane<a class="anchor" aria-label="anchor" href="#bar-plots-for-taxa-relative-abundane"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://readxl.tidyverse.org">readxl</a></span><span class="op">)</span></span>
@@ -281,10 +317,10 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.text <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.key.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-6-1.png" width="672"></div>
-<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/stacked_phyla.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span></span>
 <span><span class="va">taxon_rel_abund</span> <span class="op">&lt;-</span> <span class="va">otu_rel_abund</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -325,8 +361,8 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.text <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.key.size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/grid/unit.html">unit</a></span><span class="op">(</span><span class="fl">10</span>, <span class="st">"pt"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-7-1.png" width="672"></div>
-<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/stacked_taxa.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#---------------------------------------</span></span>
@@ -370,10 +406,10 @@
 <span>        panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672"></div>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/grouped_phyla.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span></span>
 <span><span class="va">taxon_rel_abund</span> <span class="op">&lt;-</span> <span class="va">otu_rel_abund</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -416,10 +452,10 @@
 <span>        panel.border <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>ncol<span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-9-1.png" width="672"></div>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/grouped_taxa.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span></span>
 <span><span class="va">phylum</span> <span class="op">&lt;-</span> <span class="va">ps_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -444,10 +480,10 @@
 <span>                    breaks<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"*Actinobacteria*"</span>,<span class="st">"*Bacteroidetes*"</span>, <span class="st">"*Firmicutes*"</span>,<span class="st">"*Proteobacteria*"</span>, <span class="st">"*Verrucomicrobia*"</span>, <span class="st">"Other"</span><span class="op">)</span>,</span>
 <span>                    labels<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"*Actinobacteria*"</span>,<span class="st">"*Bacteroidetes*"</span>, <span class="st">"*Firmicutes*"</span>,<span class="st">"*Proteobacteria*"</span>, <span class="st">"*Verrucomicrobia*"</span>, <span class="st">"Other"</span><span class="op">)</span>,</span>
 <span>                    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/RColorBrewer/man/ColorBrewer.html">brewer.pal</a></span><span class="op">(</span><span class="fl">5</span>, <span class="st">"Paired"</span><span class="op">)</span>, <span class="st">"gray"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-10-1.png" width="672"></div>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/faceted_phyla_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span></span>
 <span><span class="va">genus</span> <span class="op">&lt;-</span>  <span class="va">ps_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
@@ -468,10 +504,10 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        legend.text <span class="op">=</span> <span class="fu"><a href="https://wilkelab.org/ggtext/reference/element_markdown.html">element_markdown</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>        strip.background <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_rect</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"lightblue"</span>, fill <span class="op">=</span> <span class="st">"lightblue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-11-1.png" width="672"></div>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/faceted_taxa_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span></span>
 <span><span class="va">ps_rel</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -481,8 +517,8 @@
 <span>       y<span class="op">=</span><span class="st">"Relative Abundance"</span>, </span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Phyla Relative Abundance by plotbar()\nin microbial package"</span>, </span>
 <span>       fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-1.png" width="672"></div>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/plotbar_phyla_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">#---------------------------------------</span></span>
@@ -494,10 +530,10 @@
 <span>       y<span class="op">=</span><span class="st">"Relative Abundance"</span>, </span>
 <span>       subtitle <span class="op">=</span> <span class="st">"Taxa Relative Abundance by plotbar()\nin microbial package"</span>, </span>
 <span>       fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-2.png" width="672"></div>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-2.png" width="672"></div>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/plotbar_taxa_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#---------------------------------------</span></span>
 <span><span class="co"># Using ggpubr package</span></span>
 <span><span class="co">#---------------------------------------</span></span>
@@ -529,10 +565,10 @@
 <span>       subtitle <span class="op">=</span> <span class="st">"Phyla Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality"</span>, </span>
 <span>       fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-1.png" width="672"></div>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/ggpubr_phyla_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#------------------------------</span></span>
 <span><span class="co"># Plot top n</span></span>
 <span><span class="co">#------------------------------</span></span>
@@ -577,8 +613,8 @@
 <span>       subtitle <span class="op">=</span> <span class="st">"Genera Relative Abundance by ggbarplot()\nin ggpubr package grouped by nationality"</span>, </span>
 <span>       fill <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
-<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-14-1.png" width="672"></div>
-<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/unnamed-chunk-15-1.png" width="672"></div>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html">ggsave</a></span><span class="op">(</span><span class="st">"figures/ggpubr_top_n_bar.png"</span>, width<span class="op">=</span><span class="fl">5</span>, height<span class="op">=</span><span class="fl">4</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
@@ -593,10 +629,11 @@
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#bar-plots"><span class="header-section-number">4</span> Bar Plots</a></li>
 <li><a class="nav-link" href="#explore-categorical-variables"><span class="header-section-number">4.1</span> Explore categorical variables</a></li>
-<li><a class="nav-link" href="#compute-sequence-count-per-sample"><span class="header-section-number">4.2</span> Compute sequence count per sample</a></li>
-<li><a class="nav-link" href="#relative-abundance-of-taxa"><span class="header-section-number">4.3</span> Relative abundance of taxa</a></li>
-<li><a class="nav-link" href="#bar-plot-on-ps_caporaso-dataset"><span class="header-section-number">4.4</span> Bar plot on ps_caporaso dataset</a></li>
-<li><a class="nav-link" href="#bar-plots-for-taxa-relative-abundane"><span class="header-section-number">4.5</span> Bar plots for Taxa relative abundane</a></li>
+<li><a class="nav-link" href="#comparative-results-from-mothur-and-qiime2"><span class="header-section-number">4.2</span> Comparative results from Mothur and QIIME2</a></li>
+<li><a class="nav-link" href="#compute-sequence-count-per-sample"><span class="header-section-number">4.3</span> Compute sequence count per sample</a></li>
+<li><a class="nav-link" href="#relative-abundance-of-taxa"><span class="header-section-number">4.4</span> Relative abundance of taxa</a></li>
+<li><a class="nav-link" href="#bar-plot-on-ps_caporaso-dataset"><span class="header-section-number">4.5</span> Bar plot on ps_caporaso dataset</a></li>
+<li><a class="nav-link" href="#bar-plots-for-taxa-relative-abundane"><span class="header-section-number">4.6</span> Bar plots for Taxa relative abundane</a></li>
 </ul>
 
       <div class="book-extra">

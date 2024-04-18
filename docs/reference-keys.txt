@@ -5,12 +5,14 @@ navigating-the-chapter
 embark-on-the-exploration
 demo-datasets
 import-preprepared-data
+demo-data-for-qiime2-analysis
 exploration-of-visualization-types
 import-data
 major-visualization-r-colors
 visual-types
 bar-plots
 explore-categorical-variables
+comparative-results-from-mothur-and-qiime2
 compute-sequence-count-per-sample
 relative-abundance-of-taxa
 bar-plot-on-ps_caporaso-dataset

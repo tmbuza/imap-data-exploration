@@ -259,6 +259,49 @@ freq(df,
 ```
 
 
+## Comparative results from Mothur and QIIME2
+
+
+```r
+# scripts/create_barplots.R
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(svglite)
+
+read_csv("../imap-data-preparation/data/mothur/mothur_composite.csv", show_col_types = FALSE) %>% 
+  mutate(pipeline="MOTHUR", .before=2) %>% 
+  select(-OTU, -3) %>% 
+  ggplot(aes(x=Genus, y=rel_abund, fill=pipeline)) +
+  facet_grid(~pipeline) +
+  geom_col() +
+  coord_flip() +
+  labs(y="Relative Abundance (%)") +
+  theme(legend.position="none")
+```
+
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-1.png" width="576" />
+
+```r
+read_csv("../imap-data-preparation/data/qiime2/qiime2_composite.csv", show_col_types = FALSE) %>% 
+  mutate(pipeline="QIIME2", .before=2) %>% 
+  select(-feature, -c(3:14)) %>% 
+  ggplot(aes(x=Genus, y=rel_abund, fill=pipeline)) +
+  facet_grid(~pipeline) +
+  geom_col() +
+  coord_flip() +
+  labs(y="Relative Abundance (%)") + 
+  theme(legend.position="none")
+```
+
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-2.png" width="576" />
+
+```r
+ggsave(file="figures/taxon_barplot.png", width=10, height=10)
+ggsave(file="figures/taxon_barplot.svg", width=10, height=10)
+```
+
+
 ## Compute sequence count per sample
 Here we only show the head and tail count data
 
@@ -284,7 +327,7 @@ head_tail %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 ```r
 ggsave("figures/basic_barplot.png", width=5, height=4)
@@ -306,7 +349,7 @@ head_tail %>%
   geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-2.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-2.png" width="672" />
 
 ```r
 ggsave("figures/barplot_w_labels.png", width=5, height=4)
@@ -359,7 +402,7 @@ ps_caporaso %>%
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-1.png" width="960" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-6-1.png" width="960" />
 
 
 ## Bar plots for Taxa relative abundane
@@ -428,7 +471,7 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
         legend.key.size = unit(10, "pt"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-7-1.png" width="672" />
 
 ```r
 ggsave("figures/stacked_phyla.png", width=5, height=4)
@@ -479,7 +522,7 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
         legend.key.size = unit(10, "pt"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672" />
 
 
 
@@ -529,7 +572,7 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
   scale_x_continuous(expand = c(0, 0))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-9-1.png" width="672" />
 
 ```r
 ggsave("figures/grouped_phyla.png", width=5, height=4)
@@ -582,7 +625,7 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
   scale_x_continuous(expand = c(0, 0))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-10-1.png" width="672" />
 
 ```r
 ggsave("figures/grouped_taxa.png", width=5, height=4)
@@ -617,7 +660,7 @@ inner_join(phylum, phylum_pool, by="taxon") %>%
                     values = c(brewer.pal(5, "Paired"), "gray"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-11-1.png" width="672" />
 
 ```r
 ggsave("figures/faceted_phyla_bar.png", width=5, height=4)
@@ -648,7 +691,7 @@ inner_join(genus, genus_pool, by="taxon") %>%
         strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-1.png" width="672" />
 
 ```r
 ggsave("figures/faceted_taxa_bar.png", width=5, height=4)
@@ -668,7 +711,7 @@ microbial::plotbar( level="Phylum", group = "nationality", top = 10) +
        fill = NULL)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-1.png" width="672" />
 
 ```r
 ggsave("figures/plotbar_phyla_bar.png", width=5, height=4)
@@ -684,7 +727,7 @@ microbial::plotbar(level="Genus", group = "nationality", top = 10) +
        fill = NULL)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-2.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-2.png" width="672" />
 
 ```r
 ggsave("figures/plotbar_taxa_bar.png", width=5, height=4)
@@ -726,7 +769,7 @@ psmelt(ps_rel) %>%
   guides(color = "none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 
 ```r
 ggsave("figures/ggpubr_phyla_bar.png", width=5, height=4)
@@ -781,7 +824,7 @@ top_n_unique(df, n, Genus, Abundance) %>%
   guides(color = "none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-15-1.png" width="672" />
 
 ```r
 ggsave("figures/ggpubr_top_n_bar.png", width=5, height=4)
@@ -912,7 +955,7 @@ psextra_clr_dietswap %>%
   coord_fixed(ratio = 0.5, clip = "off") # makes rotated labels align correctly
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-16-1.png" width="672" />
 
 
 # (PART) RELATIONSHIP ANALYSIS {-}
@@ -980,7 +1023,7 @@ cor_heatmap(
 )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-17-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-18-1.png" width="672" />
 
 > Note: The parameter min_prevalence = 0.1 is set, equivalent to approximately 23 out of 222 samples. This value may vary depending on the dataset. Adjust as necessary.
 
@@ -1008,7 +1051,7 @@ tree <- rtree(20)
 ggtree(tree)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-19-1.png" width="672" />
 
 ## Cladogram using ggtree() function
 
@@ -1035,6 +1078,6 @@ ggtree(
 )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-19-1.png" width="576" />
+<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-20-1.png" width="576" />
 
 

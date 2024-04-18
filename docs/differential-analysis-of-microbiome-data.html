@@ -92,7 +92,7 @@
 </h2>
 <p>The <code><a href="https://rdrr.io/pkg/microbiomeMarker/man/run_lefse.html">run_lefse()</a></code> function in the <code>microbiomeMaker</code> R package provides a convenient method for performing Differential Abundance Analysis on microbiome data. By leveraging the Linear Discriminant Analysis Effect Size (LEfSe) algorithm, <code><a href="https://rdrr.io/pkg/microbiomeMarker/man/run_lefse.html">run_lefse()</a></code> enables researchers to interpret the results in the context of biological class labels, uncovering important insights into microbial community dynamics.</p>
 <p><strong>Dataset: dietswap</strong></p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yiluheihei/microbiomeMarker">microbiomeMarker</a></span><span class="op">)</span></span>
 <span></span>
@@ -110,7 +110,7 @@
 <span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/plot_heatmap.html">plot_heatmap</a></span><span class="op">(</span>group <span class="op">=</span> <span class="st">"nationality"</span>, color <span class="op">=</span> <span class="st">"rainbow"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="02_explore_visual_types_files/figure-html/lefse_microbiomeMarker1-1.png" width="960"></div>
 <p><strong>Dataset: caporaso</strong></p>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yiluheihei/microbiomeMarker">microbiomeMarker</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">ps_caporaso</span> <span class="op">&lt;-</span> <span class="va">ps_caporaso</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://david-barnett.github.io/microViz/reference/tax_fix.html">tax_fix</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -132,7 +132,7 @@
 <span class="header-section-number">5.2</span> Cladogram on kostic_crc dataset<a class="anchor" aria-label="anchor" href="#cladogram-on-kostic_crc-dataset"><i class="fas fa-link"></i></a>
 </h2>
 <p>Using plot_cladogram() from microbiomeMarker package</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/yiluheihei/microbiomeMarker">microbiomeMarker</a></span><span class="op">)</span></span>
 <span><span class="va">kostic_crc_small</span> <span class="op">&lt;-</span> <span class="fu">phyloseq</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/subset_taxa-methods.html">subset_taxa</a></span><span class="op">(</span></span>
 <span>    <span class="va">ps_kostic_crc</span>,</span>

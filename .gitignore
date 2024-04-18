@@ -1,5 +1,7 @@
 # Additional
 CDI*
+render*.rds
+./*_files/*
 
 renv/
 _bookdown_files/*

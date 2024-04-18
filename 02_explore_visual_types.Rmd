@@ -129,6 +129,43 @@ freq(df,
 ```
 
 
+## Comparative results from Mothur and QIIME2
+
+```{r fig.height=7, fig.width=6}
+# scripts/create_barplots.R
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(svglite)
+
+read_csv("../imap-data-preparation/data/mothur/mothur_composite.csv", show_col_types = FALSE) %>% 
+  mutate(pipeline="MOTHUR", .before=2) %>% 
+  select(-OTU, -3) %>% 
+  ggplot(aes(x=Genus, y=rel_abund, fill=pipeline)) +
+  facet_grid(~pipeline) +
+  geom_col() +
+  coord_flip() +
+  labs(y="Relative Abundance (%)") +
+  theme(legend.position="none")
+
+
+read_csv("../imap-data-preparation/data/qiime2/qiime2_composite.csv", show_col_types = FALSE) %>% 
+  mutate(pipeline="QIIME2", .before=2) %>% 
+  select(-feature, -c(3:14)) %>% 
+  ggplot(aes(x=Genus, y=rel_abund, fill=pipeline)) +
+  facet_grid(~pipeline) +
+  geom_col() +
+  coord_flip() +
+  labs(y="Relative Abundance (%)") + 
+  theme(legend.position="none")
+
+
+
+ggsave(file="figures/taxon_barplot.png", width=10, height=10)
+ggsave(file="figures/taxon_barplot.svg", width=10, height=10)
+```
+
+
 ## Compute sequence count per sample
 Here we only show the head and tail count data
 

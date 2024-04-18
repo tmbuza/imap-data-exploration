@@ -85,35 +85,32 @@ Loading objects:
 ```
 
 
-<div class="infoicon">
-<h2 id="demo-data-for-qiime2-analysis">Demo data for QIIME2
-analysis</h2>
-<p>The demo data for QIIME2 analysis is downloaded and stored in the
-<code>data/qiime2</code> directory. You can use these files to practice
-QIIME2 workflows and analysis techniques.</p>
-<p>The data was sourced from the QIIME2 tutorials available at <a
-href="https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/">https://docs.qiime2.org/2024.4/data/tutorials/moving-pictures/</a>.</p>
-<p>It contains the following files:</p>
-<ul>
-<li>Sample metadata</li>
-<li>Feature table</li>
-<li>Taxonomy</li>
-<li>Shannon vector</li>
-<li>Rooted tree</li>
-</ul>
-<p>This data is essential for leveraging downstream analysis aimed at
-understanding data analyzed using the QIIME2 pipeline.</p>
-<p>```R if (!dir.exists(“data”)){dir.create(“data”)} if
-(!dir.exists(“data/qiime2”)){dir.create(“data/qiime2”)}</p>
-<p>download.file(“https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza”,
-“data/qiime2/feature_table.qza”)
-download.file(“https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv”,
-“data/qiime2/sample_metadata.tsv”)
-download.file(“https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza”,
-“data/qiime2/taxonomy.qza”)
-download.file(“https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza”,
-“data/qiime2/rooted_tree.qza”)
-download.file(“https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza”,
-“data/qiime2/shannon_vector.qza”)</p>
-</div>
+## Demo data for QIIME2 analysis
+
+The demo data for QIIME2 analysis is downloaded and stored in the `data/qiime2` directory. You can use these files to practice QIIME2 workflows and analysis techniques.
+
+The data was sourced from the QIIME2 tutorials available at [https://docs.qiime2.org/2024.4/data/tutorials/moving-pictures/](https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/).
+
+It contains the following files:
+
+- Sample metadata
+- Feature table
+- Taxonomy
+- Shannon vector
+- Rooted tree
+
+This data is essential for leveraging downstream analysis aimed at understanding data analyzed using the QIIME2 pipeline.
+
+
+```R
+if (!dir.exists("data")){dir.create("data")}
+if (!dir.exists("data/qiime2")){dir.create("data/qiime2")}
+
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza", "data/qiime2/feature_table.qza")
+download.file("https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv", "data/qiime2/sample_metadata.tsv")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza", "data/qiime2/taxonomy.qza")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza", "data/qiime2/rooted_tree.qza")
+download.file("https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza", "data/qiime2/shannon_vector.qza")
+
+```
 

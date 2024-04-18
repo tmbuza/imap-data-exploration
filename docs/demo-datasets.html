@@ -138,60 +138,31 @@ Saved RData objects</code></pre>
   psextra_raw
   psextra_rel
   ps_df</code></pre>
-<div class="infoicon">
-<h2 id="demo-data-for-qiime2-analysis">
-Demo data for QIIME2
-analysis
-</h2>
-<p>
-The demo data for QIIME2 analysis is downloaded and stored in the
-<code>data/qiime2</code> directory. You can use these files to practice
-QIIME2 workflows and analysis techniques.
-</p>
-<p>
-The data was sourced from the QIIME2 tutorials available at <a href="https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/">https://docs.qiime2.org/2024.4/data/tutorials/moving-pictures/</a>.
-</p>
-<p>
-It contains the following files:
-</p>
-<ul>
-<li>
-Sample metadata
-</li>
-<li>
-Feature table
-</li>
-<li>
-Taxonomy
-</li>
-<li>
-Shannon vector
-</li>
-<li>
-Rooted tree
-</li>
-</ul>
-<p>
-This data is essential for leveraging downstream analysis aimed at
-understanding data analyzed using the QIIME2 pipeline.
-</p>
-<p>
-```R if (!dir.exists(“data”)){dir.create(“data”)} if
-(!dir.exists(“data/qiime2”)){dir.create(“data/qiime2”)}
-</p>
-<p>
-download.file(“<a href="https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza" class="uri">https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza</a>”,
-“data/qiime2/feature_table.qza”)
-download.file(“<a href="https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv" class="uri">https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv</a>”,
-“data/qiime2/sample_metadata.tsv”)
-download.file(“<a href="https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza" class="uri">https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza</a>”,
-“data/qiime2/taxonomy.qza”)
-download.file(“<a href="https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza" class="uri">https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza</a>”,
-“data/qiime2/rooted_tree.qza”)
-download.file(“<a href="https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza" class="uri">https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza</a>”,
-“data/qiime2/shannon_vector.qza”)
-</p>
 </div>
+<div id="demo-data-for-qiime2-analysis" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Demo data for QIIME2 analysis<a class="anchor" aria-label="anchor" href="#demo-data-for-qiime2-analysis"><i class="fas fa-link"></i></a>
+</h2>
+<p>The demo data for QIIME2 analysis is downloaded and stored in the <code>data/qiime2</code> directory. You can use these files to practice QIIME2 workflows and analysis techniques.</p>
+<p>The data was sourced from the QIIME2 tutorials available at <a href="https://docs.qiime2.org/2018.4/data/tutorials/moving-pictures/">https://docs.qiime2.org/2024.4/data/tutorials/moving-pictures/</a>.</p>
+<p>It contains the following files:</p>
+<ul>
+<li>Sample metadata</li>
+<li>Feature table</li>
+<li>Taxonomy</li>
+<li>Shannon vector</li>
+<li>Rooted tree</li>
+</ul>
+<p>This data is essential for leveraging downstream analysis aimed at understanding data analyzed using the QIIME2 pipeline.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"data"</span><span class="op">)</span><span class="op">}</span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.exists</a></span><span class="op">(</span><span class="st">"data/qiime2"</span><span class="op">)</span><span class="op">)</span><span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html">dir.create</a></span><span class="op">(</span><span class="st">"data/qiime2"</span><span class="op">)</span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/table.qza"</span>, <span class="st">"data/qiime2/feature_table.qza"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://data.qiime2.org/2024.2/tutorials/moving-pictures/sample_metadata.tsv"</span>, <span class="st">"data/qiime2/sample_metadata.tsv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/taxonomy.qza"</span>, <span class="st">"data/qiime2/taxonomy.qza"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/rooted-tree.qza"</span>, <span class="st">"data/qiime2/rooted_tree.qza"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/download.file.html">download.file</a></span><span class="op">(</span><span class="st">"https://docs.qiime2.org/2024.2/data/tutorials/moving-pictures/core-metrics-results/shannon_vector.qza"</span>, <span class="st">"data/qiime2/shannon_vector.qza"</span><span class="op">)</span></span></code></pre></div>
 
 </div>
 </div>
@@ -206,6 +177,7 @@ download.file(“<a href="https://docs.qiime2.org/2024.2/data/tutorials/moving-p
       <ul class="nav navbar-nav">
 <li><a class="nav-link" href="#demo-datasets"><span class="header-section-number">2</span> Microbiome Demo Datasets</a></li>
 <li><a class="nav-link" href="#import-preprepared-data"><span class="header-section-number">2.1</span> Import preprepared data</a></li>
+<li><a class="nav-link" href="#demo-data-for-qiime2-analysis"><span class="header-section-number">2.2</span> Demo data for QIIME2 analysis</a></li>
 </ul>
 
       <div class="book-extra">

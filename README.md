@@ -1,10 +1,11 @@
-# IMAP Project Overview
+# IMAP: Data Exploration
 
 ---In Progress---
 
 <br>
 
 # Related Works
+
 ## IMAP GitHub Repos
 
 | IMAP-Repo                                      | Description                                               | GH-Pages                                             |
