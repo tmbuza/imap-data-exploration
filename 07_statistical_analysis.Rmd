@@ -10,6 +10,7 @@ knitr::opts_chunk$set(
   message  =FALSE,
   warning  =FALSE,
   cache  =FALSE,
+  fig.path = "figures",
   comment  =NA)
   
 ```
@@ -28,6 +29,7 @@ load("data/ps_transformed.rda", verbose = T)
 load("data/bray_distances.rda", verbose = T)
 load("data/psextra_distances.rda", verbose = T)
 load("data/reduced_dimension.rda", verbose = T)
+load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
 
 ```
 
