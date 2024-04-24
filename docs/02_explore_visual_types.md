@@ -13,18 +13,9 @@ library(phyloseq)
 library(tidyverse)
 
 cat("\nSaved RData objects\n\n")
-```
-
-```
 
 Saved RData objects
-```
-
-```r
 load("data/external_ps_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   df_GlobalPatterns
   df_dietswap
@@ -34,13 +25,7 @@ Loading objects:
   ps_dietswap
   ps_caporaso
   ps_kostic_crc
-```
-
-```r
 load("data/ps_transformed.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin
   ps_identity
@@ -52,13 +37,7 @@ Loading objects:
   ps_clr
   ps_shift
   ps_scale
-```
-
-```r
 load("data/bray_distances.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin_bray_dist
   ps_compositional_bray_dist
@@ -69,47 +48,23 @@ Loading objects:
   ps_clr_bray_dist
   ps_shift_bray_dist
   ps_scale_bray_dist
-```
-
-```r
 load("data/psextra_distances.rda", verbose = T)
-```
-
-```
 Loading objects:
   psextra_clr_asin_bray_dist
   psextra_id_asin_bray_dist
   psextra_log10p_asin_bray_dist
-```
-
-```r
 load("data/reduced_dimension.rda", verbose = T)
-```
-
-```
 Loading objects:
   pca_asin_bray_metrics
   mds_asin_bray_metrics
   pcoa_asin_bray_metrics
   tsne_asin_bray_metrics
-```
-
-```r
 load("data/phyloseq_extra_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   psextra_clr_dietswap
   psextra_id_dietswap
   psextra_log10p_dietswap
-```
-
-```r
 load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_raw
   ps_rel
@@ -127,29 +82,14 @@ In R, there are several built-in palettes that we can use for color schemes in p
 ```
 [1] "#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3" "#A6D854" "#FFD92F" "#E5C494"
 [8] "#B3B3B3"
-```
-
-```
 [1] "#B3B3B3" "#E5C494" "#FFD92F" "#A6D854" "#E78AC3" "#8DA0CB" "#FC8D62"
 [8] "#66C2A5"
-```
-
-```
 [1] "#440154FF" "#46337EFF" "#365C8DFF" "#277F8EFF" "#1FA187FF" "#4AC16DFF"
 [7] "#9FDA3AFF" "#FDE725FF"
-```
-
-```
 [1] "#FDE725FF" "#9FDA3AFF" "#4AC16DFF" "#1FA187FF" "#277F8EFF" "#365C8DFF"
 [7] "#46337EFF" "#440154FF"
-```
-
-```
 [1] "#FF0000" "#FFBF00" "#80FF00" "#00FF40" "#00FFFF" "#0040FF" "#8000FF"
 [8] "#FF00BF"
-```
-
-```
 [1] "#FF00BF" "#8000FF" "#0040FF" "#00FFFF" "#00FF40" "#80FF00" "#FFBF00"
 [8] "#FF0000"
 ```
@@ -220,7 +160,7 @@ freq(df,
      )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/prepare_df-1.png" width="672" />
+<img src="./figures/prepare_df-1.png" width="672" />
 
 ```
      sex frequency percentage cumulative_perc
@@ -228,7 +168,7 @@ freq(df,
 2 female     42096      45.91          100.00
 ```
 
-<img src="02_explore_visual_types_files/figure-html/prepare_df-2.png" width="672" />
+<img src="./figures/prepare_df-2.png" width="672" />
 
 ```
   nationality frequency percentage cumulative_perc
@@ -236,7 +176,7 @@ freq(df,
 2         AFR     41232      44.96          100.00
 ```
 
-<img src="02_explore_visual_types_files/figure-html/prepare_df-3.png" width="672" />
+<img src="./figures/prepare_df-3.png" width="672" />
 
 ```
   grp frequency percentage cumulative_perc
@@ -245,16 +185,13 @@ freq(df,
 3  DI     29552      32.23          100.00
 ```
 
-<img src="02_explore_visual_types_files/figure-html/prepare_df-4.png" width="672" />
+<img src="./figures/prepare_df-4.png" width="672" />
 
 ```
          bmi frequency percentage cumulative_perc
 1      obese     37080      40.44           40.44
 2 overweight     31320      34.15           74.59
 3       lean     23300      25.41          100.00
-```
-
-```
 [1] "Variables processed: sex, nationality, grp, bmi"
 ```
 
@@ -280,9 +217,11 @@ read_csv("../imap-data-preparation/data/mothur/mothur_composite.csv", show_col_t
   theme(legend.position="none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-1.png" width="576" />
+<img src="./figures/unnamed-chunk-4-1.png" width="576" />
 
 ```r
+
+
 read_csv("../imap-data-preparation/data/qiime2/qiime2_composite.csv", show_col_types = FALSE) %>% 
   mutate(pipeline="QIIME2", .before=2) %>% 
   select(-feature, -c(3:14)) %>% 
@@ -294,9 +233,12 @@ read_csv("../imap-data-preparation/data/qiime2/qiime2_composite.csv", show_col_t
   theme(legend.position="none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-4-2.png" width="576" />
+<img src="./figures/unnamed-chunk-4-2.png" width="576" />
 
 ```r
+
+
+
 ggsave(file="figures/taxon_barplot.png", width=10, height=10)
 ggsave(file="figures/taxon_barplot.svg", width=10, height=10)
 ```
@@ -327,9 +269,10 @@ head_tail %>%
   theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-1.png" width="672" />
+<img src="./figures/unnamed-chunk-5-1.png" width="672" />
 
 ```r
+
 ggsave("figures/basic_barplot.png", width=5, height=4)
 
 
@@ -349,9 +292,10 @@ head_tail %>%
   geom_text(aes(label = nseqs), vjust = -0.3, color = "#AAAAAA")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-5-2.png" width="672" />
+<img src="./figures/unnamed-chunk-5-2.png" width="672" />
 
 ```r
+
 ggsave("figures/barplot_w_labels.png", width=5, height=4)
 ```
 
@@ -379,7 +323,7 @@ psextra_raw %>%
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 ```
 
-<img src="02_explore_visual_types_files/figure-html/barplotmicroViz-1.png" width="960" />
+<img src="./figures/barplotmicroViz-1.png" width="960" />
 
 
 ## Bar plot on ps_caporaso dataset
@@ -402,7 +346,7 @@ ps_caporaso %>%
   theme(axis.text.y = element_blank(), axis.ticks.y = element_blank())
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-6-1.png" width="960" />
+<img src="./figures/unnamed-chunk-6-1.png" width="960" />
 
 
 ## Bar plots for Taxa relative abundane
@@ -471,10 +415,12 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
         legend.key.size = unit(10, "pt"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-7-1.png" width="672" />
+<img src="./figures/unnamed-chunk-7-1.png" width="672" />
 
 ```r
+
 ggsave("figures/stacked_phyla.png", width=5, height=4)
+
 ```
 
 
@@ -522,7 +468,7 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
         legend.key.size = unit(10, "pt"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-8-1.png" width="672" />
+<img src="./figures/unnamed-chunk-8-1.png" width="672" />
 
 
 
@@ -572,15 +518,18 @@ inner_join(phylum_rel_abund, taxon_pool, by="taxon") %>%
   scale_x_continuous(expand = c(0, 0))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-9-1.png" width="672" />
+<img src="./figures/unnamed-chunk-9-1.png" width="672" />
 
 ```r
+
+
 ggsave("figures/grouped_phyla.png", width=5, height=4)
 ```
 
 
 
 ```r
+
 #---------------------------------------
 
 taxon_rel_abund <- otu_rel_abund %>%
@@ -625,10 +574,13 @@ inner_join(taxon_rel_abund, taxon_pool, by="taxon") %>%
   scale_x_continuous(expand = c(0, 0))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-10-1.png" width="672" />
+<img src="./figures/unnamed-chunk-10-1.png" width="672" />
 
 ```r
+
+
 ggsave("figures/grouped_taxa.png", width=5, height=4)
+
 ```
 
 
@@ -660,10 +612,13 @@ inner_join(phylum, phylum_pool, by="taxon") %>%
                     values = c(brewer.pal(5, "Paired"), "gray"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="./figures/unnamed-chunk-11-1.png" width="672" />
 
 ```r
+
+ 
 ggsave("figures/faceted_phyla_bar.png", width=5, height=4)
+
 ```
 
 
@@ -691,9 +646,11 @@ inner_join(genus, genus_pool, by="taxon") %>%
         strip.background = element_rect(colour = "lightblue", fill = "lightblue"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-12-1.png" width="672" />
+<img src="./figures/unnamed-chunk-12-1.png" width="672" />
 
 ```r
+
+
 ggsave("figures/faceted_taxa_bar.png", width=5, height=4)
 ```
 
@@ -711,9 +668,10 @@ microbial::plotbar( level="Phylum", group = "nationality", top = 10) +
        fill = NULL)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+<img src="./figures/unnamed-chunk-13-1.png" width="672" />
 
 ```r
+
 ggsave("figures/plotbar_phyla_bar.png", width=5, height=4)
 
 #---------------------------------------
@@ -727,10 +685,12 @@ microbial::plotbar(level="Genus", group = "nationality", top = 10) +
        fill = NULL)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-13-2.png" width="672" />
+<img src="./figures/unnamed-chunk-13-2.png" width="672" />
 
 ```r
+
 ggsave("figures/plotbar_taxa_bar.png", width=5, height=4)
+
 ```
 
 
@@ -769,9 +729,10 @@ psmelt(ps_rel) %>%
   guides(color = "none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-14-1.png" width="672" />
+<img src="./figures/unnamed-chunk-14-1.png" width="672" />
 
 ```r
+
 ggsave("figures/ggpubr_phyla_bar.png", width=5, height=4)
 ```
 
@@ -824,9 +785,10 @@ top_n_unique(df, n, Genus, Abundance) %>%
   guides(color = "none")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-15-1.png" width="672" />
+<img src="./figures/unnamed-chunk-15-1.png" width="672" />
 
 ```r
+
 ggsave("figures/ggpubr_top_n_bar.png", width=5, height=4)
 ```
 
@@ -863,7 +825,7 @@ run_lefse(
 plot_heatmap(group = "nationality", color = "rainbow")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/lefse_microbiomeMarker1-1.png" width="960" />
+<img src="./figures/lefse_microbiomeMarker1-1.png" width="960" />
 
 
 **Dataset: caporaso**
@@ -885,7 +847,7 @@ run_lefse(
   plot_heatmap(group = "SampleType", color = "rainbow")
 ```
 
-<img src="02_explore_visual_types_files/figure-html/lefse_microbiomeMarker2-1.png" width="960" />
+<img src="./figures/lefse_microbiomeMarker2-1.png" width="960" />
 
 
 
@@ -909,7 +871,7 @@ mm_lefse <- run_lefse(
 plot_cladogram(mm_lefse, color = c("darkgreen", "red"))
 ```
 
-<img src="02_explore_visual_types_files/figure-html/ps_kostic_crc_cladogram-1.png" width="960" />
+<img src="./figures/ps_kostic_crc_cladogram-1.png" width="960" />
 
 
 
@@ -934,7 +896,7 @@ psextra_clr_dietswap %>%
   )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unconstrained_aitchison_pca-1.png" width="672" />
+<img src="./figures/unconstrained_aitchison_pca-1.png" width="672" />
 
 ## Customizing an ordination plot
 
@@ -955,7 +917,7 @@ psextra_clr_dietswap %>%
   coord_fixed(ratio = 0.5, clip = "off") # makes rotated labels align correctly
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-16-1.png" width="672" />
+<img src="./figures/unnamed-chunk-16-1.png" width="672" />
 
 
 # (PART) RELATIONSHIP ANALYSIS {-}
@@ -1023,7 +985,7 @@ cor_heatmap(
 )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-18-1.png" width="672" />
+<img src="./figures/unnamed-chunk-18-1.png" width="672" />
 
 > Note: The parameter min_prevalence = 0.1 is set, equivalent to approximately 23 out of 222 samples. This value may vary depending on the dataset. Adjust as necessary.
 
@@ -1051,7 +1013,7 @@ tree <- rtree(20)
 ggtree(tree)
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-19-1.png" width="672" />
+<img src="./figures/unnamed-chunk-19-1.png" width="672" />
 
 ## Cladogram using ggtree() function
 
@@ -1078,6 +1040,6 @@ ggtree(
 )
 ```
 
-<img src="02_explore_visual_types_files/figure-html/unnamed-chunk-20-1.png" width="576" />
+<img src="./figures/unnamed-chunk-20-1.png" width="576" />
 
 

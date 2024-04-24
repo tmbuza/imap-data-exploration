@@ -17,18 +17,10 @@ library(phyloseq)
 library(tidyverse)
 
 cat("\nSaved RData objects\n\n")
-```
-
-```
 
 Saved RData objects
-```
 
-```r
 load("data/ps_transformed.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin
   ps_identity
@@ -40,13 +32,7 @@ Loading objects:
   ps_clr
   ps_shift
   ps_scale
-```
-
-```r
 load("data/bray_distances.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin_bray_dist
   ps_compositional_bray_dist
@@ -57,25 +43,13 @@ Loading objects:
   ps_clr_bray_dist
   ps_shift_bray_dist
   ps_scale_bray_dist
-```
-
-```r
 load("data/reduced_dimension.rda", verbose = T)
-```
-
-```
 Loading objects:
   pca_asin_bray_metrics
   mds_asin_bray_metrics
   pcoa_asin_bray_metrics
   tsne_asin_bray_metrics
-```
-
-```r
 load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_raw
   ps_rel

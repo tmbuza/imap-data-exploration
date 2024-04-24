@@ -86,96 +86,95 @@
 <span class="header-section-number">10</span> Statistical Significance Analysis<a class="anchor" aria-label="anchor" href="#statistical-significance-analysis"><i class="fas fa-link"></i></a>
 </h1>
 <p>This section delves into statistical analysis methods tailored specifically for microbiome data. Statistical analysis plays a crucial role in understanding the complex relationships and patterns within microbiome datasets, helping researchers uncover significant findings and insights into microbial community dynamics, composition, and responses to various environmental factors or treatments.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load required packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nSaved RData objects\n\n"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>
-Saved RData objects</code></pre>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/dataframe_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  df_GlobalPatterns
-  df_dietswap
-  df_caporaso
-  df_kostic_crc</code></pre>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_GlobalPatterns
-  ps_dietswap
-  ps_caporaso
-  ps_kostic_crc</code></pre>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_extra_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  psextra_clr_dietswap
-  psextra_id_dietswap
-  psextra_log10p_dietswap</code></pre>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/ps_transformed.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_asin
-  ps_identity
-  ps_compositional
-  ps_z_otu
-  ps_z_sample
-  ps_log10
-  ps_log10p
-  ps_clr
-  ps_shift
-  ps_scale</code></pre>
-<div class="sourceCode" id="cb85"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/bray_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_asin_bray_dist
-  ps_compositional_bray_dist
-  ps_z_otu_bray_dist
-  ps_z_sample_bray_dist
-  ps_log10_bray_dist
-  ps_log10p_bray_dist
-  ps_clr_bray_dist
-  ps_shift_bray_dist
-  ps_scale_bray_dist</code></pre>
-<div class="sourceCode" id="cb87"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/psextra_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  psextra_clr_asin_bray_dist
-  psextra_id_asin_bray_dist
-  psextra_log10p_asin_bray_dist</code></pre>
-<div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/reduced_dimension.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  pca_asin_bray_metrics
-  mds_asin_bray_metrics
-  pcoa_asin_bray_metrics
-  tsne_asin_bray_metrics</code></pre>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="statistical-significance-analysis.html#cb45-1" tabindex="-1"></a><span class="co"># Load required packages</span></span>
+<span id="cb45-2"><a href="statistical-significance-analysis.html#cb45-2" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb45-3"><a href="statistical-significance-analysis.html#cb45-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb45-4"><a href="statistical-significance-analysis.html#cb45-4" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="statistical-significance-analysis.html#cb45-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Saved RData objects</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb45-6"><a href="statistical-significance-analysis.html#cb45-6" tabindex="-1"></a></span>
+<span id="cb45-7"><a href="statistical-significance-analysis.html#cb45-7" tabindex="-1"></a>Saved RData objects</span>
+<span id="cb45-8"><a href="statistical-significance-analysis.html#cb45-8" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/dataframe_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-9"><a href="statistical-significance-analysis.html#cb45-9" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-10"><a href="statistical-significance-analysis.html#cb45-10" tabindex="-1"></a>  df_GlobalPatterns</span>
+<span id="cb45-11"><a href="statistical-significance-analysis.html#cb45-11" tabindex="-1"></a>  df_dietswap</span>
+<span id="cb45-12"><a href="statistical-significance-analysis.html#cb45-12" tabindex="-1"></a>  df_caporaso</span>
+<span id="cb45-13"><a href="statistical-significance-analysis.html#cb45-13" tabindex="-1"></a>  df_kostic_crc</span>
+<span id="cb45-14"><a href="statistical-significance-analysis.html#cb45-14" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/phyloseq_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-15"><a href="statistical-significance-analysis.html#cb45-15" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-16"><a href="statistical-significance-analysis.html#cb45-16" tabindex="-1"></a>  ps_GlobalPatterns</span>
+<span id="cb45-17"><a href="statistical-significance-analysis.html#cb45-17" tabindex="-1"></a>  ps_dietswap</span>
+<span id="cb45-18"><a href="statistical-significance-analysis.html#cb45-18" tabindex="-1"></a>  ps_caporaso</span>
+<span id="cb45-19"><a href="statistical-significance-analysis.html#cb45-19" tabindex="-1"></a>  ps_kostic_crc</span>
+<span id="cb45-20"><a href="statistical-significance-analysis.html#cb45-20" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/phyloseq_extra_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-21"><a href="statistical-significance-analysis.html#cb45-21" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-22"><a href="statistical-significance-analysis.html#cb45-22" tabindex="-1"></a>  psextra_clr_dietswap</span>
+<span id="cb45-23"><a href="statistical-significance-analysis.html#cb45-23" tabindex="-1"></a>  psextra_id_dietswap</span>
+<span id="cb45-24"><a href="statistical-significance-analysis.html#cb45-24" tabindex="-1"></a>  psextra_log10p_dietswap</span>
+<span id="cb45-25"><a href="statistical-significance-analysis.html#cb45-25" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/ps_transformed.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-26"><a href="statistical-significance-analysis.html#cb45-26" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-27"><a href="statistical-significance-analysis.html#cb45-27" tabindex="-1"></a>  ps_asin</span>
+<span id="cb45-28"><a href="statistical-significance-analysis.html#cb45-28" tabindex="-1"></a>  ps_identity</span>
+<span id="cb45-29"><a href="statistical-significance-analysis.html#cb45-29" tabindex="-1"></a>  ps_compositional</span>
+<span id="cb45-30"><a href="statistical-significance-analysis.html#cb45-30" tabindex="-1"></a>  ps_z_otu</span>
+<span id="cb45-31"><a href="statistical-significance-analysis.html#cb45-31" tabindex="-1"></a>  ps_z_sample</span>
+<span id="cb45-32"><a href="statistical-significance-analysis.html#cb45-32" tabindex="-1"></a>  ps_log10</span>
+<span id="cb45-33"><a href="statistical-significance-analysis.html#cb45-33" tabindex="-1"></a>  ps_log10p</span>
+<span id="cb45-34"><a href="statistical-significance-analysis.html#cb45-34" tabindex="-1"></a>  ps_clr</span>
+<span id="cb45-35"><a href="statistical-significance-analysis.html#cb45-35" tabindex="-1"></a>  ps_shift</span>
+<span id="cb45-36"><a href="statistical-significance-analysis.html#cb45-36" tabindex="-1"></a>  ps_scale</span>
+<span id="cb45-37"><a href="statistical-significance-analysis.html#cb45-37" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/bray_distances.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-38"><a href="statistical-significance-analysis.html#cb45-38" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-39"><a href="statistical-significance-analysis.html#cb45-39" tabindex="-1"></a>  ps_asin_bray_dist</span>
+<span id="cb45-40"><a href="statistical-significance-analysis.html#cb45-40" tabindex="-1"></a>  ps_compositional_bray_dist</span>
+<span id="cb45-41"><a href="statistical-significance-analysis.html#cb45-41" tabindex="-1"></a>  ps_z_otu_bray_dist</span>
+<span id="cb45-42"><a href="statistical-significance-analysis.html#cb45-42" tabindex="-1"></a>  ps_z_sample_bray_dist</span>
+<span id="cb45-43"><a href="statistical-significance-analysis.html#cb45-43" tabindex="-1"></a>  ps_log10_bray_dist</span>
+<span id="cb45-44"><a href="statistical-significance-analysis.html#cb45-44" tabindex="-1"></a>  ps_log10p_bray_dist</span>
+<span id="cb45-45"><a href="statistical-significance-analysis.html#cb45-45" tabindex="-1"></a>  ps_clr_bray_dist</span>
+<span id="cb45-46"><a href="statistical-significance-analysis.html#cb45-46" tabindex="-1"></a>  ps_shift_bray_dist</span>
+<span id="cb45-47"><a href="statistical-significance-analysis.html#cb45-47" tabindex="-1"></a>  ps_scale_bray_dist</span>
+<span id="cb45-48"><a href="statistical-significance-analysis.html#cb45-48" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/psextra_distances.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-49"><a href="statistical-significance-analysis.html#cb45-49" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-50"><a href="statistical-significance-analysis.html#cb45-50" tabindex="-1"></a>  psextra_clr_asin_bray_dist</span>
+<span id="cb45-51"><a href="statistical-significance-analysis.html#cb45-51" tabindex="-1"></a>  psextra_id_asin_bray_dist</span>
+<span id="cb45-52"><a href="statistical-significance-analysis.html#cb45-52" tabindex="-1"></a>  psextra_log10p_asin_bray_dist</span>
+<span id="cb45-53"><a href="statistical-significance-analysis.html#cb45-53" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/reduced_dimension.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-54"><a href="statistical-significance-analysis.html#cb45-54" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-55"><a href="statistical-significance-analysis.html#cb45-55" tabindex="-1"></a>  pca_asin_bray_metrics</span>
+<span id="cb45-56"><a href="statistical-significance-analysis.html#cb45-56" tabindex="-1"></a>  mds_asin_bray_metrics</span>
+<span id="cb45-57"><a href="statistical-significance-analysis.html#cb45-57" tabindex="-1"></a>  pcoa_asin_bray_metrics</span>
+<span id="cb45-58"><a href="statistical-significance-analysis.html#cb45-58" tabindex="-1"></a>  tsne_asin_bray_metrics</span>
+<span id="cb45-59"><a href="statistical-significance-analysis.html#cb45-59" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/phyloseq_raw_rel_psextra_df_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb45-60"><a href="statistical-significance-analysis.html#cb45-60" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb45-61"><a href="statistical-significance-analysis.html#cb45-61" tabindex="-1"></a>  ps_raw</span>
+<span id="cb45-62"><a href="statistical-significance-analysis.html#cb45-62" tabindex="-1"></a>  ps_rel</span>
+<span id="cb45-63"><a href="statistical-significance-analysis.html#cb45-63" tabindex="-1"></a>  psextra_raw</span>
+<span id="cb45-64"><a href="statistical-significance-analysis.html#cb45-64" tabindex="-1"></a>  psextra_rel</span>
+<span id="cb45-65"><a href="statistical-significance-analysis.html#cb45-65" tabindex="-1"></a>  ps_df</span></code></pre></div>
 <div id="permanova" class="section level2" number="10.1">
 <h2>
 <span class="header-section-number">10.1</span> PERMANOVA<a class="anchor" aria-label="anchor" href="#permanova"><i class="fas fa-link"></i></a>
 </h2>
 <p>PERMANOVA (Permutational Multivariate Analysis of Variance) is a statistical test used to assess the significance of differences between groups of microbial communities. Particularly suited for analyzing multivariate data like microbiome composition, PERMANOVA offers valuable insights into how different experimental conditions or treatments impact microbial community structure.</p>
-<div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://david-barnett.github.io/microViz">microViz</a></span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">bray_perm</span> <span class="op">&lt;-</span> <span class="va">psextra_log10p_asin_bray_dist</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://david-barnett.github.io/microViz/reference/dist_permanova.html">dist_permanova</a></span><span class="op">(</span></span>
-<span>    seed <span class="op">=</span> <span class="fl">1234</span>, <span class="co"># for set.seed to ensure reproducibility of random process</span></span>
-<span>    n_processes <span class="op">=</span> <span class="fl">1</span>, n_perms <span class="op">=</span> <span class="fl">99</span>, <span class="co"># you should use at least 999!</span></span>
-<span>    variables <span class="op">=</span> <span class="st">"bmi_group"</span></span>
-<span>  <span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://david-barnett.github.io/microViz/reference/psExtra-accessors.html">perm_get</a></span><span class="op">(</span><span class="va">bray_perm</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code>           Df  SumOfSqs         R2        F Pr(&gt;F)
-bmi_group   2 0.1233611 0.04544245 5.212833   0.01
-Residual  219 2.5913059 0.95455755       NA     NA
-Total     221 2.7146670 1.00000000       NA     NA</code></pre>
-<div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://david-barnett.github.io/microViz/reference/psExtra-accessors.html">info_get</a></span><span class="op">(</span><span class="va">bray_perm</span><span class="op">)</span></span></code></pre></div>
-<pre><code>psExtra info:
-tax_agg = "Genus" tax_trans = "log10p" dist_method = "bray" </code></pre>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="statistical-significance-analysis.html#cb46-1" tabindex="-1"></a><span class="fu">library</span>(microViz) </span>
+<span id="cb46-2"><a href="statistical-significance-analysis.html#cb46-2" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="statistical-significance-analysis.html#cb46-3" tabindex="-1"></a>bray_perm <span class="ot">&lt;-</span> psextra_log10p_asin_bray_dist <span class="sc">%&gt;%</span></span>
+<span id="cb46-4"><a href="statistical-significance-analysis.html#cb46-4" tabindex="-1"></a>  <span class="fu">dist_permanova</span>(</span>
+<span id="cb46-5"><a href="statistical-significance-analysis.html#cb46-5" tabindex="-1"></a>    <span class="at">seed =</span> <span class="dv">1234</span>, <span class="co"># for set.seed to ensure reproducibility of random process</span></span>
+<span id="cb46-6"><a href="statistical-significance-analysis.html#cb46-6" tabindex="-1"></a>    <span class="at">n_processes =</span> <span class="dv">1</span>, <span class="at">n_perms =</span> <span class="dv">99</span>, <span class="co"># you should use at least 999!</span></span>
+<span id="cb46-7"><a href="statistical-significance-analysis.html#cb46-7" tabindex="-1"></a>    <span class="at">variables =</span> <span class="st">"bmi_group"</span></span>
+<span id="cb46-8"><a href="statistical-significance-analysis.html#cb46-8" tabindex="-1"></a>  )</span>
+<span id="cb46-9"><a href="statistical-significance-analysis.html#cb46-9" tabindex="-1"></a></span>
+<span id="cb46-10"><a href="statistical-significance-analysis.html#cb46-10" tabindex="-1"></a><span class="fu">perm_get</span>(bray_perm) <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb46-11"><a href="statistical-significance-analysis.html#cb46-11" tabindex="-1"></a>           Df  SumOfSqs         R2        F <span class="fu">Pr</span>(<span class="sc">&gt;</span>F)</span>
+<span id="cb46-12"><a href="statistical-significance-analysis.html#cb46-12" tabindex="-1"></a>bmi_group   <span class="dv">2</span> <span class="fl">0.1233611</span> <span class="fl">0.04544245</span> <span class="fl">5.212833</span>   <span class="fl">0.01</span></span>
+<span id="cb46-13"><a href="statistical-significance-analysis.html#cb46-13" tabindex="-1"></a>Residual  <span class="dv">219</span> <span class="fl">2.5913059</span> <span class="fl">0.95455755</span>       <span class="cn">NA</span>     <span class="cn">NA</span></span>
+<span id="cb46-14"><a href="statistical-significance-analysis.html#cb46-14" tabindex="-1"></a>Total     <span class="dv">221</span> <span class="fl">2.7146670</span> <span class="fl">1.00000000</span>       <span class="cn">NA</span>     <span class="cn">NA</span></span>
+<span id="cb46-15"><a href="statistical-significance-analysis.html#cb46-15" tabindex="-1"></a></span>
+<span id="cb46-16"><a href="statistical-significance-analysis.html#cb46-16" tabindex="-1"></a></span>
+<span id="cb46-17"><a href="statistical-significance-analysis.html#cb46-17" tabindex="-1"></a><span class="fu">info_get</span>(bray_perm)</span>
+<span id="cb46-18"><a href="statistical-significance-analysis.html#cb46-18" tabindex="-1"></a>psExtra info<span class="sc">:</span></span>
+<span id="cb46-19"><a href="statistical-significance-analysis.html#cb46-19" tabindex="-1"></a>tax_agg <span class="ot">=</span> <span class="st">"Genus"</span> tax_trans <span class="ot">=</span> <span class="st">"log10p"</span> dist_method <span class="ot">=</span> <span class="st">"bray"</span> </span></code></pre></div>
 
 </div>
 </div>
@@ -208,7 +207,7 @@ tax_agg = "Genus" tax_trans = "log10p" dist_method = "bray" </code></pre>
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-18</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-24</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">

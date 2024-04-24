@@ -14,53 +14,26 @@ library(phyloseq)
 library(tidyverse)
 
 cat("\nSaved RData objects\n\n")
-```
-
-```
 
 Saved RData objects
-```
-
-```r
 load("data/dataframe_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   df_GlobalPatterns
   df_dietswap
   df_caporaso
   df_kostic_crc
-```
-
-```r
 load("data/phyloseq_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_GlobalPatterns
   ps_dietswap
   ps_caporaso
   ps_kostic_crc
-```
-
-```r
 load("data/phyloseq_extra_objects.rda", verbose = T)
-```
-
-```
 Loading objects:
   psextra_clr_dietswap
   psextra_id_dietswap
   psextra_log10p_dietswap
-```
-
-```r
 load("data/ps_transformed.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin
   ps_identity
@@ -72,13 +45,7 @@ Loading objects:
   ps_clr
   ps_shift
   ps_scale
-```
-
-```r
 load("data/bray_distances.rda", verbose = T)
-```
-
-```
 Loading objects:
   ps_asin_bray_dist
   ps_compositional_bray_dist
@@ -89,29 +56,24 @@ Loading objects:
   ps_clr_bray_dist
   ps_shift_bray_dist
   ps_scale_bray_dist
-```
-
-```r
 load("data/psextra_distances.rda", verbose = T)
-```
-
-```
 Loading objects:
   psextra_clr_asin_bray_dist
   psextra_id_asin_bray_dist
   psextra_log10p_asin_bray_dist
-```
-
-```r
 load("data/reduced_dimension.rda", verbose = T)
-```
-
-```
 Loading objects:
   pca_asin_bray_metrics
   mds_asin_bray_metrics
   pcoa_asin_bray_metrics
   tsne_asin_bray_metrics
+load("data/phyloseq_raw_rel_psextra_df_objects.rda", verbose = T)
+Loading objects:
+  ps_raw
+  ps_rel
+  psextra_raw
+  psextra_rel
+  ps_df
 ```
 
 ## PERMANOVA
@@ -129,20 +91,13 @@ bray_perm <- psextra_log10p_asin_bray_dist %>%
   )
 
 perm_get(bray_perm) %>% as.data.frame()
-```
-
-```
            Df  SumOfSqs         R2        F Pr(>F)
 bmi_group   2 0.1233611 0.04544245 5.212833   0.01
 Residual  219 2.5913059 0.95455755       NA     NA
 Total     221 2.7146670 1.00000000       NA     NA
-```
 
-```r
+
 info_get(bray_perm)
-```
-
-```
 psExtra info:
 tax_agg = "Genus" tax_trans = "log10p" dist_method = "bray" 
 ```

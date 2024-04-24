@@ -89,77 +89,69 @@
 <h2>
 <span class="header-section-number">3.1</span> Import data<a class="anchor" aria-label="anchor" href="#import-data"><i class="fas fa-link"></i></a>
 </h2>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Load required packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://dx.plos.org/10.1371/journal.pone.0061217">phyloseq</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html">cat</a></span><span class="op">(</span><span class="st">"\nSaved RData objects\n\n"</span><span class="op">)</span></span></code></pre></div>
-<pre><code>
-Saved RData objects</code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/external_ps_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  df_GlobalPatterns
-  df_dietswap
-  df_caporaso
-  df_kostic_crc
-  ps_GlobalPatterns
-  ps_dietswap
-  ps_caporaso
-  ps_kostic_crc</code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/ps_transformed.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_asin
-  ps_identity
-  ps_compositional
-  ps_z_otu
-  ps_z_sample
-  ps_log10
-  ps_log10p
-  ps_clr
-  ps_shift
-  ps_scale</code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/bray_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_asin_bray_dist
-  ps_compositional_bray_dist
-  ps_z_otu_bray_dist
-  ps_z_sample_bray_dist
-  ps_log10_bray_dist
-  ps_log10p_bray_dist
-  ps_clr_bray_dist
-  ps_shift_bray_dist
-  ps_scale_bray_dist</code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/psextra_distances.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  psextra_clr_asin_bray_dist
-  psextra_id_asin_bray_dist
-  psextra_log10p_asin_bray_dist</code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/reduced_dimension.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  pca_asin_bray_metrics
-  mds_asin_bray_metrics
-  pcoa_asin_bray_metrics
-  tsne_asin_bray_metrics</code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_extra_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  psextra_clr_dietswap
-  psextra_id_dietswap
-  psextra_log10p_dietswap</code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/load.html">load</a></span><span class="op">(</span><span class="st">"data/phyloseq_raw_rel_psextra_df_objects.rda"</span>, verbose <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div>
-<pre><code>Loading objects:
-  ps_raw
-  ps_rel
-  psextra_raw
-  psextra_rel
-  ps_df</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="exploration-of-visualization-types.html#cb3-1" tabindex="-1"></a><span class="co"># Load required packages</span></span>
+<span id="cb3-2"><a href="exploration-of-visualization-types.html#cb3-2" tabindex="-1"></a><span class="fu">library</span>(phyloseq)</span>
+<span id="cb3-3"><a href="exploration-of-visualization-types.html#cb3-3" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-4"><a href="exploration-of-visualization-types.html#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="exploration-of-visualization-types.html#cb3-5" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Saved RData objects</span><span class="sc">\n\n</span><span class="st">"</span>)</span>
+<span id="cb3-6"><a href="exploration-of-visualization-types.html#cb3-6" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="exploration-of-visualization-types.html#cb3-7" tabindex="-1"></a>Saved RData objects</span>
+<span id="cb3-8"><a href="exploration-of-visualization-types.html#cb3-8" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/external_ps_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-9"><a href="exploration-of-visualization-types.html#cb3-9" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-10"><a href="exploration-of-visualization-types.html#cb3-10" tabindex="-1"></a>  df_GlobalPatterns</span>
+<span id="cb3-11"><a href="exploration-of-visualization-types.html#cb3-11" tabindex="-1"></a>  df_dietswap</span>
+<span id="cb3-12"><a href="exploration-of-visualization-types.html#cb3-12" tabindex="-1"></a>  df_caporaso</span>
+<span id="cb3-13"><a href="exploration-of-visualization-types.html#cb3-13" tabindex="-1"></a>  df_kostic_crc</span>
+<span id="cb3-14"><a href="exploration-of-visualization-types.html#cb3-14" tabindex="-1"></a>  ps_GlobalPatterns</span>
+<span id="cb3-15"><a href="exploration-of-visualization-types.html#cb3-15" tabindex="-1"></a>  ps_dietswap</span>
+<span id="cb3-16"><a href="exploration-of-visualization-types.html#cb3-16" tabindex="-1"></a>  ps_caporaso</span>
+<span id="cb3-17"><a href="exploration-of-visualization-types.html#cb3-17" tabindex="-1"></a>  ps_kostic_crc</span>
+<span id="cb3-18"><a href="exploration-of-visualization-types.html#cb3-18" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/ps_transformed.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-19"><a href="exploration-of-visualization-types.html#cb3-19" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-20"><a href="exploration-of-visualization-types.html#cb3-20" tabindex="-1"></a>  ps_asin</span>
+<span id="cb3-21"><a href="exploration-of-visualization-types.html#cb3-21" tabindex="-1"></a>  ps_identity</span>
+<span id="cb3-22"><a href="exploration-of-visualization-types.html#cb3-22" tabindex="-1"></a>  ps_compositional</span>
+<span id="cb3-23"><a href="exploration-of-visualization-types.html#cb3-23" tabindex="-1"></a>  ps_z_otu</span>
+<span id="cb3-24"><a href="exploration-of-visualization-types.html#cb3-24" tabindex="-1"></a>  ps_z_sample</span>
+<span id="cb3-25"><a href="exploration-of-visualization-types.html#cb3-25" tabindex="-1"></a>  ps_log10</span>
+<span id="cb3-26"><a href="exploration-of-visualization-types.html#cb3-26" tabindex="-1"></a>  ps_log10p</span>
+<span id="cb3-27"><a href="exploration-of-visualization-types.html#cb3-27" tabindex="-1"></a>  ps_clr</span>
+<span id="cb3-28"><a href="exploration-of-visualization-types.html#cb3-28" tabindex="-1"></a>  ps_shift</span>
+<span id="cb3-29"><a href="exploration-of-visualization-types.html#cb3-29" tabindex="-1"></a>  ps_scale</span>
+<span id="cb3-30"><a href="exploration-of-visualization-types.html#cb3-30" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/bray_distances.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-31"><a href="exploration-of-visualization-types.html#cb3-31" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-32"><a href="exploration-of-visualization-types.html#cb3-32" tabindex="-1"></a>  ps_asin_bray_dist</span>
+<span id="cb3-33"><a href="exploration-of-visualization-types.html#cb3-33" tabindex="-1"></a>  ps_compositional_bray_dist</span>
+<span id="cb3-34"><a href="exploration-of-visualization-types.html#cb3-34" tabindex="-1"></a>  ps_z_otu_bray_dist</span>
+<span id="cb3-35"><a href="exploration-of-visualization-types.html#cb3-35" tabindex="-1"></a>  ps_z_sample_bray_dist</span>
+<span id="cb3-36"><a href="exploration-of-visualization-types.html#cb3-36" tabindex="-1"></a>  ps_log10_bray_dist</span>
+<span id="cb3-37"><a href="exploration-of-visualization-types.html#cb3-37" tabindex="-1"></a>  ps_log10p_bray_dist</span>
+<span id="cb3-38"><a href="exploration-of-visualization-types.html#cb3-38" tabindex="-1"></a>  ps_clr_bray_dist</span>
+<span id="cb3-39"><a href="exploration-of-visualization-types.html#cb3-39" tabindex="-1"></a>  ps_shift_bray_dist</span>
+<span id="cb3-40"><a href="exploration-of-visualization-types.html#cb3-40" tabindex="-1"></a>  ps_scale_bray_dist</span>
+<span id="cb3-41"><a href="exploration-of-visualization-types.html#cb3-41" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/psextra_distances.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-42"><a href="exploration-of-visualization-types.html#cb3-42" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-43"><a href="exploration-of-visualization-types.html#cb3-43" tabindex="-1"></a>  psextra_clr_asin_bray_dist</span>
+<span id="cb3-44"><a href="exploration-of-visualization-types.html#cb3-44" tabindex="-1"></a>  psextra_id_asin_bray_dist</span>
+<span id="cb3-45"><a href="exploration-of-visualization-types.html#cb3-45" tabindex="-1"></a>  psextra_log10p_asin_bray_dist</span>
+<span id="cb3-46"><a href="exploration-of-visualization-types.html#cb3-46" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/reduced_dimension.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-47"><a href="exploration-of-visualization-types.html#cb3-47" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-48"><a href="exploration-of-visualization-types.html#cb3-48" tabindex="-1"></a>  pca_asin_bray_metrics</span>
+<span id="cb3-49"><a href="exploration-of-visualization-types.html#cb3-49" tabindex="-1"></a>  mds_asin_bray_metrics</span>
+<span id="cb3-50"><a href="exploration-of-visualization-types.html#cb3-50" tabindex="-1"></a>  pcoa_asin_bray_metrics</span>
+<span id="cb3-51"><a href="exploration-of-visualization-types.html#cb3-51" tabindex="-1"></a>  tsne_asin_bray_metrics</span>
+<span id="cb3-52"><a href="exploration-of-visualization-types.html#cb3-52" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/phyloseq_extra_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-53"><a href="exploration-of-visualization-types.html#cb3-53" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-54"><a href="exploration-of-visualization-types.html#cb3-54" tabindex="-1"></a>  psextra_clr_dietswap</span>
+<span id="cb3-55"><a href="exploration-of-visualization-types.html#cb3-55" tabindex="-1"></a>  psextra_id_dietswap</span>
+<span id="cb3-56"><a href="exploration-of-visualization-types.html#cb3-56" tabindex="-1"></a>  psextra_log10p_dietswap</span>
+<span id="cb3-57"><a href="exploration-of-visualization-types.html#cb3-57" tabindex="-1"></a><span class="fu">load</span>(<span class="st">"data/phyloseq_raw_rel_psextra_df_objects.rda"</span>, <span class="at">verbose =</span> T)</span>
+<span id="cb3-58"><a href="exploration-of-visualization-types.html#cb3-58" tabindex="-1"></a>Loading objects<span class="sc">:</span></span>
+<span id="cb3-59"><a href="exploration-of-visualization-types.html#cb3-59" tabindex="-1"></a>  ps_raw</span>
+<span id="cb3-60"><a href="exploration-of-visualization-types.html#cb3-60" tabindex="-1"></a>  ps_rel</span>
+<span id="cb3-61"><a href="exploration-of-visualization-types.html#cb3-61" tabindex="-1"></a>  psextra_raw</span>
+<span id="cb3-62"><a href="exploration-of-visualization-types.html#cb3-62" tabindex="-1"></a>  psextra_rel</span>
+<span id="cb3-63"><a href="exploration-of-visualization-types.html#cb3-63" tabindex="-1"></a>  ps_df</span></code></pre></div>
 </div>
 <div id="major-visualization-r-colors" class="section level2" number="3.2">
 <h2>
@@ -167,16 +159,16 @@ Saved RData objects</code></pre>
 </h2>
 <p>In R, there are several built-in palettes that we can use for color schemes in plots. Some commonly used palettes include:</p>
 <pre><code>[1] "#66C2A5" "#FC8D62" "#8DA0CB" "#E78AC3" "#A6D854" "#FFD92F" "#E5C494"
-[8] "#B3B3B3"</code></pre>
-<pre><code>[1] "#B3B3B3" "#E5C494" "#FFD92F" "#A6D854" "#E78AC3" "#8DA0CB" "#FC8D62"
-[8] "#66C2A5"</code></pre>
-<pre><code>[1] "#440154FF" "#46337EFF" "#365C8DFF" "#277F8EFF" "#1FA187FF" "#4AC16DFF"
-[7] "#9FDA3AFF" "#FDE725FF"</code></pre>
-<pre><code>[1] "#FDE725FF" "#9FDA3AFF" "#4AC16DFF" "#1FA187FF" "#277F8EFF" "#365C8DFF"
-[7] "#46337EFF" "#440154FF"</code></pre>
-<pre><code>[1] "#FF0000" "#FFBF00" "#80FF00" "#00FF40" "#00FFFF" "#0040FF" "#8000FF"
-[8] "#FF00BF"</code></pre>
-<pre><code>[1] "#FF00BF" "#8000FF" "#0040FF" "#00FFFF" "#00FF40" "#80FF00" "#FFBF00"
+[8] "#B3B3B3"
+[1] "#B3B3B3" "#E5C494" "#FFD92F" "#A6D854" "#E78AC3" "#8DA0CB" "#FC8D62"
+[8] "#66C2A5"
+[1] "#440154FF" "#46337EFF" "#365C8DFF" "#277F8EFF" "#1FA187FF" "#4AC16DFF"
+[7] "#9FDA3AFF" "#FDE725FF"
+[1] "#FDE725FF" "#9FDA3AFF" "#4AC16DFF" "#1FA187FF" "#277F8EFF" "#365C8DFF"
+[7] "#46337EFF" "#440154FF"
+[1] "#FF0000" "#FFBF00" "#80FF00" "#00FF40" "#00FFFF" "#0040FF" "#8000FF"
+[8] "#FF00BF"
+[1] "#FF00BF" "#8000FF" "#0040FF" "#00FFFF" "#00FF40" "#80FF00" "#FFBF00"
 [8] "#FF0000"</code></pre>
 <blockquote>
 <ul>
@@ -303,7 +295,7 @@ Saved RData objects</code></pre>
     <div class="row">
       <div class="col-12 col-md-6 mt-3">
         <p><strong><u><a class="text-light" href="https://microbiome.complexdatainsights.com"><big>IMAP:</big> Integrated Microbiome Analysis Pipelines</a></u></strong>: End-to-End Practical User Guides Using Integrated Approaches</p>
-<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-18</b>.</p>
+<br><p>Authored by Teresia Mrema-Buza, Last updated: <b>2024-04-24</b>.</p>
 <br>
 </div>
       <div class="col-12 col-md-6 mt-3">
