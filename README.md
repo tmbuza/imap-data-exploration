@@ -1,4 +1,4 @@
-# IMAP: Data Exploration
+# IMAP PART 08: Data Exploration
 
 ---In Progress---
 
