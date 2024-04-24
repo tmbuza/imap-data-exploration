@@ -51,7 +51,7 @@ source("_common.R")
 ![](images/coders.png)
 <br>
 
-## Welcome to IMAP chapter 8 {-}
+## Welcome to IMAP chapter 08 {-}
 
 Welcome to the Microbiome Data Exploration section! In this phase of our analysis, we embark on a journey to explore the intricacies of microbiome data using preprocessed data stored in phyloseq objects. These objects encapsulate rich information about microbial communities, including taxonomic abundance, sample metadata, and ecological features.
 
