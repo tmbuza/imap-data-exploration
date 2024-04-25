@@ -2,7 +2,7 @@
 title: "<big>IMAP:</big> Integrated Microbiome Analysis Pipelines"
 subtitle: "End-to-End Practical User Guides Using Integrated Approaches"
 date:
-- <b>2024-04-24</b>
+- <b>2024-04-26</b>
 author: Teresia Mrema-Buza
 site: bookdown::bookdown_site
 documentclass: book
@@ -49,7 +49,7 @@ description: |
 ![](images/coders.png)
 <br>
 
-## Welcome to IMAP chapter 8 {-}
+## Welcome to IMAP chapter 08 {-}
 
 Welcome to the Microbiome Data Exploration section! In this phase of our analysis, we embark on a journey to explore the intricacies of microbiome data using preprocessed data stored in phyloseq objects. These objects encapsulate rich information about microbial communities, including taxonomic abundance, sample metadata, and ecological features.
 

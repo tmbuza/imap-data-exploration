@@ -30,9 +30,5 @@ hierarchical-clustering
 phylogenetic-analysis
 view-a-tree-by-ape-and-ggtree-r-packages
 cladogram-using-ggtree-function
-part-statistical-analysis
-statistical-significance-analysis
-permanova
 imap-github-repos
-data-exploration-rulegraph
 session-information
